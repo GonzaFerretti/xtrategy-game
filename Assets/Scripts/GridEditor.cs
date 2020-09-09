@@ -8,7 +8,7 @@ public class GridEditor : Editor
 {
     Transform lastHoveredCell;
     Vector3 possibleCoverPosition;
-    CellMovement possibleCellMovement;
+    CoverData possibleCellMovement;
 
     bool canPlaceCover;
 
@@ -20,6 +20,16 @@ public class GridEditor : Editor
         if (GUILayout.Button("New Grid"))
         {
             gameGridManager.InitGrid();
+            lastHoveredCell = null;
+            canPlaceCover = false;
+        }
+
+        if (GUILayout.Button("Clean Grid"))
+        {
+            gameGridManager.CleanGrid();
+            gameGridManager.CleanObstacles();
+            lastHoveredCell = null;
+            canPlaceCover = false;
         }
     }
 
@@ -56,18 +66,26 @@ public class GridEditor : Editor
     {
         Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100f))
+        if (Physics.Raycast(ray, out hit, 100f, 1 << LayerMask.NameToLayer("GroundBase")))
         {
             Transform currentlyHoveredCell = hit.transform.parent;
-            if (currentlyHoveredCell != lastHoveredCell)
+            if (currentlyHoveredCell == lastHoveredCell)
             {
                 if (lastHoveredCell)
                 {
-                    possibleCoverPosition = (currentlyHoveredCell.position + lastHoveredCell.position) / 2;
-                    Vector3Int lastHoveredCellCoordinates = lastHoveredCell.GetComponent<GameGridCell>().GetCoordinates();
+                    GameGridManager gameGridManager = (GameGridManager)target;
                     Vector3Int currentlyHoveredCellCoordinates = currentlyHoveredCell.GetComponent<GameGridCell>().GetCoordinates();
-                    possibleCellMovement = new CellMovement(lastHoveredCellCoordinates, currentlyHoveredCellCoordinates);
-                    canPlaceCover = true;
+                    GameGridCell AdjacentGridCell = gameGridManager.GetAdjacentCellRelativeToMousePosition(hit.point, currentlyHoveredCellCoordinates);
+                    if (AdjacentGridCell)
+                    {
+                        possibleCoverPosition = (currentlyHoveredCell.position + AdjacentGridCell.transform.position) / 2;
+                        possibleCellMovement = new CoverData(AdjacentGridCell.GetCoordinates(), currentlyHoveredCellCoordinates);
+                        canPlaceCover = true;
+                    }
+                    else 
+                    {
+                        canPlaceCover = false;
+                    }
                 }
             }
             lastHoveredCell = currentlyHoveredCell;
@@ -78,4 +96,6 @@ public class GridEditor : Editor
             canPlaceCover = false;
         }
     }
+
+
 }

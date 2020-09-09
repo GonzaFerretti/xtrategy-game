@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class GameGridCell : MonoBehaviour
+public class GameGridCell : GameGridElement
 {
-    Vector3Int coordinates;
+    [SerializeField] Vector3Int coordinates;
     public void SetCoordinates(Vector3Int coords)
     {
         coordinates = coords;

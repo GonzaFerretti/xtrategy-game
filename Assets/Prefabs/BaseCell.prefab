@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1464223885965141871}
   - component: {fileID: 2268474956970131388}
   - component: {fileID: 4892602977154953264}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6626395369685488837}
   - component: {fileID: 6626395369685488842}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BaseCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,3 +135,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebba611d4483bc9488c8089843ab5397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coordinates: {x: 0, y: 0, z: 0}
