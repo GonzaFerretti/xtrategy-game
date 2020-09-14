@@ -185,7 +185,7 @@ public class GameGridManager : MonoBehaviour
             cell.Untint();
         }
 
-        foreach (KeyValuePair<Vector3Int,Vector3Int> possibleNodes in possiblePathNodes)
+        foreach (KeyValuePair<Vector3Int, Vector3Int> possibleNodes in possiblePathNodes)
         {
             gridCoordinates[possibleNodes.Key].TintPath();
         }
@@ -241,7 +241,23 @@ public class GameGridManager : MonoBehaviour
     {
         List<Vector3Int> orderedByFCost = discoveredPathNodes.OrderBy(n => GetFCost(n, start, end)).ToList();
         List<int> fcostList = orderedByFCost.Select(n => GetFCost(n, start, end)).ToList();
-        return orderedByFCost[0];
+        Vector3Int possibleResult = orderedByFCost[0];
+        
+        int lastIndexOfLowestFCostValue = fcostList.LastIndexOf(fcostList[0]);
+        if (0 != lastIndexOfLowestFCostValue)
+        {
+            List<Vector3Int> everyMatchedLowestFCostNode = orderedByFCost.GetRange(0, lastIndexOfLowestFCostValue);
+            for (int i = 1; i <= everyMatchedLowestFCostNode.Count; i++)
+            {
+                Vector3Int otherPossibleResult = orderedByFCost[i];
+                if (GetHCost(otherPossibleResult,end) < GetHCost(possibleResult,end))
+                {
+                    possibleResult = otherPossibleResult;
+                    break;
+                }
+            }
+        }
+        return possibleResult;
     }
 
     public List<Vector3Int> GetNeighbourNodes(Vector3Int node)
