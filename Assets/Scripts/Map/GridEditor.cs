@@ -31,27 +31,35 @@ public class GridEditor : Editor
             lastHoveredCell = null;
             canPlaceCover = false;
         }
+
+        if (GUILayout.Button("Test Pathfinding"))
+        {
+            gameGridManager.TestPathfinding();
+        }
     }
 
     public void OnSceneGUI()
     {
-        if (Event.current.type == EventType.Layout)
+        if (((GameGridManager)target).editCoverMode)
         {
-            HandleUtility.AddDefaultControl(0);
-        }
-        if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
-        {
-            GameGridManager gameGridManager = (GameGridManager)target;
-            Vector3 mousePosition = Event.current.mousePosition;
-            Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
-            mousePosition = ray.origin;
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, 100f))
+            if (Event.current.type == EventType.Layout)
             {
-                if (canPlaceCover)
+                HandleUtility.AddDefaultControl(0);
+            }
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
+            {
+                GameGridManager gameGridManager = (GameGridManager)target;
+                Vector3 mousePosition = Event.current.mousePosition;
+                Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
+                mousePosition = ray.origin;
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, 100f))
                 {
-                    gameGridManager.AddCover(possibleCoverPosition, possibleCellMovement);
+                    if (canPlaceCover)
+                    {
+                        gameGridManager.AddCover(possibleCoverPosition, possibleCellMovement);
+                    }
                 }
             }
         }

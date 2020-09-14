@@ -66,6 +66,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -136,3 +137,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coordinates: {x: 0, y: 0, z: 0}
+  rend: {fileID: 2268474956970131388}
+  selectedMaterial: {fileID: 2100000, guid: 6cbf626edee07f749a4c613870375cfd, type: 2}
+  startMaterial: {fileID: 2100000, guid: 075ee105a884d2d409270c9a3c79fe70, type: 2}
+  endMaterial: {fileID: 2100000, guid: 34669f8ea7cc6624cb7947d34587b061, type: 2}
+  pathMaterial: {fileID: 2100000, guid: 0eedcfe268e02784daef50640f336e73, type: 2}
+  baseMaterial: {fileID: 2100000, guid: 3e86d89b87e336345b8caacf27f4fa06, type: 2}
