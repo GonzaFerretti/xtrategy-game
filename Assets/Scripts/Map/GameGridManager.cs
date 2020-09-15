@@ -143,60 +143,86 @@ public class GameGridManager : MonoBehaviour
 
     public void CalculateShortestPath(Vector3Int startCoordinates, Vector3Int destinationCoordinates)
     {
-        //Vector3Int startCoordinates = origin.GetCoordinates();
-        //Vector3Int destinationCoordinates = destination.GetCoordinates();
-
-        Dictionary<Vector3Int, Vector3Int> discoveredPathNodes = new Dictionary<Vector3Int, Vector3Int>();
-        Dictionary<Vector3Int, Vector3Int> possiblePathNodes = new Dictionary<Vector3Int, Vector3Int>();
-        discoveredPathNodes.Add(startCoordinates, startCoordinates);
-
-        Vector3Int current = startCoordinates;
-        while (true)
+        Dictionary<Vector3Int,Node> openSet = new Dictionary<Vector3Int, Node>();
+        Dictionary<Vector3Int,Node> closedSet = new Dictionary<Vector3Int,Node>();
+        Node startNode = new Node(startCoordinates);
+        Node targetNode = new Node(destinationCoordinates);
+        openSet.Add(startCoordinates, startNode);
+        List<Node> finalPath = new List<Node>();
+        int safeguard = 0;
+        while (openSet.Count > 0)
         {
-            current = GetLowestFCostInList(discoveredPathNodes.Keys.ToList(), startCoordinates, destinationCoordinates);
-
-            possiblePathNodes.Add(current, discoveredPathNodes[current]);
-            discoveredPathNodes.Remove(current);
-
-            if (current == destinationCoordinates) break;
-
-            foreach (Vector3Int neighbour in GetNeighbourNodes(current))
+            Node node = openSet.Values.ElementAt(0);
+            for (int i = 1; i < openSet.Count; i++)
             {
-                if (possiblePathNodes.ContainsKey(neighbour)) continue;
-
-                if (!discoveredPathNodes.ContainsKey(neighbour))
+                if (openSet.Values.ElementAt(i).fCost < node.fCost || openSet.Values.ElementAt(i).fCost == node.fCost)
                 {
-                    discoveredPathNodes.Add(neighbour, current);
+                    if (openSet.Values.ElementAt(i).hCost < node.hCost)
+                        node = openSet.Values.ElementAt(i);
+                }
+            }
+
+            openSet.Remove(node.coordinates);
+            closedSet.Add(node.coordinates,node);
+
+            safeguard++;
+            if (safeguard > 500)
+            {
+                Debug.Log("nope");
+                break;
+            }
+
+            if (node.coordinates == destinationCoordinates)
+            {
+                Node currentPathNode = closedSet[destinationCoordinates];
+                while (currentPathNode != startNode)
+                {
+                    finalPath.Add(currentPathNode);
+                    currentPathNode = currentPathNode.parent;
+                }
+                finalPath.Reverse();
+                break;
+            }
+
+            foreach (Node neighbour in GetNeighbourNodes(node, openSet, closedSet))
+            {
+                if (closedSet.ContainsKey(neighbour.coordinates))
+                {
+                    continue;
+                }
+
+                int newCostToNeighbour = node.gCost + GetDistance(node.coordinates, neighbour.coordinates);
+                if (newCostToNeighbour < neighbour.gCost || !openSet.ContainsKey(neighbour.coordinates))
+                {
+                    neighbour.gCost = newCostToNeighbour;
+                    neighbour.hCost = GetDistance(neighbour.coordinates, targetNode.coordinates);
+                    neighbour.parent = node;
+
+                    if (!openSet.ContainsKey(neighbour.coordinates))
+                        openSet.Add(neighbour.coordinates, neighbour);
                 }
             }
         }
-        List<Vector3Int> finalPath = new List<Vector3Int>();
-        finalPath.Add(destinationCoordinates);
-        Vector3Int currentPathNode = possiblePathNodes[destinationCoordinates];
-        while (currentPathNode != startCoordinates)
-        {
-            finalPath.Add(currentPathNode);
-            currentPathNode = possiblePathNodes[currentPathNode];
-        }
-        finalPath.Reverse();
 
+        Debug.Log(safeguard);
         foreach (GameGridCell cell in gridCoordinates.Values)
         {
             cell.Untint();
         }
 
-        foreach (KeyValuePair<Vector3Int, Vector3Int> possibleNodes in possiblePathNodes)
+        foreach (Node possibleNodes in openSet.Values)
         {
-            gridCoordinates[possibleNodes.Key].TintPath();
+            gridCoordinates[possibleNodes.coordinates].TintPath();
         }
 
-        foreach (KeyValuePair<Vector3Int, Vector3Int> discoveredNode in discoveredPathNodes)
+        foreach (Node discoveredNode in closedSet.Values)
         {
-            gridCoordinates[discoveredNode.Key].TintSelected();
+            gridCoordinates[discoveredNode.coordinates].TintSelected();
         }
-        foreach (Vector3Int finalPathNode in finalPath)
+        
+        foreach (Node finalPathNode in finalPath)
         {
-            gridCoordinates[finalPathNode].TintFinalPath();
+            gridCoordinates[finalPathNode.coordinates].TintFinalPath();
         }
 
         gridCoordinates[startCoordinates].TintStart();
@@ -208,71 +234,30 @@ public class GameGridManager : MonoBehaviour
         CalculateShortestPath(testStartNode, testEndNode);
     }
 
-    public void RetracePath()
-    {
-
-    }
-
     // Disregards diagonal movements as this isn't allowed in the game
-    public int GetDistanceBetweenCells(Vector3Int cell1, Vector3Int cell2)
+    public int GetDistance(Vector3Int cell1, Vector3Int cell2)
     {
         int result = Mathf.Abs(cell1.x - cell2.x) + Mathf.Abs(cell1.y - cell2.y);
         return result;
     }
 
-    // G cost in A* pathfinding means distance from starting node
-    public int GetGCost(Vector3Int node, Vector3Int start)
+    public List<Node> GetNeighbourNodes(Node node, Dictionary<Vector3Int, Node> openSet, Dictionary<Vector3Int, Node> closedSet)
     {
-        return GetDistanceBetweenCells(node, start);
-    }
-    // H cost in A* pathfindingg means distance from destination node
-    public int GetHCost(Vector3Int node, Vector3Int end)
-    {
-        return GetDistanceBetweenCells(node, end);
-    }
+        List<Vector3Int> possibleNeighbourCoordinates = new List<Vector3Int>();
+        List<Node> neighbourNodes = new List<Node>();
 
-    // F cost is defined as G cost + H cost
-    public int GetFCost(Vector3Int node, Vector3Int start, Vector3Int end)
-    {
-        return GetHCost(node, end) + GetGCost(node, start);
-    }
+        possibleNeighbourCoordinates.Add(node.coordinates + new Vector3Int(1, 0, 0));
+        possibleNeighbourCoordinates.Add(node.coordinates + new Vector3Int(-1, 0, 0));
+        possibleNeighbourCoordinates.Add(node.coordinates + new Vector3Int(0, 1, 0));
+        possibleNeighbourCoordinates.Add(node.coordinates + new Vector3Int(0, -1, 0));
 
-    public Vector3Int GetLowestFCostInList(List<Vector3Int> discoveredPathNodes, Vector3Int start, Vector3Int end)
-    {
-        List<Vector3Int> orderedByFCost = discoveredPathNodes.OrderBy(n => GetFCost(n, start, end)).ToList();
-        List<int> fcostList = orderedByFCost.Select(n => GetFCost(n, start, end)).ToList();
-        Vector3Int possibleResult = orderedByFCost[0];
-        
-        int lastIndexOfLowestFCostValue = fcostList.LastIndexOf(fcostList[0]);
-        if (0 != lastIndexOfLowestFCostValue)
+        foreach (Vector3Int neighbour in possibleNeighbourCoordinates)
         {
-            List<Vector3Int> everyMatchedLowestFCostNode = orderedByFCost.GetRange(0, lastIndexOfLowestFCostValue);
-            for (int i = 1; i <= everyMatchedLowestFCostNode.Count; i++)
+            if (IsNeighbourViable(node.coordinates, neighbour))
             {
-                Vector3Int otherPossibleResult = orderedByFCost[i];
-                if (GetHCost(otherPossibleResult,end) < GetHCost(possibleResult,end))
-                {
-                    possibleResult = otherPossibleResult;
-                    break;
-                }
+                Node neighbourNode = (openSet.ContainsKey(neighbour)) ? openSet[neighbour] : ((closedSet.ContainsKey(neighbour)) ? closedSet[neighbour] : new Node(neighbour));
+                neighbourNodes.Add(neighbourNode);
             }
-        }
-        return possibleResult;
-    }
-
-    public List<Vector3Int> GetNeighbourNodes(Vector3Int node)
-    {
-        List<Vector3Int> possibleNeighbourNodes = new List<Vector3Int>();
-        List<Vector3Int> neighbourNodes = new List<Vector3Int>();
-
-        possibleNeighbourNodes.Add(node + new Vector3Int(1, 0, 0));
-        possibleNeighbourNodes.Add(node + new Vector3Int(-1, 0, 0));
-        possibleNeighbourNodes.Add(node + new Vector3Int(0, 1, 0));
-        possibleNeighbourNodes.Add(node + new Vector3Int(0, -1, 0));
-
-        foreach (Vector3Int neighbour in possibleNeighbourNodes)
-        {
-            if (IsNeighbourViable(node, neighbour)) neighbourNodes.Add(neighbour);
         }
 
         return neighbourNodes;
