@@ -1,124 +1,17 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1567534015
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1567534016}
-  m_Layer: 0
-  m_Name: cells
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1567534016
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1567534015}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 6409168009872196253}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1969876206
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1969876207}
-  m_Layer: 0
-  m_Name: covers
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1969876207
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1969876206}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 6409168009872196253}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6409168009872196240
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6409168009872196253}
-  - component: {fileID: 6409168009872196242}
-  - component: {fileID: 6409168009872196243}
-  m_Layer: 0
-  m_Name: Grid Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6409168009872196253
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6409168009872196240}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1969876207}
-  - {fileID: 1567534016}
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!156049354 &6409168009872196242
-Grid:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6409168009872196240}
-  m_Enabled: 1
-  m_CellSize: {x: 1, y: 1, z: 1}
-  m_CellGap: {x: 0, y: 0, z: 0}
-  m_CellLayout: 0
-  m_CellSwizzle: 1
---- !u!114 &6409168009872196243
+--- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6409168009872196240}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b77531d3062d1ae4c842b36a592c5d3c, type: 3}
-  m_Name: 
+  m_Script: {fileID: 11500000, guid: c7013174ab35f824197f1421999825dd, type: 3}
+  m_Name: test
   m_EditorClassIdentifier: 
-  grid: {fileID: 6409168009872196242}
   gridCoordinates:
     reorderableList:
       canAdd: 1
@@ -445,7 +338,7 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
-  covers:
+  coverInfo:
     reorderableList:
       canAdd: 1
       canRemove: 1
@@ -468,22 +361,66 @@ MonoBehaviour:
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
     isExpanded: 0
-    _keyValues: []
-    _keys: []
+    _keyValues:
+    - side1: {x: 6, y: 8, z: 0}
+      side2: {x: 5, y: 8, z: 0}
+    - side1: {x: 5, y: 7, z: 0}
+      side2: {x: 6, y: 7, z: 0}
+    - side1: {x: 5, y: 6, z: 0}
+      side2: {x: 5, y: 7, z: 0}
+    - side1: {x: 4, y: 6, z: 0}
+      side2: {x: 4, y: 7, z: 0}
+    - side1: {x: 3, y: 6, z: 0}
+      side2: {x: 3, y: 7, z: 0}
+    - side1: {x: 2, y: 7, z: 0}
+      side2: {x: 3, y: 7, z: 0}
+    - side1: {x: 2, y: 8, z: 0}
+      side2: {x: 3, y: 8, z: 0}
+    - side1: {x: 2, y: 9, z: 0}
+      side2: {x: 3, y: 9, z: 0}
+    - side1: {x: 3, y: 10, z: 0}
+      side2: {x: 3, y: 9, z: 0}
+    - side1: {x: 4, y: 10, z: 0}
+      side2: {x: 4, y: 9, z: 0}
+    - side1: {x: 5, y: 10, z: 0}
+      side2: {x: 5, y: 9, z: 0}
+    - side1: {x: 6, y: 9, z: 0}
+      side2: {x: 5, y: 9, z: 0}
+    _keys:
+    - side1: {x: 6, y: 8, z: 0}
+      side2: {x: 5, y: 8, z: 0}
+    - side1: {x: 5, y: 7, z: 0}
+      side2: {x: 6, y: 7, z: 0}
+    - side1: {x: 5, y: 6, z: 0}
+      side2: {x: 5, y: 7, z: 0}
+    - side1: {x: 4, y: 6, z: 0}
+      side2: {x: 4, y: 7, z: 0}
+    - side1: {x: 3, y: 6, z: 0}
+      side2: {x: 3, y: 7, z: 0}
+    - side1: {x: 2, y: 7, z: 0}
+      side2: {x: 3, y: 7, z: 0}
+    - side1: {x: 2, y: 8, z: 0}
+      side2: {x: 3, y: 8, z: 0}
+    - side1: {x: 2, y: 9, z: 0}
+      side2: {x: 3, y: 9, z: 0}
+    - side1: {x: 3, y: 10, z: 0}
+      side2: {x: 3, y: 9, z: 0}
+    - side1: {x: 4, y: 10, z: 0}
+      side2: {x: 4, y: 9, z: 0}
+    - side1: {x: 5, y: 10, z: 0}
+      side2: {x: 5, y: 9, z: 0}
+    - side1: {x: 6, y: 9, z: 0}
+      side2: {x: 5, y: 9, z: 0}
     _values:
     - {fileID: 0}
-  baseGridCell: {fileID: 6626395369685488842, guid: 7a64af5938cc1df4da4ce4ef77e6ed88,
-    type: 3}
-  baseLowCover: {fileID: 5887443239766926031, guid: 658a4616c4172e440b33c1f318684363,
-    type: 3}
-  baseHighCover: {fileID: 4098854264101785450, guid: 191dcff9d3e56fa4882c97bc95e6e835,
-    type: 3}
-  indicatorCover: {fileID: 0}
-  cellsRootTransform: {fileID: 1567534016}
-  coversRootTransform: {fileID: 1969876207}
-  editCoverMode: 1
-  gameGridSize: {x: 10, y: 10}
-  testStartNode: {x: 1, y: 1, z: 0}
-  testEndNode: {x: 10, y: 10, z: 0}
-  baseUnit: {fileID: 2807073053509591690, guid: 82ae073d21cc0fe4e9c4b49aa516c2f3,
-    type: 3}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}

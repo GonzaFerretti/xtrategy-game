@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class Unit : GameGridElement
@@ -16,6 +17,15 @@ public class Unit : GameGridElement
     [SerializeField] private Material selectedMaterial;
     [SerializeField] private Material baseMaterial;
 
+    AsyncRangeQuery currentRangeQuery;
+    public List<Vector3Int> possibleMovements;
+
+    public void Init(Vector3 startingPos, GameGridCell cell)
+    {
+        currentCell = cell;
+        transform.position = startingPos;
+    }
+
     public virtual void Start()
     {
         SetUnitAttributes();
@@ -30,12 +40,50 @@ public class Unit : GameGridElement
     public virtual void Select()
     {
         rend.material = selectedMaterial;
-        currentCell.TintSelected();
+        if (possibleMovements.Count == 0)
+        {
+            Vector3Int currentCellCoords = currentCell.GetCoordinates();
+            currentRangeQuery = grid.QueryUnitRange(movementRange, currentCellCoords);
+            possibleMovements = new List<Vector3Int>();
+            StartCoroutine(WaitForRangeQuery());
+        }
+        else
+        {
+            grid.TintBulk(possibleMovements);
+        }
+    }
+
+    public IEnumerator Move(Vector3Int destinationCoords)
+    {
+        if (possibleMovements.Contains(destinationCoords))
+        {
+            Vector3Int[] path = grid.CalculateShortestPath(currentCell.GetCoordinates(), destinationCoords);
+            for (int i = 0; i < path.Length; i++)
+            {
+                transform.position = grid.GetWorldPositionFromCoords(path[i]);
+                yield return new WaitForSeconds(0.25f);
+            }
+            grid.UntintBulk(possibleMovements);
+            possibleMovements = new List<Vector3Int>();
+            currentCell = grid.GetCellAtCoordinate(path[path.Length - 1]);
+        }
+    }
+
+    public IEnumerator WaitForRangeQuery()
+    {
+        while (!currentRangeQuery.hasFinished)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        possibleMovements = currentRangeQuery.cellsInRange;
+        grid.TintBulk(possibleMovements);
+        currentRangeQuery.EndQuery();
     }
 
     public virtual void Deselect()
     {
         rend.material = baseMaterial;
-        currentCell.Untint();
+        grid.UntintBulk(possibleMovements);
     }
 }

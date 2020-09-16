@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+[System.Serializable]
 public class GameGridCell : GameGridElement
 {
     [SerializeField] Vector3Int coordinates;

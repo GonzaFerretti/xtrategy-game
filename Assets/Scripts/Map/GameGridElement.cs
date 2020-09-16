@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameGridElement : MonoBehaviour
 {
-    protected GameGridManager grid;
+    [SerializeField]protected GameGridManager grid;
 
     public void SetGridManagerReference(GameGridManager reference)
     {

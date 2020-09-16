@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(GameGridManager))]
+[CustomEditor(typeof(GameGridManager), true)]
 public class GridEditor : Editor
 {
-    Transform lastHoveredCell;
-    Vector3 possibleCoverPosition;
-    CoverData possibleCellMovement;
+    [SerializeField] Transform lastHoveredCell;
+    [SerializeField] Vector3 possibleCoverPosition;
+    [SerializeField] CoverData possibleCellMovement;
+    [SerializeField] GameGridManager gameGridManager;
+    string saveName;
 
     bool canPlaceCover;
 
@@ -16,7 +18,7 @@ public class GridEditor : Editor
     {
         base.OnInspectorGUI();
 
-        GameGridManager gameGridManager = (GameGridManager)target;
+        if (!gameGridManager) gameGridManager = (GameGridManager)target;
         if (GUILayout.Button("New Grid"))
         {
             gameGridManager.InitGrid();
@@ -36,10 +38,26 @@ public class GridEditor : Editor
         {
             gameGridManager.TestPathfinding();
         }
+        saveName = EditorGUILayout.TextField(new GUIContent("Save name: "), saveName);
+
+        if (GUILayout.Button("Save to file"))
+        {
+            string path = "Assets/Scriptable Objects/" + saveName + ".asset";
+            MapDictData mapData = AssetDatabase.LoadAssetAtPath<MapDictData>(path);
+            if (mapData)
+            {
+                AssetDatabase.DeleteAsset(path);
+            }
+            mapData = CreateInstance<MapDictData>();
+            mapData.Init(gameGridManager.gridCoordinates, gameGridManager.covers);
+            AssetDatabase.CreateAsset(mapData, "Assets/Scriptable Objects/" + saveName + ".asset");
+            gameGridManager.SetMapData(mapData);
+        }
     }
 
     public void OnSceneGUI()
     {
+        if (!gameGridManager) gameGridManager = (GameGridManager)target;
         if (((GameGridManager)target).editCoverMode)
         {
             if (Event.current.type == EventType.Layout)
@@ -67,7 +85,8 @@ public class GridEditor : Editor
 
     void OnEnable()
     {
-        SceneView.onSceneGUIDelegate += this.OnSceneMouseOver;
+        if (!gameGridManager) gameGridManager = (GameGridManager)target;
+        SceneView.duringSceneGui += this.OnSceneMouseOver;
     }
 
     void OnSceneMouseOver(SceneView view)
@@ -81,7 +100,7 @@ public class GridEditor : Editor
             {
                 if (lastHoveredCell)
                 {
-                    GameGridManager gameGridManager = (GameGridManager)target;
+                    gameGridManager = (GameGridManager)target;
                     Vector3Int currentlyHoveredCellCoordinates = currentlyHoveredCell.GetComponent<GameGridCell>().GetCoordinates();
                     GameGridCell AdjacentGridCell = gameGridManager.GetAdjacentCellRelativeToMousePosition(hit.point, currentlyHoveredCellCoordinates);
                     if (AdjacentGridCell)

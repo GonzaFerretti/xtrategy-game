@@ -4,8 +4,9 @@ using UnityEngine;
 [System.Serializable]
 public struct CoverData
 {
-    Vector3Int side1;
-    Vector3Int side2;
+    
+    [SerializeField] Vector3Int side1;
+    [SerializeField] Vector3Int side2;
     public CoverData(Vector3Int origin, Vector3Int destination)
     {
         this.side1 = origin;
