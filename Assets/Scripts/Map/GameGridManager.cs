@@ -355,11 +355,21 @@ public class GameGridManager : MonoBehaviour
 
                 foreach (Vector3Int possibleNeighbour in possibleNextBorders)
                 {
-                    if (!currentQueries[queryId].cellsInRange.Contains(possibleNeighbour) && !nextBorder.ContainsKey(possibleNeighbour))
+                    Cover possibleCover = GetCoverFromCells(currentBorderCell, possibleNeighbour);
+                    int stepsTaken = (possibleCover && possibleCover is LowCover) ? currentBorder[currentBorderCell] + 2 : currentBorder[currentBorderCell] + 1;
+                    if (stepsTaken <= maxSteps)
                     {
-                        Cover possibleCover = GetCoverFromCells(currentBorderCell, possibleNeighbour);
-                        int stepsTaken = (possibleCover && possibleCover is LowCover) ? currentBorder[currentBorderCell] + 2 : currentBorder[currentBorderCell] + 1;
-                        if (stepsTaken <= maxSteps) nextBorder.Add(possibleNeighbour, stepsTaken);
+                        if (nextBorder.ContainsKey(possibleNeighbour))
+                        {
+                            if (nextBorder[possibleNeighbour] > stepsTaken)
+                            {
+                                nextBorder[possibleNeighbour] = stepsTaken;
+                            }
+                        }
+                        else
+                        {
+                            nextBorder.Add(possibleNeighbour, stepsTaken);
+                        }
                     }
                 }
             }
