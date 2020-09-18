@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ControllerStateTransition : ScriptableObject
+public abstract class ControllerStateTransition : ScriptableObject
 {
-    public ControllerState startingState;
-    public ControllerState endState;
-    public ControllerStateTransitionConditionTransition condition;
+    public ControllerState destinationState;
+    public abstract void Transition(BaseController controller);
+    public abstract bool CheckCondition(BaseController controller);
 }

@@ -346,8 +346,6 @@ public class GameGridManager : MonoBehaviour
         while (depth <= maxSteps)
         {
             currentQueries[queryId].cellsInRange.AddRange(currentBorder.Keys);
-
-            TintBulk(currentQueries[queryId].cellsInRange);
             Dictionary<Vector3Int, int> nextBorder = new Dictionary<Vector3Int, int>();
             foreach (Vector3Int currentBorderCell in currentBorder.Keys)
             {

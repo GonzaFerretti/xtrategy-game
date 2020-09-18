@@ -324,7 +324,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentlySelectedUnit: {fileID: 0}
-  gridManager: {fileID: 0}
+  gridManager: {fileID: 2009562864}
+  controllerStates:
+  - {fileID: 11400000, guid: 0c570ef61e700a94a9120c043b6e33e4, type: 2}
+  - {fileID: 11400000, guid: 69902d7e36afdde488c0f7abe5e192af, type: 2}
+  currentState: {fileID: 11400000, guid: 0c570ef61e700a94a9120c043b6e33e4, type: 2}
 --- !u!4 &1351654734
 Transform:
   m_ObjectHideFlags: 0
@@ -339,6 +343,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2009562864 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6409168009872196243, guid: 89042c2a50a5375448dbf067a5c51345,
+    type: 3}
+  m_PrefabInstance: {fileID: 6409168010487029029}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b77531d3062d1ae4c842b36a592c5d3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6409168010487029029
 PrefabInstance:
   m_ObjectHideFlags: 0
