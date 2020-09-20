@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95b2f63888bcb0347a2f8b4d18fb671a, type: 3}
   m_Name: Unit Selection
   m_EditorClassIdentifier: 
-  destinationState: {fileID: 0}
+  destinationState: {fileID: 11400000, guid: 69902d7e36afdde488c0f7abe5e192af, type: 2}

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(GameGridManager), true)]
+[CustomEditor(typeof(GridBuilder), true)]
 public class GridEditor : Editor
 {
     [SerializeField] Transform lastHoveredCell;
     [SerializeField] Vector3 possibleCoverPosition;
     [SerializeField] CoverData possibleCellMovement;
-    [SerializeField] GameGridManager gameGridManager;
+    [SerializeField] GridBuilder gridBuilder;
     string saveName;
 
     bool canPlaceCover;
@@ -18,47 +18,48 @@ public class GridEditor : Editor
     {
         base.OnInspectorGUI();
 
-        if (!gameGridManager) gameGridManager = (GameGridManager)target;
+        if (!gridBuilder) gridBuilder = ((GridBuilder)target);
         if (GUILayout.Button("New Grid"))
         {
-            gameGridManager.InitGrid();
+            gridBuilder.InitGrid();
             lastHoveredCell = null;
             canPlaceCover = false;
         }
 
         if (GUILayout.Button("Clean Grid"))
         {
-            gameGridManager.CleanGrid();
-            gameGridManager.CleanObstacles();
+            gridBuilder.CleanGrid();
+            gridBuilder.CleanObstacles();
             lastHoveredCell = null;
             canPlaceCover = false;
         }
-
+        /*
         if (GUILayout.Button("Test Pathfinding"))
         {
-            gameGridManager.TestPathfinding();
-        }
+            gridBuilder.TestPathfinding();
+        }*/
+        if (saveName == "" && gridBuilder.gameGridManager.savedData) saveName = gridBuilder.gameGridManager.savedData.name;
         saveName = EditorGUILayout.TextField(new GUIContent("Save name: "), saveName);
 
         if (GUILayout.Button("Save to file"))
         {
-            string path = "Assets/Scriptable Objects/" + saveName + ".asset";
+            string path = "Assets/Scriptable Objects/Map/" + saveName + ".asset";
             MapDictData mapData = AssetDatabase.LoadAssetAtPath<MapDictData>(path);
             if (mapData)
             {
                 AssetDatabase.DeleteAsset(path);
             }
             mapData = CreateInstance<MapDictData>();
-            mapData.Init(gameGridManager.gridCoordinates, gameGridManager.covers);
-            AssetDatabase.CreateAsset(mapData, "Assets/Scriptable Objects/" + saveName + ".asset");
-            gameGridManager.SetMapData(mapData);
+            mapData.Init(gridBuilder.gridCoordinates, gridBuilder.covers);
+            AssetDatabase.CreateAsset(mapData, path);
+            gridBuilder.gameGridManager.savedData = mapData;
         }
     }
 
     public void OnSceneGUI()
     {
-        if (!gameGridManager) gameGridManager = (GameGridManager)target;
-        if (((GameGridManager)target).editCoverMode)
+        if (!gridBuilder) gridBuilder = ((GridBuilder)target);
+        if ((gridBuilder.editCoverMode))
         {
             if (Event.current.type == EventType.Layout)
             {
@@ -66,7 +67,6 @@ public class GridEditor : Editor
             }
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
             {
-                GameGridManager gameGridManager = (GameGridManager)target;
                 Vector3 mousePosition = Event.current.mousePosition;
                 Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
                 mousePosition = ray.origin;
@@ -76,7 +76,7 @@ public class GridEditor : Editor
                 {
                     if (canPlaceCover)
                     {
-                        gameGridManager.AddCover(possibleCoverPosition, possibleCellMovement);
+                        gridBuilder.AddCover(possibleCoverPosition, possibleCellMovement);
                     }
                 }
             }
@@ -85,7 +85,7 @@ public class GridEditor : Editor
 
     void OnEnable()
     {
-        if (!gameGridManager) gameGridManager = (GameGridManager)target;
+        if (!gridBuilder) gridBuilder = ((GridBuilder)target);
         SceneView.duringSceneGui += this.OnSceneMouseOver;
     }
 
@@ -100,9 +100,9 @@ public class GridEditor : Editor
             {
                 if (lastHoveredCell)
                 {
-                    gameGridManager = (GameGridManager)target;
+                    gridBuilder = ((GridBuilder)target);
                     Vector3Int currentlyHoveredCellCoordinates = currentlyHoveredCell.GetComponent<GameGridCell>().GetCoordinates();
-                    GameGridCell AdjacentGridCell = gameGridManager.GetAdjacentCellRelativeToMousePosition(hit.point, currentlyHoveredCellCoordinates);
+                    GameGridCell AdjacentGridCell = gridBuilder.GetAdjacentCellRelativeToMousePosition(hit.point, currentlyHoveredCellCoordinates);
                     if (AdjacentGridCell)
                     {
                         possibleCoverPosition = (currentlyHoveredCell.position + AdjacentGridCell.transform.position) / 2;

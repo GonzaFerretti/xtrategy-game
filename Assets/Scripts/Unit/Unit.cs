@@ -26,6 +26,18 @@ public class Unit : GameGridElement
         transform.position = startingPos;
     }
 
+    public void Update()
+    {
+        // REMOVE LATER
+        if (!currentCell)
+        {
+            
+            currentCell = FindObjectOfType<GameGridCell>();
+            grid = currentCell.grid;
+            transform.position = currentCell.transform.position;
+        }
+    }
+
     public virtual void Start()
     {
         SetUnitAttributes();

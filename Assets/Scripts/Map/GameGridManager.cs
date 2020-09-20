@@ -8,148 +8,86 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Remoting.Messaging;
 using System.IO;
 using UnityEditor.UIElements;
+using System.Reflection;
+using System.Runtime.Serialization;
 
 public class GameGridManager : MonoBehaviour
 {
     // I'm using Unity grid class to handle grid to world or viceversa conversions.
     [Header("Cell Info")]
     [SerializeField] private Grid grid;
+    [SerializeField] public Transform cellsRootTransform;
+    [SerializeField] public Transform coversRootTransform;
+
+
     [SerializeField] public GridCoordinates gridCoordinates;
     [SerializeField] public CoverInformation covers;
-    [SerializeField] private GameGridCell baseGridCell;
-    [SerializeField] private Cover baseLowCover;
-    [SerializeField] private Cover baseHighCover;
-    [SerializeField] private Cover indicatorCover;
-    [SerializeField] private Transform cellsRootTransform;
-    [SerializeField] private Transform coversRootTransform;
-    [SerializeField] public bool editCoverMode = false;
 
     [SerializeField] private Dictionary<int, AsyncRangeQuery> currentQueries = new Dictionary<int, AsyncRangeQuery>();
-    [SerializeField] private MapDictData savedData;
+    [SerializeField] public MapDictData savedData;
+    [SerializeField] private MapElementsDB elementsDatabase;
 
-    [Header("Test Parameters")]
-    [SerializeField] public Vector2Int gameGridSize;
-    [SerializeField] private Vector3Int testStartNode;
-    [SerializeField] private Vector3Int testEndNode;
-    [SerializeField] private Unit baseUnit;
-
-
-    public void SetMapData(MapDictData data)
-    {
-        savedData = data;
-    }
-
-    public void InitGrid()
-    {
-        int rows = gameGridSize.x;
-        int columns = gameGridSize.y;
-        CleanGrid();
-        CleanObstacles();
-        for (int row = 1; row <= rows; row++)
-        {
-            for (int column = 1; column <= columns; column++)
-            {
-                Vector3Int cellCoordinates = new Vector3Int(row, column, 0);
-                Vector3 currentCellWorldPosition = grid.CellToWorld(cellCoordinates);
-                GameGridCell cell = Instantiate(baseGridCell, currentCellWorldPosition, Quaternion.identity, cellsRootTransform);
-                cell.name = "cell(" + row + "," + column + ")";
-                //cell.transform.localScale = grid.cellSize;
-                cell.SetCoordinates(cellCoordinates);
-                cell.SetGridManagerReference(this);
-                gridCoordinates.Add(cellCoordinates, cell);
-            }
-        }
-
-        Vector3Int randomPositionInGrid = new Vector3Int(Random.Range(1, rows), Random.Range(1, columns), 0);
-        Unit newUnit = Instantiate(baseUnit);
-        newUnit.SetGridManagerReference(this);
-        newUnit.Init(GetWorldPositionFromCoords(randomPositionInGrid), gridCoordinates[randomPositionInGrid]);
-    }
-
-    public void CleanObstacles()
-    {
-        while (coversRootTransform.childCount > 0)
-        {
-            DestroyImmediate(coversRootTransform.GetChild(0).gameObject);
-        }
-
-        covers = new CoverInformation();
-    }
-
-    public void CleanGrid()
-    {
-        while (cellsRootTransform.childCount > 0)
-        {
-            DestroyImmediate(cellsRootTransform.GetChild(0).gameObject);
-        }
-
-        gridCoordinates = new GridCoordinates();
-    }
-
-    public void AddCover(Vector3 position, CoverData cellMovement)
-    {
-        CoverData invertedCellMovement = cellMovement.GetInverted();
-        bool containsInCurrentDirection = covers.ContainsKey(cellMovement);
-        bool containsInInvertedDirection = covers.ContainsKey(invertedCellMovement);
-        if (!containsInCurrentDirection && !containsInInvertedDirection)
-        {
-            CreateCover(position, cellMovement, baseLowCover);
-        }
-        else
-        {
-            CoverData indexedDirection = (containsInCurrentDirection) ? cellMovement : invertedCellMovement;
-            Cover cover = covers[indexedDirection];
-            bool isCurrentCoverLow = cover is LowCover;
-            covers.Remove(indexedDirection);
-            DestroyImmediate(cover.gameObject);
-
-            if (isCurrentCoverLow)
-            {
-                CreateCover(position, indexedDirection, baseHighCover);
-            }
-        }
-    }
 
     public void Start()
     {
-        gridCoordinates = savedData.gridCoordinates;
-        covers = savedData.coverInfo;
+        BuildCellsFromData();
+        BuildCoversFromData();
     }
 
-    public Cover CreateCover(Vector3 position, CoverData cellMovement, Cover CoverTypeSample)
+    public void BuildCellsFromData()
     {
-        Cover cover = Instantiate(CoverTypeSample);
-        cover.transform.position = position;
-        cover.transform.parent = coversRootTransform;
-        if (!cellMovement.IsCellMovementDirectionInXAxis())
+        Dictionary<string, GameGridCell> gridElementCache = new Dictionary<string, GameGridCell>();
+        for (int i = 0; i < savedData.cellsCoordinates.Count; i++)
         {
-            cover.transform.localEulerAngles = new Vector3(0, 90, 0);
-        }
-        covers.Add(cellMovement, cover);
-        cover.SetGridManagerReference(this);
-        return cover;
-    }
-
-    public GameGridCell GetAdjacentCellRelativeToMousePosition(Vector3 currentMousePosition, Vector3Int currentlyHoveredCell)
-    {
-        if (gridCoordinates.ContainsKey(currentlyHoveredCell))
-        {
-            if (this == null) return null;
-            Vector3 gridCellPosition = gridCoordinates[currentlyHoveredCell].transform.position;
-            Vector3 scaledDirection = currentMousePosition - gridCellPosition;
-            float AbsX = Mathf.Abs(scaledDirection.x);
-            float AbsY = Mathf.Abs(scaledDirection.z);
-            Vector3Int vectorToCheck = (AbsX > AbsY) ? Vector3Int.right * (int)Mathf.Sign(scaledDirection.x) : Vector3Int.up * (int)Mathf.Sign(scaledDirection.z);
-            if (gridCoordinates.ContainsKey(currentlyHoveredCell + vectorToCheck))
+            Vector3Int coordinates = savedData.cellsCoordinates[i];
+            string prefabName = savedData.cellsPrefabNames[i];
+            Vector3 cellPosition = GetWorldPositionFromCoords(coordinates);
+            GameGridCell cellToInstantiate = null;
+            if (gridElementCache.ContainsKey(prefabName))
             {
-                return gridCoordinates[currentlyHoveredCell + vectorToCheck];
+                cellToInstantiate = gridElementCache[prefabName];
             }
             else
             {
-                return null;
+                cellToInstantiate = elementsDatabase.GetElementByType<GameGridCell>(prefabName);
+                gridElementCache.Add(prefabName, cellToInstantiate);
             }
+            GameGridCell cell = Instantiate(cellToInstantiate, cellPosition, Quaternion.identity, cellsRootTransform);
+            cell.name = "cell(" + coordinates.x + "," + coordinates.y + ")";
+            cell.SetCoordinates(coordinates);
+            cell.SetGridManagerReference(this);
+            gridCoordinates.Add(coordinates, cell);
         }
-        else return null;
+    }
+
+    public void BuildCoversFromData()
+    {
+        Dictionary<string, Cover> coverElementsCache = new Dictionary<string, Cover>();
+        for (int i = 0; i < savedData.coversData.Count; i++)
+        {
+            CoverData coverInfo = savedData.coversData[i];
+            string prefabName = savedData.coversPrefabNames[i];
+            Vector3 position = (GetWorldPositionFromCoords(coverInfo.side1) + GetWorldPositionFromCoords(coverInfo.side2)) / 2;
+            Cover coverToInstantiate = null;
+            if (coverElementsCache.ContainsKey(prefabName))
+            {
+                coverToInstantiate = coverElementsCache[prefabName];
+            }
+            else
+            {
+                coverToInstantiate = elementsDatabase.GetElementByType<Cover>(prefabName);
+                coverElementsCache.Add(prefabName, coverToInstantiate);
+            }
+            Cover cover = Instantiate(coverToInstantiate);
+            cover.SetGridManagerReference(this);
+            cover.transform.position = position;
+            cover.transform.parent = coversRootTransform;
+            if (!coverInfo.IsCellMovementDirectionInXAxis())
+            {
+                cover.transform.localEulerAngles = new Vector3(0, 90, 0);
+            }
+            covers.Add(coverInfo, cover);
+        }
     }
 
     public GameGridCell GetCellAtCoordinate(Vector3Int coord)
@@ -237,11 +175,6 @@ public class GameGridManager : MonoBehaviour
         {
             gridCoordinates[cell].TintSelected();
         }
-    }
-
-    public void TestPathfinding()
-    {
-        CalculateShortestPath(testStartNode, testEndNode);
     }
 
     // Disregards diagonal movements as this isn't allowed in the game
@@ -418,3 +351,4 @@ public class GridCoordinates : SerializableDictionaryBase<Vector3Int, GameGridCe
 
 [System.Serializable]
 public class CoverInformation : SerializableDictionaryBase<CoverData, Cover> { }
+
