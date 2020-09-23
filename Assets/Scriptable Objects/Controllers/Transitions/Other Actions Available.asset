@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25b523493f5b01c4088b388fe729cab4, type: 3}
-  m_Name: Test Unit
+  m_Script: {fileID: 11500000, guid: 7831f685627eba5449935685cd80203c, type: 3}
+  m_Name: Other Actions Available
   m_EditorClassIdentifier: 
-  maxHp: 10
-  movementRange: 3
-  minAttackRange: 2
-  maxAttackRange: 3
+  destinationState: {fileID: 11400000, guid: 69902d7e36afdde488c0f7abe5e192af, type: 2}

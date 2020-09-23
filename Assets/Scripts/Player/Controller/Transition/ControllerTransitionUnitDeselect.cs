@@ -9,9 +9,4 @@ public class ControllerTransitionUnitDeselect : ControllerStateTransition
     {
         return controller.currentlySelectedUnit == null;
     }
-
-    public override void Transition(BaseController controller)
-    {
-        controller.SwitchStates(destinationState.stateName);
-    }
 }

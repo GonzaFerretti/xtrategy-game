@@ -8,9 +8,11 @@ public class Unit : GameGridElement
     [SerializeField] GameGridCell currentCell;
 
     [SerializeField] float currentHp;
-    [SerializeField] bool canMove = true;
-    [SerializeField] bool canAttack = true;
+    [SerializeField] public currentActionState moveState = currentActionState.notStarted;
+    [SerializeField] public currentActionState attackState = currentActionState.notStarted;
     [SerializeField] int movementRange;
+    [SerializeField] int minAttackRange;
+    [SerializeField] int maxAttackRange;
     [SerializeField] UnitAttributes unitAttributes;
     [SerializeField] private Renderer rend;
 
@@ -19,6 +21,7 @@ public class Unit : GameGridElement
 
     AsyncRangeQuery currentRangeQuery;
     public List<Vector3Int> possibleMovements;
+    public List<Vector3Int> possibleAttacks;
 
     public void Init(Vector3 startingPos, GameGridCell cell)
     {
@@ -26,14 +29,17 @@ public class Unit : GameGridElement
         transform.position = startingPos;
     }
 
+    public Vector3Int GetCoordinates()
+    {
+        return currentCell.GetCoordinates();
+    }
+
     public void Update()
     {
         // REMOVE LATER
         if (!currentCell)
         {
-            
-            currentCell = FindObjectOfType<GameGridCell>();
-            grid = currentCell.grid;
+            currentCell = grid.GetCellAtCoordinate(new Vector3Int(Random.Range(1, 10), Random.Range(1, 10), 0));
             transform.position = currentCell.transform.position;
         }
     }
@@ -47,11 +53,14 @@ public class Unit : GameGridElement
     {
         currentHp = unitAttributes.maxHp;
         movementRange = unitAttributes.movementRange;
+        minAttackRange = unitAttributes.minAttackRange;
+        maxAttackRange = unitAttributes.maxAttackRange;
     }
 
     public virtual void Select()
     {
         rend.material = selectedMaterial;
+        if (moveState == currentActionState.ended) return;
         if (possibleMovements.Count == 0)
         {
             Vector3Int currentCellCoords = currentCell.GetCoordinates();
@@ -65,10 +74,26 @@ public class Unit : GameGridElement
         }
     }
 
+    public virtual void PrepareAttack()
+    {
+        if (possibleAttacks.Count == 0)
+        {
+            Vector3Int currentCellCoords = currentCell.GetCoordinates();
+            currentRangeQuery = grid.QueryUnitAttackRange(minAttackRange, maxAttackRange, currentCellCoords);
+            possibleAttacks = new List<Vector3Int>();
+            StartCoroutine(WaitForAttackRangeQuery());
+        }
+        else
+        {
+            grid.TintBulk(possibleAttacks);
+        }
+    }
+
     public IEnumerator Move(Vector3Int destinationCoords)
     {
         if (possibleMovements.Contains(destinationCoords))
         {
+            moveState = currentActionState.inProgress;
             Vector3Int[] path = grid.CalculateShortestPath(currentCell.GetCoordinates(), destinationCoords);
             for (int i = 0; i < path.Length; i++)
             {
@@ -78,6 +103,7 @@ public class Unit : GameGridElement
             grid.UntintBulk(possibleMovements);
             possibleMovements = new List<Vector3Int>();
             currentCell = grid.GetCellAtCoordinate(path[path.Length - 1]);
+            moveState = currentActionState.ended;
         }
     }
 
@@ -93,9 +119,28 @@ public class Unit : GameGridElement
         currentRangeQuery.EndQuery();
     }
 
+    public IEnumerator WaitForAttackRangeQuery()
+    {
+        while (!currentRangeQuery.hasFinished)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        possibleAttacks = currentRangeQuery.cellsInRange;
+        grid.TintBulk(possibleAttacks);
+        currentRangeQuery.EndQuery();
+    }
+
     public virtual void Deselect()
     {
         rend.material = baseMaterial;
         grid.UntintBulk(possibleMovements);
     }
+}
+
+public enum currentActionState 
+{ 
+    notStarted,
+    inProgress,
+    ended
 }

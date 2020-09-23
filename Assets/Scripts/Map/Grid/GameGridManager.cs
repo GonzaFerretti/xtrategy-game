@@ -184,7 +184,7 @@ public class GameGridManager : MonoBehaviour
         return result;
     }
 
-    public List<Vector3Int> GetViableNeighbourCells(Vector3Int currentCellCoords)
+    public List<Vector3Int> GetViableNeighbourCellsForMovement(Vector3Int currentCellCoords)
     {
         List<Vector3Int> possibleNeighbourCoordinates = new List<Vector3Int>();
 
@@ -198,7 +198,7 @@ public class GameGridManager : MonoBehaviour
 
     public List<Node> GetNeighbourNodes(Node node, Dictionary<Vector3Int, Node> openSet, Dictionary<Vector3Int, Node> closedSet)
     {
-        List<Vector3Int> possibleNeighbourCoordinates = GetViableNeighbourCells(node.coordinates);
+        List<Vector3Int> possibleNeighbourCoordinates = GetViableNeighbourCellsForMovement(node.coordinates);
 
         List<Node> neighbourNodes = new List<Node>();
         foreach (Vector3Int neighbour in possibleNeighbourCoordinates)
@@ -244,33 +244,7 @@ public class GameGridManager : MonoBehaviour
         return possibleCover;
     }
 
-    public void TintMovementRange()
-    {
-
-    }
-
-    public IEnumerator ProcessUnitRangeQuery(int maxSteps, int currentSteps, Vector3Int currentCell, int queryId)
-    {
-        currentQueries[queryId].cellsInRange.Add(currentCell);
-        yield return new WaitForEndOfFrame();
-        List<Vector3Int> currentNeighbours = GetViableNeighbourCells(currentCell);
-
-        foreach (Vector3Int neighbour in currentNeighbours)
-        {
-            if (!currentQueries[queryId].cellsInRange.Contains(neighbour))
-            {
-                Cover possibleCover = GetCoverFromCells(currentCell, neighbour);
-                int nextSteps = (possibleCover && possibleCover is LowCover) ? currentSteps + 2 : currentSteps + 1;
-                if (nextSteps <= maxSteps)
-                {
-                    yield return StartCoroutine(ProcessUnitRangeQuery(maxSteps, nextSteps, neighbour, queryId));
-                }
-            }
-        }
-
-    }
-
-    public IEnumerator ProcessUnitRangeQueryBIS(int maxSteps, Vector3Int currentCell, int queryId)
+    public IEnumerator ProcessUnitRangeQuery(int maxSteps, Vector3Int currentCell, int queryId)
     {
         Dictionary<Vector3Int, int> currentBorder = new Dictionary<Vector3Int, int>();
         currentBorder.Add(currentCell, 0);
@@ -282,7 +256,7 @@ public class GameGridManager : MonoBehaviour
             Dictionary<Vector3Int, int> nextBorder = new Dictionary<Vector3Int, int>();
             foreach (Vector3Int currentBorderCell in currentBorder.Keys)
             {
-                List<Vector3Int> possibleNextBorders = GetViableNeighbourCells(currentBorderCell);
+                List<Vector3Int> possibleNextBorders = GetViableNeighbourCellsForMovement(currentBorderCell);
 
                 foreach (Vector3Int possibleNeighbour in possibleNextBorders)
                 {
@@ -312,7 +286,7 @@ public class GameGridManager : MonoBehaviour
 
     public IEnumerator StartUnitRangeQuery(int maxSteps, Vector3Int startingCell, int queryId)
     {
-        yield return StartCoroutine(ProcessUnitRangeQueryBIS(maxSteps, startingCell, queryId));
+        yield return StartCoroutine(ProcessUnitRangeQuery(maxSteps, startingCell, queryId));
         currentQueries[queryId].hasFinished = true;
     }
 
@@ -338,6 +312,90 @@ public class GameGridManager : MonoBehaviour
     public void EndQuery(AsyncRangeQuery query)
     {
         currentQueries.Remove(query.id);
+    }
+
+    public IEnumerator ProcessAttackRangeQuery(int minRange, int maxRange, Vector3Int currentCell, int queryId)
+    {
+        Dictionary<Vector3Int, int> currentBorder = new Dictionary<Vector3Int, int>();
+        currentBorder.Add(currentCell, 0);
+        List<Vector3Int> discardedRange = new List<Vector3Int>();
+        int range = 0;
+        UntintBulk(gridCoordinates.Keys);
+        while (range <= maxRange)
+        {
+            if (range >= minRange && range <= maxRange) currentQueries[queryId].cellsInRange.AddRange(currentBorder.Keys);
+            else discardedRange.AddRange(currentBorder.Keys);
+            Dictionary<Vector3Int, int> nextBorder = new Dictionary<Vector3Int, int>();
+            foreach (Vector3Int currentBorderCell in currentBorder.Keys)
+            {
+                List<Vector3Int> possibleNextBorders = GetViableNeighbourCellsForAttack(currentBorderCell);
+
+                foreach (Vector3Int possibleNeighbour in possibleNextBorders)
+                {
+                        if (!nextBorder.ContainsKey(possibleNeighbour) && !discardedRange.Contains(possibleNeighbour) && !currentQueries[queryId].cellsInRange.Contains(possibleNeighbour))
+                        {
+                            nextBorder.Add(possibleNeighbour, currentBorder[currentBorderCell] + 1);
+                        }
+                }
+            }
+            currentBorder = nextBorder;
+            range++;
+            yield return null;
+        }
+    }
+
+    public List<Vector3Int> GetViableNeighbourCellsForAttack(Vector3Int cell)
+    {
+        List<Vector3Int> possibleNeighbourCoordinates = new List<Vector3Int>();
+
+        CheckNeighbourAttackViabilityAndAdd(ref possibleNeighbourCoordinates, cell, new Vector3Int(1, 0, 0));
+        CheckNeighbourAttackViabilityAndAdd(ref possibleNeighbourCoordinates, cell, new Vector3Int(-1, 0, 0));
+        CheckNeighbourAttackViabilityAndAdd(ref possibleNeighbourCoordinates, cell, new Vector3Int(0, 1, 0));
+        CheckNeighbourAttackViabilityAndAdd(ref possibleNeighbourCoordinates, cell, new Vector3Int(0, -1, 0));
+        CheckNeighbourAttackViabilityAndAdd(ref possibleNeighbourCoordinates, cell, new Vector3Int(1, 1, 0));
+        CheckNeighbourAttackViabilityAndAdd(ref possibleNeighbourCoordinates, cell, new Vector3Int(-1, -1, 0));
+        CheckNeighbourAttackViabilityAndAdd(ref possibleNeighbourCoordinates, cell, new Vector3Int(-1, 1, 0));
+        CheckNeighbourAttackViabilityAndAdd(ref possibleNeighbourCoordinates, cell, new Vector3Int(1, -1, 0));
+
+        return possibleNeighbourCoordinates;
+    }
+
+    public void CheckNeighbourAttackViabilityAndAdd(ref List<Vector3Int> coordinatesList, Vector3Int currentNode, Vector3Int direction)
+    {
+        if (IsNeighbourViableForAttack(currentNode, currentNode + direction))
+        {
+            coordinatesList.Add(currentNode + direction);
+        }
+    }
+
+    public bool IsNeighbourViableForAttack(Vector3Int node, Vector3Int neighbour)
+    {
+       return gridCoordinates.ContainsKey(neighbour);
+    }
+
+    public IEnumerator StartUnitAttackRangeQuery(int minRange, int maxRange, Vector3Int startingCell, int queryId)
+    {
+        yield return StartCoroutine(ProcessAttackRangeQuery(minRange,maxRange, startingCell, queryId));
+        currentQueries[queryId].hasFinished = true;
+    }
+
+    public AsyncRangeQuery QueryUnitAttackRange(int minRange, int maxRange, Vector3Int startingCell)
+    {
+        foreach (GameGridCell cell in gridCoordinates.Values)
+        {
+            cell.Untint();
+        }
+
+        int queryId = Random.Range(0, 100);
+        while (currentQueries.ContainsKey(queryId))
+        {
+            queryId = Random.Range(0, 100);
+        }
+
+        AsyncRangeQuery rangeQuery = new AsyncRangeQuery(queryId, this);
+        currentQueries.Add(queryId, rangeQuery);
+        StartCoroutine(StartUnitAttackRangeQuery(minRange, maxRange, startingCell, queryId));
+        return rangeQuery;
     }
 
     public Vector3 GetWorldPositionFromCoords(Vector3Int cellCoords)

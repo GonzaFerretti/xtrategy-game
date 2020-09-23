@@ -7,4 +7,6 @@ public class UnitAttributes : ScriptableObject
 {
     public float maxHp;
     public int movementRange;
+    public int minAttackRange;
+    public int maxAttackRange;
 }

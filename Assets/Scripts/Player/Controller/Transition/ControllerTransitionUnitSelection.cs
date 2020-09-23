@@ -7,12 +7,6 @@ public class ControllerTransitionUnitSelection : ControllerStateTransition
 {
     public override bool CheckCondition(BaseController controller)
     {
-        return controller.currentlySelectedUnit != null && controller.currentlySelectedUnit.possibleMovements.Count > 0;
-    }
-
-
-    public override void Transition(BaseController controller)
-    {
-        controller.SwitchStates(destinationState.stateName);
+        return controller.currentlySelectedUnit != null && (controller.currentlySelectedUnit.possibleMovements.Count > 0 || controller.currentlySelectedUnit.moveState == currentActionState.ended);
     }
 }

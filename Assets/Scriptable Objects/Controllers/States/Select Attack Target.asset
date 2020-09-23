@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25b523493f5b01c4088b388fe729cab4, type: 3}
-  m_Name: Test Unit
+  m_Script: {fileID: 11500000, guid: 330e9a37e9d761f4ea7850a89996c36b, type: 3}
+  m_Name: Select Attack Target
   m_EditorClassIdentifier: 
-  maxHp: 10
-  movementRange: 3
-  minAttackRange: 2
-  maxAttackRange: 3
+  stateName: selectAttackTarget
+  transitions: []

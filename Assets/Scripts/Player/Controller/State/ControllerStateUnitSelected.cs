@@ -16,9 +16,16 @@ public class ControllerStateUnitSelected : ControllerState
     public void CheckUnitDeselect()
     {
         GameObject unitSelected;
-        if (!(controller as PlayerController).GetObjectUnderMouse(out unitSelected, 1 << LayerMask.NameToLayer("Unit")))
+        controller.currentlySelectedUnit.Deselect();
+
+        if ((controller as PlayerController).GetObjectUnderMouse(out unitSelected, 1 << LayerMask.NameToLayer("Unit")))
         {
-            DeselectUnit();
+            controller.currentlySelectedUnit = unitSelected.GetComponent<Unit>();
+            controller.currentlySelectedUnit.Select();
+        }
+        else
+        {
+            controller.currentlySelectedUnit = null;
         }
     }
 
@@ -29,13 +36,6 @@ public class ControllerStateUnitSelected : ControllerState
         {
             Vector3Int target = objectSelected.transform.parent.GetComponent<GameGridCell>().GetCoordinates();
             controller.MoveUnit(target);
-            DeselectUnit();
         }
-    }
-
-    void DeselectUnit()
-    {
-        controller.currentlySelectedUnit.Deselect();
-        controller.currentlySelectedUnit = null;
     }
 }

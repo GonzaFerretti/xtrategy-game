@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 893b130260363ec498da81e26d47f8bc, type: 3}
+  m_Name: Waiting For Action Finish
+  m_EditorClassIdentifier: 
+  stateName: actionWaitFinish
+  transitions:
+  - {fileID: 11400000, guid: 48f1d0ed0056cc94ea015d7c08d662d6, type: 2}
+  - {fileID: 11400000, guid: 3d2616f6c1b08cd4da25d2c6ae782dba, type: 2}

@@ -5,6 +5,11 @@ using UnityEngine;
 public abstract class ControllerStateTransition : ScriptableObject
 {
     public ControllerState destinationState;
-    public abstract void Transition(BaseController controller);
+
+    public virtual void Transition(BaseController controller)
+    {
+        controller.SwitchStates(destinationState.stateName);
+    }
+
     public abstract bool CheckCondition(BaseController controller);
 }

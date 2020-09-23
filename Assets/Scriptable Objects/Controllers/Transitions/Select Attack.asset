@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25b523493f5b01c4088b388fe729cab4, type: 3}
-  m_Name: Test Unit
+  m_Script: {fileID: 11500000, guid: 1ab845645d41faf4f8f3f7ca8de690df, type: 3}
+  m_Name: Select Attack
   m_EditorClassIdentifier: 
-  maxHp: 10
-  movementRange: 3
-  minAttackRange: 2
-  maxAttackRange: 3
+  destinationState: {fileID: 11400000, guid: 6910220df67a2584f830a8439b03065d, type: 2}
+  requiredKeyCode: 98
