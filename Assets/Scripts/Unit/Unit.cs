@@ -20,6 +20,8 @@ public class Unit : GameGridElement
     [SerializeField] private Material selectedMaterial;
     [SerializeField] private Material baseMaterial;
 
+    [SerializeField] private UiHpBar hpBar;
+
     AsyncRangeQuery currentRangeQuery;
     public List<Vector3Int> possibleMovements;
     public List<Vector3Int> possibleAttacks;
@@ -40,7 +42,12 @@ public class Unit : GameGridElement
         currentHp -= amountToDamage;
         if (currentHp <= 0)
         {
+            Destroy(hpBar.gameObject);
             Destroy(this.gameObject);
+        }
+        else
+        {
+            hpBar.UpdateHPbar(1f * currentHp / (1f * unitAttributes.maxHp));
         }
     }
 
