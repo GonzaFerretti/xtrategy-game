@@ -71,6 +71,7 @@ GameObject:
   - component: {fileID: 6409168009872196253}
   - component: {fileID: 6409168009872196242}
   - component: {fileID: 6409168009872196243}
+  - component: {fileID: 1097648072}
   m_Layer: 0
   m_Name: Grid Manager
   m_TagString: Untagged
@@ -119,6 +120,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 6409168009872196242}
+  cellsRootTransform: {fileID: 1567534016}
+  coversRootTransform: {fileID: 1969876207}
   gridCoordinates:
     reorderableList:
       canAdd: 1
@@ -142,309 +145,9 @@ MonoBehaviour:
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
     isExpanded: 0
-    _keyValues:
-    - {x: 1, y: 1, z: 0}
-    - {x: 1, y: 2, z: 0}
-    - {x: 1, y: 3, z: 0}
-    - {x: 1, y: 4, z: 0}
-    - {x: 1, y: 5, z: 0}
-    - {x: 1, y: 6, z: 0}
-    - {x: 1, y: 7, z: 0}
-    - {x: 1, y: 8, z: 0}
-    - {x: 1, y: 9, z: 0}
-    - {x: 1, y: 10, z: 0}
-    - {x: 2, y: 1, z: 0}
-    - {x: 2, y: 2, z: 0}
-    - {x: 2, y: 3, z: 0}
-    - {x: 2, y: 4, z: 0}
-    - {x: 2, y: 5, z: 0}
-    - {x: 2, y: 6, z: 0}
-    - {x: 2, y: 7, z: 0}
-    - {x: 2, y: 8, z: 0}
-    - {x: 2, y: 9, z: 0}
-    - {x: 2, y: 10, z: 0}
-    - {x: 3, y: 1, z: 0}
-    - {x: 3, y: 2, z: 0}
-    - {x: 3, y: 3, z: 0}
-    - {x: 3, y: 4, z: 0}
-    - {x: 3, y: 5, z: 0}
-    - {x: 3, y: 6, z: 0}
-    - {x: 3, y: 7, z: 0}
-    - {x: 3, y: 8, z: 0}
-    - {x: 3, y: 9, z: 0}
-    - {x: 3, y: 10, z: 0}
-    - {x: 4, y: 1, z: 0}
-    - {x: 4, y: 2, z: 0}
-    - {x: 4, y: 3, z: 0}
-    - {x: 4, y: 4, z: 0}
-    - {x: 4, y: 5, z: 0}
-    - {x: 4, y: 6, z: 0}
-    - {x: 4, y: 7, z: 0}
-    - {x: 4, y: 8, z: 0}
-    - {x: 4, y: 9, z: 0}
-    - {x: 4, y: 10, z: 0}
-    - {x: 5, y: 1, z: 0}
-    - {x: 5, y: 2, z: 0}
-    - {x: 5, y: 3, z: 0}
-    - {x: 5, y: 4, z: 0}
-    - {x: 5, y: 5, z: 0}
-    - {x: 5, y: 6, z: 0}
-    - {x: 5, y: 7, z: 0}
-    - {x: 5, y: 8, z: 0}
-    - {x: 5, y: 9, z: 0}
-    - {x: 5, y: 10, z: 0}
-    - {x: 6, y: 1, z: 0}
-    - {x: 6, y: 2, z: 0}
-    - {x: 6, y: 3, z: 0}
-    - {x: 6, y: 4, z: 0}
-    - {x: 6, y: 5, z: 0}
-    - {x: 6, y: 6, z: 0}
-    - {x: 6, y: 7, z: 0}
-    - {x: 6, y: 8, z: 0}
-    - {x: 6, y: 9, z: 0}
-    - {x: 6, y: 10, z: 0}
-    - {x: 7, y: 1, z: 0}
-    - {x: 7, y: 2, z: 0}
-    - {x: 7, y: 3, z: 0}
-    - {x: 7, y: 4, z: 0}
-    - {x: 7, y: 5, z: 0}
-    - {x: 7, y: 6, z: 0}
-    - {x: 7, y: 7, z: 0}
-    - {x: 7, y: 8, z: 0}
-    - {x: 7, y: 9, z: 0}
-    - {x: 7, y: 10, z: 0}
-    - {x: 8, y: 1, z: 0}
-    - {x: 8, y: 2, z: 0}
-    - {x: 8, y: 3, z: 0}
-    - {x: 8, y: 4, z: 0}
-    - {x: 8, y: 5, z: 0}
-    - {x: 8, y: 6, z: 0}
-    - {x: 8, y: 7, z: 0}
-    - {x: 8, y: 8, z: 0}
-    - {x: 8, y: 9, z: 0}
-    - {x: 8, y: 10, z: 0}
-    - {x: 9, y: 1, z: 0}
-    - {x: 9, y: 2, z: 0}
-    - {x: 9, y: 3, z: 0}
-    - {x: 9, y: 4, z: 0}
-    - {x: 9, y: 5, z: 0}
-    - {x: 9, y: 6, z: 0}
-    - {x: 9, y: 7, z: 0}
-    - {x: 9, y: 8, z: 0}
-    - {x: 9, y: 9, z: 0}
-    - {x: 9, y: 10, z: 0}
-    - {x: 10, y: 1, z: 0}
-    - {x: 10, y: 2, z: 0}
-    - {x: 10, y: 3, z: 0}
-    - {x: 10, y: 4, z: 0}
-    - {x: 10, y: 5, z: 0}
-    - {x: 10, y: 6, z: 0}
-    - {x: 10, y: 7, z: 0}
-    - {x: 10, y: 8, z: 0}
-    - {x: 10, y: 9, z: 0}
-    - {x: 10, y: 10, z: 0}
-    _keys:
-    - {x: 1, y: 1, z: 0}
-    - {x: 1, y: 2, z: 0}
-    - {x: 1, y: 3, z: 0}
-    - {x: 1, y: 4, z: 0}
-    - {x: 1, y: 5, z: 0}
-    - {x: 1, y: 6, z: 0}
-    - {x: 1, y: 7, z: 0}
-    - {x: 1, y: 8, z: 0}
-    - {x: 1, y: 9, z: 0}
-    - {x: 1, y: 10, z: 0}
-    - {x: 2, y: 1, z: 0}
-    - {x: 2, y: 2, z: 0}
-    - {x: 2, y: 3, z: 0}
-    - {x: 2, y: 4, z: 0}
-    - {x: 2, y: 5, z: 0}
-    - {x: 2, y: 6, z: 0}
-    - {x: 2, y: 7, z: 0}
-    - {x: 2, y: 8, z: 0}
-    - {x: 2, y: 9, z: 0}
-    - {x: 2, y: 10, z: 0}
-    - {x: 3, y: 1, z: 0}
-    - {x: 3, y: 2, z: 0}
-    - {x: 3, y: 3, z: 0}
-    - {x: 3, y: 4, z: 0}
-    - {x: 3, y: 5, z: 0}
-    - {x: 3, y: 6, z: 0}
-    - {x: 3, y: 7, z: 0}
-    - {x: 3, y: 8, z: 0}
-    - {x: 3, y: 9, z: 0}
-    - {x: 3, y: 10, z: 0}
-    - {x: 4, y: 1, z: 0}
-    - {x: 4, y: 2, z: 0}
-    - {x: 4, y: 3, z: 0}
-    - {x: 4, y: 4, z: 0}
-    - {x: 4, y: 5, z: 0}
-    - {x: 4, y: 6, z: 0}
-    - {x: 4, y: 7, z: 0}
-    - {x: 4, y: 8, z: 0}
-    - {x: 4, y: 9, z: 0}
-    - {x: 4, y: 10, z: 0}
-    - {x: 5, y: 1, z: 0}
-    - {x: 5, y: 2, z: 0}
-    - {x: 5, y: 3, z: 0}
-    - {x: 5, y: 4, z: 0}
-    - {x: 5, y: 5, z: 0}
-    - {x: 5, y: 6, z: 0}
-    - {x: 5, y: 7, z: 0}
-    - {x: 5, y: 8, z: 0}
-    - {x: 5, y: 9, z: 0}
-    - {x: 5, y: 10, z: 0}
-    - {x: 6, y: 1, z: 0}
-    - {x: 6, y: 2, z: 0}
-    - {x: 6, y: 3, z: 0}
-    - {x: 6, y: 4, z: 0}
-    - {x: 6, y: 5, z: 0}
-    - {x: 6, y: 6, z: 0}
-    - {x: 6, y: 7, z: 0}
-    - {x: 6, y: 8, z: 0}
-    - {x: 6, y: 9, z: 0}
-    - {x: 6, y: 10, z: 0}
-    - {x: 7, y: 1, z: 0}
-    - {x: 7, y: 2, z: 0}
-    - {x: 7, y: 3, z: 0}
-    - {x: 7, y: 4, z: 0}
-    - {x: 7, y: 5, z: 0}
-    - {x: 7, y: 6, z: 0}
-    - {x: 7, y: 7, z: 0}
-    - {x: 7, y: 8, z: 0}
-    - {x: 7, y: 9, z: 0}
-    - {x: 7, y: 10, z: 0}
-    - {x: 8, y: 1, z: 0}
-    - {x: 8, y: 2, z: 0}
-    - {x: 8, y: 3, z: 0}
-    - {x: 8, y: 4, z: 0}
-    - {x: 8, y: 5, z: 0}
-    - {x: 8, y: 6, z: 0}
-    - {x: 8, y: 7, z: 0}
-    - {x: 8, y: 8, z: 0}
-    - {x: 8, y: 9, z: 0}
-    - {x: 8, y: 10, z: 0}
-    - {x: 9, y: 1, z: 0}
-    - {x: 9, y: 2, z: 0}
-    - {x: 9, y: 3, z: 0}
-    - {x: 9, y: 4, z: 0}
-    - {x: 9, y: 5, z: 0}
-    - {x: 9, y: 6, z: 0}
-    - {x: 9, y: 7, z: 0}
-    - {x: 9, y: 8, z: 0}
-    - {x: 9, y: 9, z: 0}
-    - {x: 9, y: 10, z: 0}
-    - {x: 10, y: 1, z: 0}
-    - {x: 10, y: 2, z: 0}
-    - {x: 10, y: 3, z: 0}
-    - {x: 10, y: 4, z: 0}
-    - {x: 10, y: 5, z: 0}
-    - {x: 10, y: 6, z: 0}
-    - {x: 10, y: 7, z: 0}
-    - {x: 10, y: 8, z: 0}
-    - {x: 10, y: 9, z: 0}
-    - {x: 10, y: 10, z: 0}
-    _values:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
+    _keyValues: []
+    _keys: []
+    _values: []
   covers:
     reorderableList:
       canAdd: 1
@@ -470,8 +173,74 @@ MonoBehaviour:
     isExpanded: 0
     _keyValues: []
     _keys: []
-    _values:
-    - {fileID: 0}
+    _values: []
+  savedData: {fileID: 0}
+  elementsDatabase: {fileID: 11400000, guid: 6ebd11e2af9456940b92dec658c18bfa, type: 2}
+--- !u!114 &1097648072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6409168009872196240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42ea028134dd18f4884c407d90db6632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameGridManager: {fileID: 6409168009872196243}
+  gridCoordinates:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 0
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 0
+    _keyValues: []
+    _keys: []
+    _values: []
+  covers:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 0
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 0
+    _keyValues: []
+    _keys: []
+    _values: []
   baseGridCell: {fileID: 6626395369685488842, guid: 7a64af5938cc1df4da4ce4ef77e6ed88,
     type: 3}
   baseLowCover: {fileID: 5887443239766926031, guid: 658a4616c4172e440b33c1f318684363,
@@ -479,11 +248,9 @@ MonoBehaviour:
   baseHighCover: {fileID: 4098854264101785450, guid: 191dcff9d3e56fa4882c97bc95e6e835,
     type: 3}
   indicatorCover: {fileID: 0}
-  cellsRootTransform: {fileID: 1567534016}
-  coversRootTransform: {fileID: 1969876207}
   editCoverMode: 1
   gameGridSize: {x: 10, y: 10}
-  testStartNode: {x: 1, y: 1, z: 0}
-  testEndNode: {x: 10, y: 10, z: 0}
+  testStartNode: {x: 0, y: 0, z: 0}
+  testEndNode: {x: 0, y: 0, z: 0}
   baseUnit: {fileID: 2807073053509591690, guid: 82ae073d21cc0fe4e9c4b49aa516c2f3,
     type: 3}

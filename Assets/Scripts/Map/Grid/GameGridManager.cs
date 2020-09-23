@@ -169,8 +169,17 @@ public class GameGridManager : MonoBehaviour
         }
     }
 
+    public void UntintAll()
+    {
+        foreach (GameGridCell cell in gridCoordinates.Values)
+        {
+            cell.Untint();
+        }
+    }
+
     public void TintBulk(IEnumerable<Vector3Int> cellsToTint)
     {
+        UntintAll();
         foreach (Vector3Int cell in cellsToTint)
         {
             gridCoordinates[cell].TintSelected();

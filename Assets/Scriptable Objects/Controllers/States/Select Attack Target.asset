@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: Select Attack Target
   m_EditorClassIdentifier: 
   stateName: selectAttackTarget
-  transitions: []
+  transitions:
+  - {fileID: 11400000, guid: 44ebb17b8503c49439a2e2a0c9b931e4, type: 2}
+  - {fileID: 11400000, guid: f79fe089a5ab403459ba90f4c7fba385, type: 2}

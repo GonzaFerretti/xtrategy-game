@@ -20,6 +20,11 @@ public class BaseController : MonoBehaviour
         return currentState;
     }
 
+    public GameGridManager GetGridReference()
+    {
+        return gridManager;
+    }
+
     public virtual void InitControllerStates()
     {
         foreach (ControllerState state in controllerStates)

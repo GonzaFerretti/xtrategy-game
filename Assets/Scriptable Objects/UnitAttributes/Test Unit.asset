@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 10
   movementRange: 3
-  minAttackRange: 2
-  maxAttackRange: 3
+  minAttackRange: 0
+  maxAttackRange: 10

@@ -9,6 +9,23 @@ public class ControllerStateSelectUnitTarget : ControllerState
     {
         base.OnUpdate();
         if (Input.GetMouseButtonDown(1)) CheckPossibleAttackTarget();
+        if (Input.GetMouseButtonDown(0)) CheckUnitDeselect();
+    }
+
+    public void CheckUnitDeselect()
+    {
+        GameObject unitSelected;
+        controller.currentlySelectedUnit.Deselect();
+
+        if ((controller as PlayerController).GetObjectUnderMouse(out unitSelected, 1 << LayerMask.NameToLayer("Unit")))
+        {
+            controller.currentlySelectedUnit = unitSelected.GetComponent<Unit>();
+            controller.currentlySelectedUnit.Select();
+        }
+        else
+        {
+            controller.currentlySelectedUnit = null;
+        }
     }
 
     public void CheckPossibleAttackTarget()
@@ -21,9 +38,17 @@ public class ControllerStateSelectUnitTarget : ControllerState
             Vector3Int unitPosition = unitSelected.GetCoordinates();
             if (controller.currentlySelectedUnit.possibleAttacks.Contains(unitPosition))
             {
-                Destroy(unitSelected.gameObject);
-                controller.currentlySelectedUnit.attackState = currentActionState.ended;
+                controller.currentlySelectedUnit.attackState = currentActionState.inProgress;
+                controller.StartCoroutine(AttackEnemy(unitSelected));
+                controller.GetGridReference().UntintAll();
             }
         }
+    }
+
+    IEnumerator AttackEnemy(Unit enemyToAttack)
+    {
+        yield return new WaitForSeconds(1);
+        enemyToAttack.Damage(controller.currentlySelectedUnit.damage);
+        controller.currentlySelectedUnit.attackState = currentActionState.ended;
     }
 }

@@ -8,7 +8,9 @@ public class ControllerTransitionSelectAttackTarget : ControllerStateTransition
     public KeyCode requiredKeyCode;
     public override bool CheckCondition(BaseController controller)
     {
-        return Input.GetKeyDown(requiredKeyCode) && controller.currentlySelectedUnit.attackState == currentActionState.notStarted;
+        bool test = Input.GetKeyDown(requiredKeyCode) && controller.currentlySelectedUnit.attackState == currentActionState.notStarted;
+
+        return test;
     }
 
     public override void Transition(BaseController controller)

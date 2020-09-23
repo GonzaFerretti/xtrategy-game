@@ -7,12 +7,13 @@ public class Unit : GameGridElement
 {
     [SerializeField] GameGridCell currentCell;
 
-    [SerializeField] float currentHp;
+    [SerializeField] int currentHp;
     [SerializeField] public currentActionState moveState = currentActionState.notStarted;
     [SerializeField] public currentActionState attackState = currentActionState.notStarted;
     [SerializeField] int movementRange;
     [SerializeField] int minAttackRange;
     [SerializeField] int maxAttackRange;
+    [SerializeField] public int damage;
     [SerializeField] UnitAttributes unitAttributes;
     [SerializeField] private Renderer rend;
 
@@ -32,6 +33,15 @@ public class Unit : GameGridElement
     public Vector3Int GetCoordinates()
     {
         return currentCell.GetCoordinates();
+    }
+
+    public void Damage(int amountToDamage)
+    {
+        currentHp -= amountToDamage;
+        if (currentHp <= 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     public void Update()
@@ -55,6 +65,7 @@ public class Unit : GameGridElement
         movementRange = unitAttributes.movementRange;
         minAttackRange = unitAttributes.minAttackRange;
         maxAttackRange = unitAttributes.maxAttackRange;
+        damage = unitAttributes.damage;
     }
 
     public virtual void Select()
@@ -134,7 +145,7 @@ public class Unit : GameGridElement
     public virtual void Deselect()
     {
         rend.material = baseMaterial;
-        grid.UntintBulk(possibleMovements);
+        grid.UntintAll();
     }
 }
 

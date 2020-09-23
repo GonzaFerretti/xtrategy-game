@@ -5,8 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Unit/UnitAttributes")]
 public class UnitAttributes : ScriptableObject
 {
-    public float maxHp;
+    public int maxHp;
     public int movementRange;
     public int minAttackRange;
     public int maxAttackRange;
+    public int damage;
 }
