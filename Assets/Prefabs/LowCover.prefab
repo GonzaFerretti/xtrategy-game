@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3225474046817900283}
   - component: {fileID: 5887443239766926031}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: LowCover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 0}
+  basePrefabName: 
 --- !u!1 &8844795371940080896
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,7 +58,7 @@ GameObject:
   - component: {fileID: 8872802318638984986}
   - component: {fileID: 8072786562111764425}
   - component: {fileID: 3212602635248203845}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

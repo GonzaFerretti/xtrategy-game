@@ -4,5 +4,5 @@ using UnityEngine;
 [System.Serializable]
 public class Cover : GameGridElement
 {
-    [SerializeField] protected int a = 0;
+    public CoverData coverData;
 }

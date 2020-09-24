@@ -11,7 +11,6 @@ public class GridBuilder : MonoBehaviour
     [SerializeField] private Cover baseLowCover;
     [SerializeField] private Cover baseHighCover;
     [SerializeField] private Cover indicatorCover;
-    [SerializeField] public bool editCoverMode = false;
 
 
     [Header("Test Parameters")]
@@ -27,18 +26,41 @@ public class GridBuilder : MonoBehaviour
             for (int column = 1; column <= columns; column++)
             {
                 Vector3Int cellCoordinates = new Vector3Int(row, column, 0);
-                Vector3 currentCellWorldPosition = gameGridManager.GetWorldPositionFromCoords(cellCoordinates);
-                GameGridCell cell = Instantiate(baseGridCell, currentCellWorldPosition, Quaternion.identity, gameGridManager.cellsRootTransform);
-                cell.name = "cell(" + row + "," + column + ")";
-                //cell.transform.localScale = grid.cellSize;
-                cell.basePrefabName = baseGridCell.name;
-                cell.SetCoordinates(cellCoordinates);
-                cell.SetGridManagerReference(gameGridManager);
-                gridCoordinates.Add(cellCoordinates, cell);
+                CreateCell(cellCoordinates, baseGridCell);
             }
         }
 
         Vector3Int randomPositionInGrid = new Vector3Int(Random.Range(1, rows), Random.Range(1, columns), 0);
+    }
+
+    public void CreateCell(Vector3Int cellCoordinates, GameGridCell prefab)
+    {
+        Vector3 currentCellWorldPosition = gameGridManager.GetWorldPositionFromCoords(cellCoordinates);
+        GameGridCell cell = Instantiate(prefab, currentCellWorldPosition, Quaternion.identity, gameGridManager.cellsRootTransform);
+        cell.name = "cell(" + cellCoordinates.x + "," + cellCoordinates.y + ")";
+        //cell.transform.localScale = grid.cellSize;
+        cell.basePrefabName = prefab.name;
+        cell.SetCoordinates(cellCoordinates);
+        cell.SetGridManagerReference(gameGridManager);
+        gridCoordinates.Add(cellCoordinates, cell);
+    }
+
+    public void ReplaceCell(Vector3Int coords, GameGridCell prefabToReplaceItWith)
+    {
+        GameGridCell oldCell = gridCoordinates[coords];
+        gridCoordinates.Remove(coords);
+        DestroyImmediate(oldCell.gameObject);
+        CreateCell(coords, prefabToReplaceItWith.GetComponent<GameGridCell>());
+    }
+
+    public void ReplaceCover(CoverData coverData, Cover prefabToReplaceWith)
+    {
+        Cover oldCover = covers[coverData];
+        Vector3 position = oldCover.transform.position;
+        covers.Remove(coverData);
+        DestroyImmediate(oldCover.gameObject);
+
+        CreateCover(position, coverData, prefabToReplaceWith);
     }
 
     public void CleanObstacles()
@@ -96,6 +118,7 @@ public class GridBuilder : MonoBehaviour
         }
         covers.Add(cellMovement, cover);
         cover.SetGridManagerReference(gameGridManager);
+        cover.coverData = cellMovement;
         return cover;
     }
 

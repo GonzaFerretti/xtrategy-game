@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -68,28 +70,71 @@ public class GridEditor : Editor
     public void OnSceneGUI()
     {
         if (!gridBuilder) gridBuilder = ((GridBuilder)target);
-        if ((gridBuilder.editCoverMode))
+        if (Event.current.type == EventType.Layout)
         {
-            if (Event.current.type == EventType.Layout)
+            HandleUtility.AddDefaultControl(0);
+        }
+        if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
+        {
+            Vector3 mousePosition = Event.current.mousePosition;
+            Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
+            mousePosition = ray.origin;
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 100f))
             {
-                HandleUtility.AddDefaultControl(0);
-            }
-            if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
-            {
-                Vector3 mousePosition = Event.current.mousePosition;
-                Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
-                mousePosition = ray.origin;
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit, 100f))
+                if (Event.current.shift)
                 {
                     if (canPlaceCover)
                     {
                         gridBuilder.AddCover(possibleCoverPosition, possibleCellMovement);
                     }
                 }
+                else
+                {
+                    switch (LayerMask.LayerToName(hit.transform.gameObject.layer))
+                    {
+                        case "GroundBase":
+                            GameGridCell nextCell = GetNextPrefab<GameGridCell>("GroundBase", hit);
+                            gridBuilder.ReplaceCell(hit.transform.parent.GetComponent<GameGridCell>().GetCoordinates(), nextCell);
+                            break;
+                        case "LowCover":
+                            Cover nextLowCover = GetNextPrefab<LowCover>("LowCover", hit);
+                            gridBuilder.ReplaceCover(hit.transform.parent.GetComponent<Cover>().coverData, nextLowCover);
+                            break;
+                        case "HighCover":
+                            Cover nextHighCover = GetNextPrefab<HighCover>("HighCover", hit);
+                            gridBuilder.ReplaceCover(hit.transform.parent.GetComponent<Cover>().coverData, nextHighCover);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
             }
         }
+    }
+
+    public T GetNextPrefab<T>(string layer, RaycastHit hit)
+    {
+        GameObject[] possibleFloorPrefabs = gridBuilder.gameGridManager.elementsDatabase.prefabs.Where(n => n.layer == LayerMask.NameToLayer(layer)).ToArray();
+        int length = possibleFloorPrefabs.Length;
+        int currentIndex = -1;
+        GameObject nextPrefab = null;
+        for (int i = 0; i < length; i++)
+        {
+            if (possibleFloorPrefabs[i].name == hit.transform.parent.GetComponent<GameGridElement>().basePrefabName)
+            {
+                currentIndex = i;
+                break;
+            }
+        }
+        if (currentIndex != -1)
+        {
+            currentIndex++;
+            if (currentIndex == length) currentIndex = 0;
+            nextPrefab = possibleFloorPrefabs[currentIndex];
+        }
+        return nextPrefab.GetComponent<T>();
     }
 
     void OnEnable()
@@ -118,7 +163,7 @@ public class GridEditor : Editor
                         possibleCellMovement = new CoverData(AdjacentGridCell.GetCoordinates(), currentlyHoveredCellCoordinates);
                         canPlaceCover = true;
                     }
-                    else 
+                    else
                     {
                         canPlaceCover = false;
                     }

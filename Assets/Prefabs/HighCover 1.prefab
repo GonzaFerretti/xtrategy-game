@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3225474046817900283}
   - component: {fileID: 4098854264101785450}
   m_Layer: 12
-  m_Name: HighCover
+  m_Name: HighCover 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,6 +46,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 0}
   basePrefabName: 
+  coverData:
+    side1: {x: 0, y: 0, z: 0}
+    side2: {x: 0, y: 0, z: 0}
 --- !u!1 &8844795371940080896
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,7 +107,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 34669f8ea7cc6624cb7947d34587b061, type: 2}
+  - {fileID: 2100000, guid: 075ee105a884d2d409270c9a3c79fe70, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
