@@ -33,11 +33,7 @@ public class GridEditor : Editor
             lastHoveredCell = null;
             canPlaceCover = false;
         }
-        /*
-        if (GUILayout.Button("Test Pathfinding"))
-        {
-            gridBuilder.TestPathfinding();
-        }*/
+
         if (saveName == "" && gridBuilder.gameGridManager.savedData) saveName = gridBuilder.gameGridManager.savedData.name;
         saveName = EditorGUILayout.TextField(new GUIContent("Save name: "), saveName);
 
@@ -53,6 +49,19 @@ public class GridEditor : Editor
             mapData.Init(gridBuilder.gridCoordinates, gridBuilder.covers);
             AssetDatabase.CreateAsset(mapData, path);
             gridBuilder.gameGridManager.savedData = mapData;
+        }
+
+        if (GUILayout.Button("Load from file"))
+        {
+            gridBuilder.CleanGrid();
+            gridBuilder.CleanObstacles();
+
+            lastHoveredCell = null;
+            canPlaceCover = false;
+
+            string path = "Assets/Scriptable Objects/Map/" + saveName + ".asset";
+            MapDictData mapData = AssetDatabase.LoadAssetAtPath<MapDictData>(path);
+            gridBuilder.LoadFromFile(mapData);
         }
     }
 

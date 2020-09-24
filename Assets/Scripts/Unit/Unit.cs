@@ -66,6 +66,14 @@ public class Unit : GameGridElement
         SetUnitAttributes();
     }
 
+    public void ResetActions()
+    {
+        attackState = currentActionState.notStarted;
+        moveState = currentActionState.notStarted;
+        possibleAttacks = new List<Vector3Int>();
+        possibleMovements = new List<Vector3Int>();
+    }
+
     public virtual void SetUnitAttributes()
     {
         currentHp = unitAttributes.maxHp;
@@ -73,6 +81,11 @@ public class Unit : GameGridElement
         minAttackRange = unitAttributes.minAttackRange;
         maxAttackRange = unitAttributes.maxAttackRange;
         damage = unitAttributes.damage;
+    }
+
+    public bool HasActionsLeft()
+    {
+        return moveState != currentActionState.ended || attackState != currentActionState.ended;
     }
 
     public virtual void Select()

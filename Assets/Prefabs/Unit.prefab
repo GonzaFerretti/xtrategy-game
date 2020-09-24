@@ -370,8 +370,8 @@ MonoBehaviour:
   basePrefabName: 
   currentCell: {fileID: 0}
   currentHp: 0
-  moveState: 0
-  attackState: 0
+  moveState: 2
+  attackState: 2
   movementRange: 1
   minAttackRange: 0
   maxAttackRange: 0

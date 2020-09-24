@@ -25,7 +25,8 @@ public class GameGridManager : MonoBehaviour
 
     [SerializeField] private Dictionary<int, AsyncRangeQuery> currentQueries = new Dictionary<int, AsyncRangeQuery>();
     [SerializeField] public MapDictData savedData;
-    [SerializeField] private MapElementsDB elementsDatabase;
+    [SerializeField] public MapElementsDB elementsDatabase;
+    [SerializeField] public GameManager gameManager;
 
 
     public void Start()

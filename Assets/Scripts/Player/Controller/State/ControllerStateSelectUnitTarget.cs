@@ -14,12 +14,14 @@ public class ControllerStateSelectUnitTarget : ControllerState
 
     public void CheckUnitDeselect()
     {
-        GameObject unitSelected;
+        GameObject objectSelected;
         controller.currentlySelectedUnit.Deselect();
 
-        if ((controller as PlayerController).GetObjectUnderMouse(out unitSelected, 1 << LayerMask.NameToLayer("Unit")))
+        if ((controller as PlayerController).GetObjectUnderMouse(out objectSelected, 1 << LayerMask.NameToLayer("Unit")))
         {
-            controller.currentlySelectedUnit = unitSelected.GetComponent<Unit>();
+            Unit unitSelected = objectSelected.GetComponent<Unit>();
+            if (!controller.OwnsUnit(unitSelected)) return;
+            controller.currentlySelectedUnit = unitSelected;
             controller.currentlySelectedUnit.Select();
         }
         else

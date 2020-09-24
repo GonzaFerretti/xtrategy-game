@@ -11,6 +11,8 @@ public class BaseController : MonoBehaviour
     Dictionary<string, ControllerState> runtimeControllerStates = new Dictionary<string, ControllerState>();
     [SerializeField] ControllerState currentState;
 
+    [SerializeField] List<Unit> unitsControlled;
+
     public virtual void Start()
     {
         InitControllerStates();
@@ -19,6 +21,20 @@ public class BaseController : MonoBehaviour
     {
         return currentState;
     }
+
+    public bool HasAnyMovesLeft()
+    {
+        bool hasAnyMovesLeft = false;
+        foreach (Unit unit in unitsControlled)
+        {
+            if (unit.HasActionsLeft())
+            {
+                hasAnyMovesLeft = true;
+                break;
+            }
+        }
+        return hasAnyMovesLeft;
+    }    
 
     public GameGridManager GetGridReference()
     {
@@ -44,6 +60,35 @@ public class BaseController : MonoBehaviour
     public virtual void Update()
     {
         currentState.OnUpdate();
+    }
+
+    public void ResetUnits()
+    {
+        foreach (Unit unit in unitsControlled)
+        {
+            unit.ResetActions();
+        }
+    }
+
+    public int GetAmountOfUnitsLeft()
+    {
+        return unitsControlled.Count;
+    }
+
+    public void DestroyPlayer()
+    {
+        while (unitsControlled.Count > 0)
+        {
+            GameObject unit = unitsControlled[0].gameObject;
+            unitsControlled.RemoveAt(0);
+            Destroy(unit);
+        }
+        Destroy(gameObject);
+    }
+
+    public bool OwnsUnit(Unit unit)
+    {
+        return unitsControlled.Contains(unit);        
     }
 
     public void MoveUnit(Vector3Int target)

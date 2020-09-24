@@ -9,4 +9,15 @@ public class ControllerTransitionNoAvailableActions : ControllerStateTransition
     {
         return (controller.currentlySelectedUnit.moveState == currentActionState.ended && controller.currentlySelectedUnit.attackState == currentActionState.ended);
     }
+
+    public override void Transition(BaseController controller)
+    {
+        base.Transition(controller);
+        if (!controller.HasAnyMovesLeft())
+        {
+            controller.GetGridReference().gameManager.EndPlayerTurn();
+            controller.currentlySelectedUnit.Deselect();
+            controller.currentlySelectedUnit = null;
+        }
+    }
 }

@@ -16,14 +16,6 @@ public class GridBuilder : MonoBehaviour
 
     [Header("Test Parameters")]
     [SerializeField] public Vector2Int gameGridSize;
-    [SerializeField] private Vector3Int testStartNode;
-    [SerializeField] private Vector3Int testEndNode;
-    [SerializeField] private Unit baseUnit;
-
-    public void TestPathfinding()
-    {
-        gameGridManager.CalculateShortestPath(testStartNode, testEndNode);
-    }
     public void InitGrid()
     {
         int rows = gameGridSize.x;
@@ -127,6 +119,70 @@ public class GridBuilder : MonoBehaviour
             }
         }
         else return null;
+    }
+
+    void BuildCellsFromData(MapDictData savedData)
+    {
+        Dictionary<string, GameGridCell> gridElementCache = new Dictionary<string, GameGridCell>();
+        for (int i = 0; i < savedData.cellsCoordinates.Count; i++)
+        {
+            Vector3Int coordinates = savedData.cellsCoordinates[i];
+            string prefabName = savedData.cellsPrefabNames[i];
+            Vector3 cellPosition = gameGridManager.GetWorldPositionFromCoords(coordinates);
+            GameGridCell cellToInstantiate = null;
+            if (gridElementCache.ContainsKey(prefabName))
+            {
+                cellToInstantiate = gridElementCache[prefabName];
+            }
+            else
+            {
+                cellToInstantiate = gameGridManager.elementsDatabase.GetElementByType<GameGridCell>(prefabName);
+                gridElementCache.Add(prefabName, cellToInstantiate);
+            }
+            GameGridCell cell = Instantiate(cellToInstantiate, cellPosition, Quaternion.identity, gameGridManager.cellsRootTransform);
+            cell.name = "cell(" + coordinates.x + "," + coordinates.y + ")";
+            cell.SetCoordinates(coordinates);
+            cell.basePrefabName = prefabName;
+            cell.SetGridManagerReference(gameGridManager);
+            gridCoordinates.Add(coordinates, cell);
+        }
+    }
+
+    void BuildCoversFromData(MapDictData savedData)
+    {
+        Dictionary<string, Cover> coverElementsCache = new Dictionary<string, Cover>();
+        for (int i = 0; i < savedData.coversData.Count; i++)
+        {
+            CoverData coverInfo = savedData.coversData[i];
+            string prefabName = savedData.coversPrefabNames[i];
+            Vector3 position = (gameGridManager.GetWorldPositionFromCoords(coverInfo.side1) + gameGridManager.GetWorldPositionFromCoords(coverInfo.side2)) / 2;
+            Cover coverToInstantiate = null;
+            if (coverElementsCache.ContainsKey(prefabName))
+            {
+                coverToInstantiate = coverElementsCache[prefabName];
+            }
+            else
+            {
+                coverToInstantiate = gameGridManager.elementsDatabase.GetElementByType<Cover>(prefabName);
+                coverElementsCache.Add(prefabName, coverToInstantiate);
+            }
+            Cover cover = Instantiate(coverToInstantiate);
+            cover.basePrefabName = prefabName;
+            cover.SetGridManagerReference(gameGridManager);
+            cover.transform.position = position;
+            cover.transform.parent = gameGridManager.coversRootTransform;
+            if (!coverInfo.IsCellMovementDirectionInXAxis())
+            {
+                cover.transform.localEulerAngles = new Vector3(0, 90, 0);
+            }
+            covers.Add(coverInfo, cover);
+        }
+    }
+
+    public void LoadFromFile(MapDictData mapData)
+    {
+        BuildCellsFromData(mapData);
+        BuildCoversFromData(mapData);
     }
 
 }
