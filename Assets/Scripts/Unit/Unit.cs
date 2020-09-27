@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -23,6 +24,8 @@ public class Unit : GameGridElement
     [SerializeField] private UiHpBar hpBar;
 
     AsyncRangeQuery currentRangeQuery;
+
+    public BaseController owner;
     public List<Vector3Int> possibleMovements;
     public List<Vector3Int> possibleAttacks;
 
@@ -101,7 +104,7 @@ public class Unit : GameGridElement
         }
         else
         {
-            grid.TintBulk(possibleMovements);
+            grid.EnableCellIndicators(possibleMovements, GridIndicatorMode.possibleMovement);
         }
     }
 
@@ -116,7 +119,7 @@ public class Unit : GameGridElement
         }
         else
         {
-            grid.TintBulk(possibleAttacks);
+            grid.EnableCellIndicators(possibleAttacks, GridIndicatorMode.possibleAttack);
         }
     }
 
@@ -131,7 +134,7 @@ public class Unit : GameGridElement
                 transform.position = grid.GetWorldPositionFromCoords(path[i]);
                 yield return new WaitForSeconds(0.25f);
             }
-            grid.UntintBulk(possibleMovements);
+            grid.DisableCellIndicators(possibleMovements);
             possibleMovements = new List<Vector3Int>();
             currentCell = grid.GetCellAtCoordinate(path[path.Length - 1]);
             moveState = currentActionState.ended;
@@ -146,7 +149,7 @@ public class Unit : GameGridElement
         }
 
         possibleMovements = currentRangeQuery.cellsInRange;
-        grid.TintBulk(possibleMovements);
+        grid.EnableCellIndicators(possibleMovements, GridIndicatorMode.possibleMovement);
         currentRangeQuery.EndQuery();
     }
 
@@ -158,14 +161,16 @@ public class Unit : GameGridElement
         }
 
         possibleAttacks = currentRangeQuery.cellsInRange;
-        grid.TintBulk(possibleAttacks);
+        List<Vector3Int> allyPositionsInRange = possibleAttacks.Intersect(owner.GetOwnedUnitsPosition()).ToList();
+        possibleAttacks.RemoveAll(x => allyPositionsInRange.Contains(x));
+        grid.EnableCellIndicators(possibleAttacks, GridIndicatorMode.possibleAttack);
         currentRangeQuery.EndQuery();
     }
 
     public virtual void Deselect()
     {
         rend.material = baseMaterial;
-        grid.UntintAll();
+        grid.DisableAllCellIndicators();
     }
 }
 

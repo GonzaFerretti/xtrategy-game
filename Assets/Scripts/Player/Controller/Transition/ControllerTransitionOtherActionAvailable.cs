@@ -17,7 +17,7 @@ public class ControllerTransitionOtherActionAvailable : ControllerStateTransitio
         base.Transition(controller);
         if (controller.currentlySelectedUnit.moveState == currentActionState.notStarted)
         {
-            controller.GetGridReference().TintBulk(controller.currentlySelectedUnit.possibleMovements);
+            controller.GetGridReference().EnableCellIndicators(controller.currentlySelectedUnit.possibleMovements, GridIndicatorMode.possibleMovement);
         }
     }
 }

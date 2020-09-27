@@ -11,15 +11,34 @@ public class BaseController : MonoBehaviour
     Dictionary<string, ControllerState> runtimeControllerStates = new Dictionary<string, ControllerState>();
     [SerializeField] ControllerState currentState;
 
-    [SerializeField] List<Unit> unitsControlled;
+    [SerializeField] protected List<Unit> unitsControlled;
 
     public virtual void Start()
     {
         InitControllerStates();
+        SetUnitOwnership();
     }
     public ControllerState GetCurrentState()
     {
         return currentState;
+    }
+
+    public List<Vector3Int> GetOwnedUnitsPosition()
+    {
+        List<Vector3Int> unitsPositions = new List<Vector3Int>();
+        foreach (Unit unit in unitsControlled)
+        {
+            unitsPositions.Add(unit.GetCoordinates());
+        }
+        return unitsPositions;
+    }
+
+    public void SetUnitOwnership()
+    {
+        foreach (Unit unit in unitsControlled)
+        {
+            unit.owner = this;
+        }
     }
 
     public bool HasAnyMovesLeft()

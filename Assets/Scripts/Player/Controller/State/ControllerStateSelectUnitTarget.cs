@@ -42,7 +42,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
             {
                 controller.currentlySelectedUnit.attackState = currentActionState.inProgress;
                 controller.StartCoroutine(AttackEnemy(unitSelected));
-                controller.GetGridReference().UntintAll();
+                controller.GetGridReference().DisableAllCellIndicators();
             }
         }
     }

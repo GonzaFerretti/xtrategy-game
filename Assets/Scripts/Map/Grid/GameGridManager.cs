@@ -1,15 +1,9 @@
-﻿using System.Collections;
+﻿using RotaryHeart.Lib.SerializableDictionary;
+using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using UnityEngine;
-using RotaryHeart.Lib.SerializableDictionary;
-using System.Runtime.CompilerServices;
 using System.Runtime.Remoting.Messaging;
-using System.IO;
-using UnityEditor.UIElements;
-using System.Reflection;
-using System.Runtime.Serialization;
+using UnityEngine;
 
 public class GameGridManager : MonoBehaviour
 {
@@ -18,21 +12,39 @@ public class GameGridManager : MonoBehaviour
     [SerializeField] private Grid grid;
     [SerializeField] public Transform cellsRootTransform;
     [SerializeField] public Transform coversRootTransform;
+    [SerializeField] public Transform cellIndicatorsRootTransform;
 
 
     [SerializeField] public GridCoordinates gridCoordinates;
     [SerializeField] public CoverInformation covers;
 
     [SerializeField] private Dictionary<int, AsyncRangeQuery> currentQueries = new Dictionary<int, AsyncRangeQuery>();
+    [SerializeField] private Dictionary<Vector3Int, GridIndicator> gridIndicators = new Dictionary<Vector3Int, GridIndicator>();
     [SerializeField] public MapDictData savedData;
     [SerializeField] public MapElementsDB elementsDatabase;
     [SerializeField] public GameManager gameManager;
+
+    [SerializeField] GridIndicator gridIndicatorPrefab;
+    [SerializeField] float indicatorHeight;
 
 
     public void Start()
     {
         BuildCellsFromData();
         BuildCoversFromData();
+        InitializeGridIndicators();
+    }
+
+    public void InitializeGridIndicators()
+    {
+        foreach (KeyValuePair<Vector3Int,GameGridCell> cellData in gridCoordinates)
+        {
+            GridIndicator newGridIndicator = Instantiate(gridIndicatorPrefab);
+            newGridIndicator.transform.position = cellData.Value.transform.position + Vector3.up * indicatorHeight;
+            newGridIndicator.transform.parent = cellIndicatorsRootTransform;
+
+            gridIndicators.Add(cellData.Key, newGridIndicator);
+        }
     }
 
     public void BuildCellsFromData()
@@ -162,28 +174,27 @@ public class GameGridManager : MonoBehaviour
         return null;
     }
 
-    public void UntintBulk(IEnumerable<Vector3Int> cellsToUntint)
+    public void EnableCellIndicators(IEnumerable<Vector3Int> indicatorsToEnable, GridIndicatorMode gridIndicatorMode)
     {
-        foreach (Vector3Int cell in cellsToUntint)
+        foreach (Vector3Int indicator in indicatorsToEnable)
         {
-            gridCoordinates[cell].Untint();
+            gridIndicators[indicator].Enable(gridIndicatorMode);
         }
     }
 
-    public void UntintAll()
+    public void DisableCellIndicators(IEnumerable<Vector3Int> indicatorsToDisable)
     {
-        foreach (GameGridCell cell in gridCoordinates.Values)
+        foreach (Vector3Int indicator in indicatorsToDisable)
         {
-            cell.Untint();
+            gridIndicators[indicator].Disable();
         }
     }
 
-    public void TintBulk(IEnumerable<Vector3Int> cellsToTint)
+    public void DisableAllCellIndicators()
     {
-        UntintAll();
-        foreach (Vector3Int cell in cellsToTint)
+        foreach (KeyValuePair<Vector3Int,GridIndicator> indicatorData in gridIndicators)
         {
-            gridCoordinates[cell].TintSelected();
+            indicatorData.Value.Disable();
         }
     }
 
@@ -259,7 +270,7 @@ public class GameGridManager : MonoBehaviour
         Dictionary<Vector3Int, int> currentBorder = new Dictionary<Vector3Int, int>();
         currentBorder.Add(currentCell, 0);
         int depth = 0;
-        UntintBulk(gridCoordinates.Keys);
+        DisableCellIndicators(gridCoordinates.Keys);
         while (depth <= maxSteps)
         {
             currentQueries[queryId].cellsInRange.AddRange(currentBorder.Keys);
@@ -304,7 +315,7 @@ public class GameGridManager : MonoBehaviour
     {
         foreach (GameGridCell cell in gridCoordinates.Values)
         {
-            cell.Untint();
+            gridIndicators[cell.GetCoordinates()].Disable();
         }
 
         int queryId = Random.Range(0, 100);
@@ -330,7 +341,7 @@ public class GameGridManager : MonoBehaviour
         currentBorder.Add(currentCell, 0);
         List<Vector3Int> discardedRange = new List<Vector3Int>();
         int range = 0;
-        UntintBulk(gridCoordinates.Keys);
+        DisableCellIndicators(gridCoordinates.Keys);
         while (range <= maxRange)
         {
             if (range >= minRange && range <= maxRange) currentQueries[queryId].cellsInRange.AddRange(currentBorder.Keys);
@@ -393,7 +404,7 @@ public class GameGridManager : MonoBehaviour
     {
         foreach (GameGridCell cell in gridCoordinates.Values)
         {
-            cell.Untint();
+            gridIndicators[cell.GetCoordinates()].Disable();
         }
 
         int queryId = Random.Range(0, 100);
