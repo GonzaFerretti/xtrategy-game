@@ -12,3 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02f383c5262ef3a42ab4abceac7edf4d, type: 3}
   m_Name: Grid Indicator Materials
   m_EditorClassIdentifier: 
+  materials:
+  - {fileID: 2100000, guid: 67410c2170837a7409653d5cdec7d4d0, type: 2}
+  - {fileID: 2100000, guid: 28cbad6b4a98a0b4b803b6c039c60df0, type: 2}
+  - {fileID: 2100000, guid: 64f2d6c6f61626a43a899fb660022f42, type: 2}
+  - {fileID: 2100000, guid: 40ced85e9ed2da24b839cbb508068aac, type: 2}
+  - {fileID: 2100000, guid: 1ecd779e410837544896322243509351, type: 2}

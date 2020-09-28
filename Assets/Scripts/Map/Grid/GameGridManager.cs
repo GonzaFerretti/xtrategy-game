@@ -265,6 +265,18 @@ public class GameGridManager : MonoBehaviour
         return possibleCover;
     }
 
+    public bool IsUnitCovered(Vector3Int unitCoord)
+    {
+        foreach (KeyValuePair<CoverData, Cover> possibleCover in covers)
+        {
+            if (possibleCover.Value.coverData.side1 == unitCoord || possibleCover.Value.coverData.side2 == unitCoord)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public IEnumerator ProcessUnitRangeQuery(int maxSteps, Vector3Int currentCell, int queryId)
     {
         Dictionary<Vector3Int, int> currentBorder = new Dictionary<Vector3Int, int>();
@@ -422,6 +434,35 @@ public class GameGridManager : MonoBehaviour
     public Vector3 GetWorldPositionFromCoords(Vector3Int cellCoords)
     {
         return grid.CellToWorld(cellCoords);
+    }
+
+    public Vector3Int[] GetBestPathToGetToClosestUnit(Unit thisUnit, List<Unit> otherUnits)
+    {
+        List<Vector3Int[]> DictDistancePossibleMovement = new List<Vector3Int[]>();
+        foreach (Unit possibleTargetUnit in otherUnits)
+        {
+            List<Vector3Int> possibleDirections = GetViableNeighbourCellsForMovement(possibleTargetUnit.GetCoordinates());
+            foreach (Vector3Int possibleDirection in possibleDirections)
+            {
+                Vector3Int[] posssiblePath = CalculateShortestPath(thisUnit.GetCoordinates(), possibleDirection);
+                DictDistancePossibleMovement.Add(posssiblePath);
+            }
+        }
+
+        int stepsToClosestUnit = int.MaxValue;
+        Vector3Int[] pathToClosestUnit = new Vector3Int[0];
+
+        foreach (Vector3Int[] existingPath in DictDistancePossibleMovement)
+        {
+            int steps = existingPath.Length;
+            if (steps < stepsToClosestUnit)
+            {
+                stepsToClosestUnit = steps;
+                pathToClosestUnit = existingPath;
+            }
+        }
+
+        return pathToClosestUnit;
     }
 }
 

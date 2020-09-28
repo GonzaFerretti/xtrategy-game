@@ -9,11 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25b523493f5b01c4088b388fe729cab4, type: 3}
-  m_Name: Test Unit
+  m_Script: {fileID: 11500000, guid: 9014c8c6c045ea547926a927d2092a06, type: 3}
+  m_Name: Melee
   m_EditorClassIdentifier: 
-  maxHp: 10
-  movementRange: 3
-  minAttackRange: 0
-  maxAttackRange: 3
-  damage: 2

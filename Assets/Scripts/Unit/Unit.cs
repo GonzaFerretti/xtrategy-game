@@ -7,19 +7,18 @@ using UnityEngine;
 public class Unit : GameGridElement
 {
     [SerializeField] GameGridCell currentCell;
+    [SerializeField] public bool isCovered;
 
-    [SerializeField] int currentHp;
+    [SerializeField] public int currentHp;
     [SerializeField] public currentActionState moveState = currentActionState.notStarted;
     [SerializeField] public currentActionState attackState = currentActionState.notStarted;
-    [SerializeField] int movementRange;
+    [SerializeField] public int movementRange;
     [SerializeField] int minAttackRange;
     [SerializeField] int maxAttackRange;
     [SerializeField] public int damage;
     [SerializeField] UnitAttributes unitAttributes;
     [SerializeField] private Renderer rend;
-
-    [SerializeField] private Material selectedMaterial;
-    [SerializeField] private Material baseMaterial;
+    [SerializeField] public AIBehaviour AI;
 
     [SerializeField] private UiHpBar hpBar;
 
@@ -84,6 +83,7 @@ public class Unit : GameGridElement
         minAttackRange = unitAttributes.minAttackRange;
         maxAttackRange = unitAttributes.maxAttackRange;
         damage = unitAttributes.damage;
+        AI = unitAttributes.aiBehaviour;
     }
 
     public bool HasActionsLeft()
@@ -93,12 +93,10 @@ public class Unit : GameGridElement
 
     public virtual void Select()
     {
-        rend.material = selectedMaterial;
         if (moveState == currentActionState.ended) return;
         if (possibleMovements.Count == 0)
         {
-            Vector3Int currentCellCoords = currentCell.GetCoordinates();
-            currentRangeQuery = grid.QueryUnitRange(movementRange, currentCellCoords);
+            currentRangeQuery = StartRangeQuery();
             possibleMovements = new List<Vector3Int>();
             StartCoroutine(WaitForRangeQuery());
         }
@@ -108,12 +106,21 @@ public class Unit : GameGridElement
         }
     }
 
+    public AsyncRangeQuery StartRangeQuery()
+    {
+        return grid.QueryUnitRange(movementRange, GetCoordinates());
+    }
+
+    public AsyncRangeQuery StartAttackRangeQuery()
+    {
+        return grid.QueryUnitAttackRange(minAttackRange, maxAttackRange, GetCoordinates());
+    }
+
     public virtual void PrepareAttack()
     {
         if (possibleAttacks.Count == 0)
         {
-            Vector3Int currentCellCoords = currentCell.GetCoordinates();
-            currentRangeQuery = grid.QueryUnitAttackRange(minAttackRange, maxAttackRange, currentCellCoords);
+            currentRangeQuery = StartAttackRangeQuery();
             possibleAttacks = new List<Vector3Int>();
             StartCoroutine(WaitForAttackRangeQuery());
         }
@@ -123,22 +130,36 @@ public class Unit : GameGridElement
         }
     }
 
-    public IEnumerator Move(Vector3Int destinationCoords)
+    public IEnumerator MoveByDestinationCoords(Vector3Int destinationCoords)
     {
-        if (possibleMovements.Contains(destinationCoords))
+        moveState = currentActionState.inProgress;
+        isCovered = false;
+        Vector3Int[] path = grid.CalculateShortestPath(currentCell.GetCoordinates(), destinationCoords);
+        for (int i = 0; i < path.Length; i++)
         {
-            moveState = currentActionState.inProgress;
-            Vector3Int[] path = grid.CalculateShortestPath(currentCell.GetCoordinates(), destinationCoords);
-            for (int i = 0; i < path.Length; i++)
-            {
-                transform.position = grid.GetWorldPositionFromCoords(path[i]);
-                yield return new WaitForSeconds(0.25f);
-            }
-            grid.DisableCellIndicators(possibleMovements);
-            possibleMovements = new List<Vector3Int>();
-            currentCell = grid.GetCellAtCoordinate(path[path.Length - 1]);
-            moveState = currentActionState.ended;
+            transform.position = grid.GetWorldPositionFromCoords(path[i]);
+            yield return new WaitForSeconds(0.25f);
         }
+        possibleMovements = new List<Vector3Int>();
+        currentCell = grid.GetCellAtCoordinate(path[path.Length - 1]);
+        isCovered = grid.IsUnitCovered(GetCoordinates());
+        moveState = currentActionState.ended;
+        grid.DisableCellIndicators(possibleMovements);
+    }
+
+    public IEnumerator MoveAlongPath(Vector3Int[] givenPath)
+    {
+        moveState = currentActionState.inProgress;
+        isCovered = false;
+        for (int i = 0; i < givenPath.Length; i++)
+        {
+            transform.position = grid.GetWorldPositionFromCoords(givenPath[i]);
+            yield return new WaitForSeconds(0.25f);
+        }
+        possibleMovements = new List<Vector3Int>();
+        currentCell = grid.GetCellAtCoordinate(givenPath[givenPath.Length - 1]);
+        isCovered = grid.IsUnitCovered(GetCoordinates());
+        moveState = currentActionState.ended;
     }
 
     public IEnumerator WaitForRangeQuery()
@@ -169,13 +190,12 @@ public class Unit : GameGridElement
 
     public virtual void Deselect()
     {
-        rend.material = baseMaterial;
         grid.DisableAllCellIndicators();
     }
 }
 
-public enum currentActionState 
-{ 
+public enum currentActionState
+{
     notStarted,
     inProgress,
     ended
