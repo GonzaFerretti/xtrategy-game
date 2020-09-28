@@ -7,7 +7,7 @@ using UnityEngine;
 public class Unit : GameGridElement
 {
     [SerializeField] GameGridCell currentCell;
-    [SerializeField] public bool isCovered;
+    [SerializeField] public List<Cover> currentCovers;
 
     [SerializeField] public int currentHp;
     [SerializeField] public currentActionState moveState = currentActionState.notStarted;
@@ -60,6 +60,7 @@ public class Unit : GameGridElement
         {
             currentCell = grid.GetCellAtCoordinate(new Vector3Int(Random.Range(1, 10), Random.Range(1, 10), 0));
             transform.position = currentCell.transform.position;
+            currentCovers = grid.GetCoversFromCoord(GetCoordinates());
         }
     }
 
@@ -133,7 +134,7 @@ public class Unit : GameGridElement
     public IEnumerator MoveByDestinationCoords(Vector3Int destinationCoords)
     {
         moveState = currentActionState.inProgress;
-        isCovered = false;
+        currentCovers = new List<Cover>();
         Vector3Int[] path = grid.CalculateShortestPath(currentCell.GetCoordinates(), destinationCoords);
         for (int i = 0; i < path.Length; i++)
         {
@@ -142,7 +143,7 @@ public class Unit : GameGridElement
         }
         possibleMovements = new List<Vector3Int>();
         currentCell = grid.GetCellAtCoordinate(path[path.Length - 1]);
-        isCovered = grid.IsUnitCovered(GetCoordinates());
+        currentCovers = grid.GetCoversFromCoord(GetCoordinates());
         moveState = currentActionState.ended;
         grid.DisableCellIndicators(possibleMovements);
     }
@@ -150,7 +151,7 @@ public class Unit : GameGridElement
     public IEnumerator MoveAlongPath(Vector3Int[] givenPath)
     {
         moveState = currentActionState.inProgress;
-        isCovered = false;
+        currentCovers = new List<Cover>();
         for (int i = 0; i < givenPath.Length; i++)
         {
             transform.position = grid.GetWorldPositionFromCoords(givenPath[i]);
@@ -158,7 +159,7 @@ public class Unit : GameGridElement
         }
         possibleMovements = new List<Vector3Int>();
         currentCell = grid.GetCellAtCoordinate(givenPath[givenPath.Length - 1]);
-        isCovered = grid.IsUnitCovered(GetCoordinates());
+        currentCovers = grid.GetCoversFromCoord(GetCoordinates());
         moveState = currentActionState.ended;
     }
 

@@ -15,6 +15,7 @@ public class ControllerTransitionOtherActionAvailable : ControllerStateTransitio
     public override void Transition(BaseController controller)
     {
         base.Transition(controller);
+        controller.GetGridReference().DisableAllCellIndicators();
         if (controller.currentlySelectedUnit.moveState == currentActionState.notStarted)
         {
             controller.GetGridReference().EnableCellIndicators(controller.currentlySelectedUnit.possibleMovements, GridIndicatorMode.possibleMovement);

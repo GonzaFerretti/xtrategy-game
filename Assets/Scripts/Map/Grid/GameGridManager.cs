@@ -1,8 +1,10 @@
 ﻿using RotaryHeart.Lib.SerializableDictionary;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class GameGridManager : MonoBehaviour
@@ -265,17 +267,6 @@ public class GameGridManager : MonoBehaviour
         return possibleCover;
     }
 
-    public bool IsUnitCovered(Vector3Int unitCoord)
-    {
-        foreach (KeyValuePair<CoverData, Cover> possibleCover in covers)
-        {
-            if (possibleCover.Value.coverData.side1 == unitCoord || possibleCover.Value.coverData.side2 == unitCoord)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public IEnumerator ProcessUnitRangeQuery(int maxSteps, Vector3Int currentCell, int queryId)
     {
@@ -350,9 +341,12 @@ public class GameGridManager : MonoBehaviour
     public IEnumerator ProcessAttackRangeQuery(int minRange, int maxRange, Vector3Int currentCell, int queryId)
     {
         Dictionary<Vector3Int, int> currentBorder = new Dictionary<Vector3Int, int>();
-        currentBorder.Add(currentCell, 0);
+        foreach (Vector3Int cell in GetViableNeighbourCellsForAttack(currentCell))
+        {
+            currentBorder.Add(cell, 0);
+        }
         List<Vector3Int> discardedRange = new List<Vector3Int>();
-        int range = 0;
+        int range = 1;
         DisableCellIndicators(gridCoordinates.Keys);
         while (range <= maxRange)
         {
@@ -438,31 +432,107 @@ public class GameGridManager : MonoBehaviour
 
     public Vector3Int[] GetBestPathToGetToClosestUnit(Unit thisUnit, List<Unit> otherUnits)
     {
-        List<Vector3Int[]> DictDistancePossibleMovement = new List<Vector3Int[]>();
+        List<Vector3Int[]> possiblePaths = new List<Vector3Int[]>();
         foreach (Unit possibleTargetUnit in otherUnits)
         {
             List<Vector3Int> possibleDirections = GetViableNeighbourCellsForMovement(possibleTargetUnit.GetCoordinates());
             foreach (Vector3Int possibleDirection in possibleDirections)
             {
                 Vector3Int[] posssiblePath = CalculateShortestPath(thisUnit.GetCoordinates(), possibleDirection);
-                DictDistancePossibleMovement.Add(posssiblePath);
+                possiblePaths.Add(posssiblePath);
             }
         }
 
-        int stepsToClosestUnit = int.MaxValue;
-        Vector3Int[] pathToClosestUnit = new Vector3Int[0];
+        return GetShortestPathFromPossiblePaths(possiblePaths);
+    }
 
-        foreach (Vector3Int[] existingPath in DictDistancePossibleMovement)
+    public Vector3Int[] GetPathToCoverClosestToEnemy(Unit thisUnit, List<Unit> otherUnits)
+    {
+        Dictionary<Vector3Int[], int> possiblePaths = new Dictionary<Vector3Int[], int>();
+        foreach (Unit possibleTargetUnit in otherUnits)
+        {
+            foreach (CoverData cover in covers.Keys)
+            {
+                Vector3Int possiblePositionToCover;
+                if (isCoverSuitableToDefendAgainstUnit(cover, possibleTargetUnit, out possiblePositionToCover))
+                {
+                    Vector3Int[] pathToPosition = CalculateShortestPath(thisUnit.GetCoordinates(), possiblePositionToCover);
+                    Vector3Int[] pathFromCoverToEnemy = CalculateShortestPath(possiblePositionToCover, possibleTargetUnit.GetCoordinates());
+                    possiblePaths.Add(pathToPosition,pathFromCoverToEnemy.Length);
+                    
+                }
+            }
+        }
+
+        int stepsToUnitFromClosestCover = int.MaxValue;
+        List<Vector3Int[]> closestToUnitsCover = new List<Vector3Int[]>();
+
+        foreach (KeyValuePair<Vector3Int[], int> existingPath in possiblePaths)
+        {
+            int stepsToUnit = existingPath.Value; 
+            if (stepsToUnit <= stepsToUnitFromClosestCover)
+            {
+                stepsToUnitFromClosestCover = stepsToUnit;
+                closestToUnitsCover.Add(existingPath.Key);
+            }
+        }
+
+        return GetShortestPathFromPossiblePaths(closestToUnitsCover);
+    }
+
+    public List<Cover> GetCoversFromCoord(Vector3Int coord)
+    {
+        List<Cover> result = new List<Cover>();
+        foreach (KeyValuePair<CoverData, Cover> possibleCover in covers)
+        {
+            if (possibleCover.Key.side1 == coord || possibleCover.Key.side2 == coord)
+            {
+                result.Add(possibleCover.Value);
+                break;
+            }
+        }
+        return result;
+    }
+
+    public Vector3Int[] GetShortestPathFromPossiblePaths(List<Vector3Int[]> possiblePaths)
+    {
+        int stepsToClosestUnit = int.MaxValue;
+        Vector3Int[] closestPath = new Vector3Int[0];
+
+        foreach (Vector3Int[] existingPath in possiblePaths)
         {
             int steps = existingPath.Length;
             if (steps < stepsToClosestUnit)
             {
                 stepsToClosestUnit = steps;
-                pathToClosestUnit = existingPath;
+                closestPath = existingPath;
             }
         }
+        return closestPath;
+    }
 
-        return pathToClosestUnit;
+    public bool isCoverSuitableToDefendAgainstUnit(CoverData cover, Unit unit, out Vector3Int suitableSide)
+    {
+        suitableSide = new Vector3Int(-1, -1, -1);
+        if (unit.currentCovers.Contains(covers[cover])) return false;
+        Vector3Int unitCoords = unit.GetCoordinates();
+        
+        bool coversXAxis = cover.IsCellMovementDirectionInXAxis();
+        if (coversXAxis)
+        {
+            if (unitCoords.x == cover.side1.x || unitCoords.x == cover.side2.x) return false;
+            bool isRightOfCover = unit.GetCoordinates().x > cover.side1.x && cover.side2.x < cover.side1.x;
+            suitableSide = (isRightOfCover) ? cover.side1 : cover.side2;
+            return true;
+        }
+        else
+        {
+            if (unitCoords.y == cover.side1.y || unitCoords.y == cover.side2.y) return false;
+            bool isUpOfCover = unit.GetCoordinates().y > cover.side1.y && cover.side2.y < cover.side1.y;
+            suitableSide = (isUpOfCover) ? cover.side1 : cover.side2;
+            return true;
+        }
+
     }
 }
 

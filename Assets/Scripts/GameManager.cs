@@ -17,9 +17,16 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        playersRemaining = players;
+        CompleteRemaingPlayerList();
         InitGridRefAndUnitList();
-        Invoke("StartPlayerTurn", 3);
+        Invoke("StartPlayerTurn", 1);
+    }
+
+    public void CompleteRemaingPlayerList()
+    {
+        playersRemaining = new List<BaseController>();
+        for (int i = 0; i < players.Count; i++)
+            playersRemaining.Add(players[i]);
     }
 
     void InitGridRefAndUnitList()
@@ -47,7 +54,7 @@ public class GameManager : MonoBehaviour
             if (currentTurn < totalTurns)
             {
                 currentTurn++;
-                playersRemaining = players;
+                CompleteRemaingPlayerList();
                 StartPlayerTurn();
             }
             else EndMatch();

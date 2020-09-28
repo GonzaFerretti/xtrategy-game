@@ -18,7 +18,7 @@ public class AIController : BaseController
             yield return StartCoroutine(unit.AI.ExecuteBehaviour(this, unit));
         }
         gridManager.gameManager.EndPlayerTurn();
-        
+
     }
 
     public void Attack(Unit attackedUnit, Unit attackingUnit)
@@ -29,7 +29,7 @@ public class AIController : BaseController
 
     public override void Update()
     {
-        
+
     }
 
     public bool WaitForAction()
@@ -57,7 +57,7 @@ public class AIController : BaseController
         return possibleUnitsToAttack;
     }
 
-    public Unit GetLowestUnitInAttackRange(List<Vector3Int> attackRange) 
+    public Unit GetLowestUnitInAttackRange(List<Vector3Int> attackRange)
     {
         List<Unit> unitsInAttackRange = GetUnitsInAttackRange(attackRange);
         if (unitsInAttackRange.Count > 0)
@@ -107,5 +107,79 @@ public class AIController : BaseController
         AsyncAIActionResult actionResult = new AsyncAIActionResult(queryId, this);
         currentActions.Add(queryId, actionResult);
         return actionResult;
-    }    
+    }
+
+
+
+    public IEnumerator AttemptAttack(Unit actingUnit, int id)
+    {
+        AsyncRangeQuery attackQuery = actingUnit.StartAttackRangeQuery();
+
+        while (!attackQuery.hasFinished)
+        {
+            yield return null;
+        }
+        if (attackQuery.cellsInRange.Count > 0)
+        {
+            Unit lowestHpUnitInRange = GetLowestUnitInAttackRange(attackQuery.cellsInRange);
+            if (lowestHpUnitInRange)
+            {
+                Attack(lowestHpUnitInRange, actingUnit);
+                currentActions[id].endedSuccesfully = true;
+            }
+            else
+            {
+                currentActions[id].endedSuccesfully = false;
+            }
+        }
+        else
+        {
+            currentActions[id].endedSuccesfully = false;
+        }
+
+        attackQuery.EndQuery();
+    }
+
+    public IEnumerator MoveTowardsClosestEnemy(Unit actingUnit)
+    {
+        Vector3Int[] pathToClosestEnemy = GetGridReference().GetBestPathToGetToClosestUnit(actingUnit, GetUnitsFromOthers());
+        if (pathToClosestEnemy.Length > 0)
+        {
+            int movementRange = actingUnit.movementRange;
+            if (pathToClosestEnemy.Length > movementRange)
+            {
+                Vector3Int[] longestPossiblePath = new Vector3Int[movementRange];
+                for (int i = 0; i < movementRange; i++)
+                {
+                    longestPossiblePath[i] = pathToClosestEnemy[i];
+                }
+                pathToClosestEnemy = longestPossiblePath;
+            }
+            yield return StartCoroutine(actingUnit.MoveAlongPath(pathToClosestEnemy));
+        }
+    }
+
+    public IEnumerator MoveTowardsCoverCloseToEnemy(Unit actingUnit, int id)
+    {
+        Vector3Int[] pathToClosestEnemy = GetGridReference().GetPathToCoverClosestToEnemy(actingUnit, GetUnitsFromOthers());
+        if (pathToClosestEnemy.Length > 0)
+        {
+            int movementRange = actingUnit.movementRange;
+            if (pathToClosestEnemy.Length > movementRange)
+            {
+                Vector3Int[] longestPossiblePath = new Vector3Int[movementRange];
+                for (int i = 0; i < movementRange; i++)
+                {
+                    longestPossiblePath[i] = pathToClosestEnemy[i];
+                }
+                pathToClosestEnemy = longestPossiblePath;
+            }
+            currentActions[id].endedSuccesfully = true;
+            yield return StartCoroutine(actingUnit.MoveAlongPath(pathToClosestEnemy));
+        }
+        else
+        {
+            currentActions[id].endedSuccesfully = false;
+        }
+    }
 }
