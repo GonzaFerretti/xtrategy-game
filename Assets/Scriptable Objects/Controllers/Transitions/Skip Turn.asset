@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e0b74a48161d4441886fa5b4746fe25, type: 3}
+  m_Name: Skip Turn
+  m_EditorClassIdentifier: 
+  destinationState: {fileID: 11400000, guid: 0c570ef61e700a94a9120c043b6e33e4, type: 2}

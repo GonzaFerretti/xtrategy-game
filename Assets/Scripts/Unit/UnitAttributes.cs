@@ -10,4 +10,5 @@ public class UnitAttributes : ScriptableObject
     public int minAttackRange;
     public int maxAttackRange;
     public int damage;
+    public AIBehaviour aiBehaviour;
 }

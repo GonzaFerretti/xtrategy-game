@@ -7,8 +7,10 @@ public class GameManager : MonoBehaviour
 {
     public List<BaseController> players;
     public List<BaseController> playersRemaining;
+    public List<Unit> allUnits;
 
     public BaseController currentPlayer;
+    [SerializeField] GameGridManager grid;
 
     [SerializeField] int totalTurns;
     [SerializeField] int currentTurn = 1;
@@ -16,7 +18,21 @@ public class GameManager : MonoBehaviour
     public void Start()
     {
         playersRemaining = players;
-        StartPlayerTurn();
+        InitGridRefAndUnitList();
+        Invoke("StartPlayerTurn", 3);
+    }
+
+    void InitGridRefAndUnitList()
+    {
+        if (!grid)
+        {
+            grid = players[0].GetGridReference();
+        }
+        allUnits = new List<Unit>();
+        foreach (BaseController player in players)
+        {
+            allUnits.AddRange(player.unitsControlled);
+        }
     }
 
     public void EndPlayerTurn()
@@ -41,7 +57,7 @@ public class GameManager : MonoBehaviour
     void StartPlayerTurn()
     {
         currentPlayer = playersRemaining[0];
-        currentPlayer.ResetUnits();
+        currentPlayer.StartTurn();
     }
 
     void EndMatch()

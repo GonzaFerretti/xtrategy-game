@@ -37,7 +37,10 @@ public class ControllerStateUnitSelected : ControllerState
         if ((controller as PlayerController).GetObjectUnderMouse(out objectSelected, 1 << LayerMask.NameToLayer("GroundBase")))
         {
             Vector3Int target = objectSelected.transform.parent.GetComponent<GameGridCell>().GetCoordinates();
-            controller.MoveUnit(target);
+            if (controller.currentlySelectedUnit.possibleMovements.Contains(target))
+            {
+                controller.MoveUnit(target);
+            }
         }
     }
 }

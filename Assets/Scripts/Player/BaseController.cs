@@ -11,7 +11,7 @@ public class BaseController : MonoBehaviour
     Dictionary<string, ControllerState> runtimeControllerStates = new Dictionary<string, ControllerState>();
     [SerializeField] ControllerState currentState;
 
-    [SerializeField] protected List<Unit> unitsControlled;
+    [SerializeField] public List<Unit> unitsControlled;
 
     public virtual void Start()
     {
@@ -81,7 +81,7 @@ public class BaseController : MonoBehaviour
         currentState.OnUpdate();
     }
 
-    public void ResetUnits()
+    public virtual void StartTurn()
     {
         foreach (Unit unit in unitsControlled)
         {
@@ -112,6 +112,6 @@ public class BaseController : MonoBehaviour
 
     public void MoveUnit(Vector3Int target)
     {
-        StartCoroutine(currentlySelectedUnit.Move(target));
+        StartCoroutine(currentlySelectedUnit.MoveByDestinationCoords(target));
     }
 }
