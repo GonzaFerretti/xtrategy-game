@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 76aa549e2424e304ebf52c3b17c52f1f
+guid: 0590d0563ae79c3409c93f54a54e8c53
 ModelImporter:
   serializedVersion: 26
   internalIDToNameTable:
@@ -26,7 +26,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -71,14 +71,14 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips:
-  - 8b094a9ad2e59c34b942d78a4460f637
-  - 495a0f5478812bb458b3a9a44f6b0ffc
-  - 26a61b746c25b0548b1a2eabcb7657f8
-  - 8e752578d46076a4f9f768c7ead54f1c
-  - a8fede6d54679fc479ec895c3dfecc05
-  - aa008405de5616045ad0acc8ce0569ae
-  - 7234790e3d209b749919985a169daef1
-  - dc38f3cf3ffafa348b129cc8c88fd04c
+  - cf4ddc4e12711ce42b2d3e6b15520f72
+  - 69b77d16e980e7a4dbd563eb1669ec8a
+  - 12f9f5202e0ebb94bbdae262260533d2
+  - 9715a0dcb6dbaf545be002b114e974a6
+  - 57764b4fd844bf74c880f076a46b5096
+  - dd70dce3da89f3448bd7154b5131cc4f
+  - ba59f4870c778944799851b1d1533977
+  - f4096386951e4ac46adc61592d54cfc2
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
@@ -95,10 +95,10 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 3
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
