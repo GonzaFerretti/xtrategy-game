@@ -105,7 +105,6 @@ public class GridEditor : Editor
                             Cover nextHighCover = GetNextPrefab<HighCover>("HighCover", hit);
                             gridBuilder.ReplaceCover(hit.transform.parent.GetComponent<Cover>().coverData, nextHighCover);
                             break;
-
                         default:
                             break;
                     }

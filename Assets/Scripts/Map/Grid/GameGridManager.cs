@@ -306,6 +306,26 @@ public class GameGridManager : MonoBehaviour
             depth++;
             yield return null;
         }
+
+        List<Vector3Int> cellsInRangeWithoutUnits = new List<Vector3Int>();
+
+        foreach (Vector3Int cell in currentQueries[queryId].cellsInRange)
+        {
+            cellsInRangeWithoutUnits.Add(cell);
+        }
+
+        foreach (Vector3Int cell in currentQueries[queryId].cellsInRange)
+        {
+            foreach (Unit unit in gameManager.allUnits)
+            {
+                if (unit.GetCoordinates() == cell)
+                {
+                    cellsInRangeWithoutUnits.Remove(cell);
+                    break;
+                }
+            }
+        }
+        currentQueries[queryId].cellsInRange = cellsInRangeWithoutUnits;
     }
 
     public IEnumerator StartUnitRangeQuery(int maxSteps, Vector3Int startingCell, int queryId)

@@ -570,7 +570,7 @@ MonoBehaviour:
   allUnits: []
   currentPlayer: {fileID: 0}
   grid: {fileID: 2009562864}
-  totalTurns: 6
+  totalTurns: 9999
   currentTurn: 1
 --- !u!114 &2009562864 stripped
 MonoBehaviour:
@@ -748,15 +748,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1097648072, guid: 89042c2a50a5375448dbf067a5c51345, type: 3}
       propertyPath: gridCoordinates._keyValues.Array.size
-      value: 400
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1097648072, guid: 89042c2a50a5375448dbf067a5c51345, type: 3}
       propertyPath: gridCoordinates._keys.Array.size
-      value: 400
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1097648072, guid: 89042c2a50a5375448dbf067a5c51345, type: 3}
       propertyPath: gridCoordinates._values.Array.size
-      value: 400
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1097648072, guid: 89042c2a50a5375448dbf067a5c51345, type: 3}
       propertyPath: covers._keyValues.Array.size
@@ -9280,7 +9280,7 @@ PrefabInstance:
         type: 3}
       propertyPath: savedData
       value: 
-      objectReference: {fileID: 11400000, guid: d096926f129cc3f4e94fd7677c0d041e,
+      objectReference: {fileID: 11400000, guid: defd4f8a980931f48a10cef6c13b9e3b,
         type: 2}
     - target: {fileID: 6409168009872196243, guid: 89042c2a50a5375448dbf067a5c51345,
         type: 3}
