@@ -413,6 +413,7 @@ public class GameGridManager : MonoBehaviour
             Vector3Int unitCoords = unit.GetCoordinates();
             foreach (Cover cover in unit.currentCovers)
             {
+                if (cover is LowCover) continue;
                 if (IsCoverInTheWayOfAttack(currentCell, unitCoords, cover))
                 {
                     cellsInValidAttackRange.Remove(unitCoords);
@@ -426,7 +427,6 @@ public class GameGridManager : MonoBehaviour
 
     public bool IsCoverInTheWayOfAttack(Vector3Int origin, Vector3Int destination, Cover coverObject)
     {
-        if (coverObject is LowCover) return false;
         CoverData cover = coverObject.coverData;
 
         bool isOnSide1OfCover = destination == cover.side1;

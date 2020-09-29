@@ -19,7 +19,7 @@ public class GridEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-
+        if (Application.isPlaying) return;
         if (!gridBuilder) gridBuilder = ((GridBuilder)target);
         if (GUILayout.Button("New Grid"))
         {
@@ -70,6 +70,7 @@ public class GridEditor : Editor
 
     public void OnSceneGUI()
     {
+        if (Application.isPlaying) return;
         if (!gridBuilder) gridBuilder = ((GridBuilder)target);
         if (Event.current.type == EventType.Layout)
         {
@@ -145,6 +146,7 @@ public class GridEditor : Editor
 
     void OnSceneMouseOver(SceneView view)
     {
+        if (Application.isPlaying) return;
         Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 100f, 1 << LayerMask.NameToLayer("GroundBase")))

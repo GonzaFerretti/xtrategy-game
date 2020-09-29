@@ -51,7 +51,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
     IEnumerator AttackEnemy(Unit enemyToAttack)
     {
         yield return new WaitForSeconds(1);
-        enemyToAttack.Damage(controller.currentlySelectedUnit.damage);
+        enemyToAttack.TakeDamage(controller.currentlySelectedUnit.damage, controller.currentlySelectedUnit);
         controller.currentlySelectedUnit.attackState = currentActionState.ended;
     }
 }

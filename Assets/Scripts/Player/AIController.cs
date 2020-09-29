@@ -23,7 +23,7 @@ public class AIController : BaseController
 
     public void Attack(Unit attackedUnit, Unit attackingUnit)
     {
-        attackedUnit.Damage(attackingUnit.damage);
+        attackedUnit.TakeDamage(attackingUnit.damage, attackingUnit);
         attackingUnit.attackState = currentActionState.ended;
     }
 

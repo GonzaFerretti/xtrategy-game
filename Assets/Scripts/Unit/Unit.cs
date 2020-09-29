@@ -57,9 +57,20 @@ public class Unit : GameGridElement
         return currentCell.GetCoordinates();
     }
 
-    public void Damage(int amountToDamage)
+    public void TakeDamage(int baseDamage, Unit attackingUnit)
     {
-        currentHp -= amountToDamage;
+        bool isCoverInTheWay = false;
+        foreach (Cover cover in currentCovers)
+        {
+            if (cover is HighCover) continue;
+            if (grid.IsCoverInTheWayOfAttack(attackingUnit.GetCoordinates(), GetCoordinates(), cover))
+            {
+                isCoverInTheWay = true;
+                break;
+            }
+        }
+        Debug.Log(isCoverInTheWay);
+        currentHp = (isCoverInTheWay) ? currentHp - baseDamage - 1 : currentHp - baseDamage;
         if (currentHp <= 0)
         {
             Destroy(hpBar.gameObject);
