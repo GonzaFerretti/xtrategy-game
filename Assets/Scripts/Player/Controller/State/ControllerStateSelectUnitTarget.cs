@@ -10,7 +10,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
         base.OnUpdate();
         if (Input.GetMouseButtonDown(1)) CheckPossibleAttackTarget();
         if (Input.GetMouseButtonDown(0)) CheckUnitDeselect();
-        (controller as PlayerController).OnHoverGrid(GridIndicatorMode.possibleAttack, GridIndicatorMode.selectedAttack, controller.currentlySelectedUnit.possibleAttacks);
+        if (controller.currentlySelectedUnit) (controller as PlayerController).OnHoverGrid(GridIndicatorMode.possibleAttack, GridIndicatorMode.selectedAttack, controller.currentlySelectedUnit.possibleAttacks);
     }
 
     public void CheckUnitDeselect()

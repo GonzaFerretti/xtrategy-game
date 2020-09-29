@@ -97,6 +97,7 @@ public class GameGridManager : MonoBehaviour
             cover.SetGridManagerReference(this);
             cover.transform.position = position;
             cover.transform.parent = coversRootTransform;
+            cover.coverData = coverInfo;
             if (!coverInfo.IsCellMovementDirectionInXAxis())
             {
                 cover.transform.localEulerAngles = new Vector3(0, 90, 0);
@@ -399,6 +400,81 @@ public class GameGridManager : MonoBehaviour
             range++;
             yield return null;
         }
+
+        List<Vector3Int> cellsInValidAttackRange = new List<Vector3Int>();
+
+        foreach (Vector3Int cell in currentQueries[queryId].cellsInRange)
+        {
+            cellsInValidAttackRange.Add(cell);
+        }
+
+        foreach (Unit unit in gameManager.allUnits)
+        {
+            Vector3Int unitCoords = unit.GetCoordinates();
+            foreach (Cover cover in unit.currentCovers)
+            {
+                if (IsCoverInTheWayOfAttack(currentCell, unitCoords, cover))
+                {
+                    cellsInValidAttackRange.Remove(unitCoords);
+                    break;
+                }
+            }
+        }
+        currentQueries[queryId].cellsInRange = cellsInValidAttackRange;
+
+    }
+
+    public bool IsCoverInTheWayOfAttack(Vector3Int origin, Vector3Int destination, Cover coverObject)
+    {
+        if (coverObject is LowCover) return false;
+        CoverData cover = coverObject.coverData;
+
+        bool isOnSide1OfCover = destination == cover.side1;
+        bool isOnSide2OfCover = destination == cover.side2;
+        if (!isOnSide1OfCover && !isOnSide2OfCover) return false;
+        bool coversXAxis = cover.IsCellMovementDirectionInXAxis();
+        if (coversXAxis)
+        {
+            if (cover.side1.y < cover.side2.y && isOnSide1OfCover && origin.y >= cover.side2.y)
+            {
+                return true;
+            }
+            else if (cover.side2.y < cover.side1.y && isOnSide2OfCover && origin.y >= cover.side1.y)
+            {
+                return true;
+            }
+            else if (cover.side1.y < cover.side2.y && isOnSide2OfCover && origin.y <= cover.side1.y)
+            {
+                return true;
+            }
+            else if (cover.side2.y < cover.side1.y && isOnSide1OfCover && origin.y <= cover.side2.y)
+            {
+                return true;
+            }
+            return false;
+        }
+        else
+        {
+
+
+            if (cover.side1.x < cover.side2.x && isOnSide1OfCover && origin.x >= cover.side2.x)
+            {
+                return true;
+            }
+            else if (cover.side2.x < cover.side1.x && isOnSide2OfCover && origin.x >= cover.side1.x)
+            {
+                return true;
+            }
+            else if (cover.side1.x < cover.side2.x && isOnSide2OfCover && origin.x <= cover.side1.x)
+            {
+                return true;
+            }
+            else if (cover.side2.x < cover.side1.x && isOnSide1OfCover && origin.x <= cover.side2.x)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 
     public List<Vector3Int> GetViableNeighbourCellsForAttack(Vector3Int cell)
@@ -486,9 +562,10 @@ public class GameGridManager : MonoBehaviour
                 Vector3Int possiblePositionToCover;
                 if (isCoverSuitableToDefendAgainstUnit(cover, possibleTargetUnit, out possiblePositionToCover))
                 {
+                    if (possiblePositionToCover == thisUnit.GetCoordinates()) continue;
                     Vector3Int[] pathToPosition = CalculateShortestPath(thisUnit.GetCoordinates(), possiblePositionToCover);
                     Vector3Int[] pathFromCoverToEnemy = CalculateShortestPath(possiblePositionToCover, possibleTargetUnit.GetCoordinates());
-                    possiblePaths.Add(pathToPosition, pathFromCoverToEnemy.Length);
+                    if (!possiblePaths.ContainsKey(pathToPosition))  possiblePaths.Add(pathToPosition, pathFromCoverToEnemy.Length);
 
                 }
             }
@@ -518,7 +595,6 @@ public class GameGridManager : MonoBehaviour
             if (possibleCover.Key.side1 == coord || possibleCover.Key.side2 == coord)
             {
                 result.Add(possibleCover.Value);
-                break;
             }
         }
         return result;
@@ -550,19 +626,52 @@ public class GameGridManager : MonoBehaviour
         bool coversXAxis = cover.IsCellMovementDirectionInXAxis();
         if (coversXAxis)
         {
-            if (unitCoords.x == cover.side1.x || unitCoords.x == cover.side2.x) return false;
-            bool isRightOfCover = unit.GetCoordinates().x > cover.side1.x && cover.side2.x < cover.side1.x;
-            suitableSide = (isRightOfCover) ? cover.side1 : cover.side2;
-            return true;
+            if (cover.side1.y < cover.side2.y && unitCoords.y >= cover.side2.y)
+            {
+                suitableSide = cover.side1;
+                return true;
+            }
+            else if (cover.side2.y < cover.side1.y && unitCoords.y >= cover.side1.y)
+            {
+                suitableSide = cover.side2;
+                return true;
+            }
+            else if (cover.side1.y < cover.side2.y && unitCoords.y <= cover.side1.y)
+            {
+                suitableSide = cover.side2;
+                return true;
+            }
+            else if (cover.side2.y < cover.side1.y && unitCoords.y <= cover.side2.y)
+            {
+                suitableSide = cover.side1;
+                return true;
+            }
+            return false;
         }
         else
         {
-            if (unitCoords.y == cover.side1.y || unitCoords.y == cover.side2.y) return false;
-            bool isUpOfCover = unit.GetCoordinates().y > cover.side1.y && cover.side2.y < cover.side1.y;
-            suitableSide = (isUpOfCover) ? cover.side1 : cover.side2;
-            return true;
+            if (cover.side1.x < cover.side2.x && unitCoords.x >= cover.side2.x)
+            {
+                suitableSide = cover.side1;
+                return true;
+            }
+            else if (cover.side2.x < cover.side1.x && unitCoords.x >= cover.side1.x)
+            {
+                suitableSide = cover.side2;
+                return true;
+            }
+            else if (cover.side1.x < cover.side2.x && unitCoords.x <= cover.side1.x)
+            {
+                suitableSide = cover.side2;
+                return true;
+            }
+            else if (cover.side2.x < cover.side1.x && unitCoords.x <= cover.side2.x)
+            {
+                suitableSide = cover.side1;
+                return true;
+            }
+            return false;
         }
-
     }
 }
 

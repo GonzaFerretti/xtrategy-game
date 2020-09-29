@@ -51,6 +51,7 @@ public class GridEditor : Editor
             mapData.Init(gridBuilder.gridCoordinates, gridBuilder.covers);
             AssetDatabase.CreateAsset(mapData, path);
             gridBuilder.gameGridManager.savedData = mapData;
+            EditorUtility.SetDirty(gridBuilder.gameGridManager);
         }
 
         if (GUILayout.Button("Load from file"))

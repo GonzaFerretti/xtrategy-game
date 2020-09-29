@@ -9,7 +9,7 @@ public class ControllerStateUnitSelected : ControllerState
         base.OnUpdate();
         if (Input.GetMouseButtonDown(0)) CheckUnitDeselect();
         if (Input.GetMouseButtonDown(1)) CheckUnitMovement();
-        (controller as PlayerController).OnHoverGrid(GridIndicatorMode.possibleMovement,GridIndicatorMode.selectedMovement, controller.currentlySelectedUnit.possibleMovements);
+        if (controller.currentlySelectedUnit) (controller as PlayerController).OnHoverGrid(GridIndicatorMode.possibleMovement,GridIndicatorMode.selectedMovement, controller.currentlySelectedUnit.possibleMovements);
     }
 
     public void CheckUnitDeselect()

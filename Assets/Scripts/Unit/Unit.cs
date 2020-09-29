@@ -22,16 +22,34 @@ public class Unit : GameGridElement
 
     [SerializeField] private UiHpBar hpBar;
 
+    public Renderer[] rens;
+    public Material seethroughBaseMaterial;
+
     AsyncRangeQuery currentRangeQuery;
 
     public BaseController owner;
     public List<Vector3Int> possibleMovements;
     public List<Vector3Int> possibleAttacks;
 
-    public void Init(Vector3 startingPos, GameGridCell cell)
+    void InitShader()
     {
-        currentCell = cell;
-        transform.position = startingPos;
+        rens = GetComponentsInChildren<Renderer>();
+        foreach (Renderer ren in rens)
+        {
+            Material[] usualMat = ren.materials;
+            Material[] transMat = new Material[ren.materials.Length];
+            for (int i = 0; i < ren.materials.Length; i++)
+            {
+                Material mat = new Material(seethroughBaseMaterial);
+                mat.SetTexture("_Albedo", usualMat[i].GetTexture("_MainTex"));
+                mat.SetTexture("_Normal", usualMat[i].GetTexture("_BumpMap"));
+                mat.SetFloat("_Glossiness", usualMat[i].GetFloat("_Glossiness"));
+                mat.SetFloat("_Metallic", usualMat[i].GetFloat("_Metallic"));
+                mat.SetColor("_Color", owner.playerColor);
+                transMat[i] = mat;
+            }
+            ren.materials = transMat;
+        }
     }
 
     public Vector3Int GetCoordinates()
@@ -67,6 +85,7 @@ public class Unit : GameGridElement
     public virtual void Start()
     {
         SetUnitAttributes();
+        InitShader();
     }
 
     public void ResetActions()

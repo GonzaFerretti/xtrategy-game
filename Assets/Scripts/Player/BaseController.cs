@@ -13,6 +13,7 @@ public class BaseController : MonoBehaviour
     [SerializeField] ControllerState currentState;
 
     [SerializeField] public List<Unit> unitsControlled;
+    public Color playerColor;
 
     public virtual void Start()
     {
