@@ -4,14 +4,13 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Controller/State/Unit selected")]
 public class ControllerStateUnitSelected : ControllerState
 {
-
     public override void OnUpdate()
     {
         base.OnUpdate();
         if (Input.GetMouseButtonDown(0)) CheckUnitDeselect();
         if (Input.GetMouseButtonDown(1)) CheckUnitMovement();
+        (controller as PlayerController).OnHoverGrid(GridIndicatorMode.possibleMovement,GridIndicatorMode.selectedMovement, controller.currentlySelectedUnit.possibleMovements);
     }
-
 
     public void CheckUnitDeselect()
     {

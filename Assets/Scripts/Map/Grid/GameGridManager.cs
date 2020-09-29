@@ -39,7 +39,7 @@ public class GameGridManager : MonoBehaviour
 
     public void InitializeGridIndicators()
     {
-        foreach (KeyValuePair<Vector3Int,GameGridCell> cellData in gridCoordinates)
+        foreach (KeyValuePair<Vector3Int, GameGridCell> cellData in gridCoordinates)
         {
             GridIndicator newGridIndicator = Instantiate(gridIndicatorPrefab);
             newGridIndicator.transform.position = cellData.Value.transform.position + Vector3.up * indicatorHeight;
@@ -184,6 +184,11 @@ public class GameGridManager : MonoBehaviour
         }
     }
 
+    public void EnableCellIndicator(Vector3Int indicatorToEnable, GridIndicatorMode gridIndicatorMode)
+    {
+        gridIndicators[indicatorToEnable].Enable(gridIndicatorMode);
+    }
+
     public void DisableCellIndicators(IEnumerable<Vector3Int> indicatorsToDisable)
     {
         foreach (Vector3Int indicator in indicatorsToDisable)
@@ -192,9 +197,14 @@ public class GameGridManager : MonoBehaviour
         }
     }
 
+    public void DisableCellIndicator(Vector3Int indicatorToDisable)
+    {
+        gridIndicators[indicatorToDisable].Disable();
+    }
+
     public void DisableAllCellIndicators()
     {
-        foreach (KeyValuePair<Vector3Int,GridIndicator> indicatorData in gridIndicators)
+        foreach (KeyValuePair<Vector3Int, GridIndicator> indicatorData in gridIndicators)
         {
             indicatorData.Value.Disable();
         }
@@ -379,10 +389,10 @@ public class GameGridManager : MonoBehaviour
 
                 foreach (Vector3Int possibleNeighbour in possibleNextBorders)
                 {
-                        if (!nextBorder.ContainsKey(possibleNeighbour) && !discardedRange.Contains(possibleNeighbour) && !currentQueries[queryId].cellsInRange.Contains(possibleNeighbour))
-                        {
-                            nextBorder.Add(possibleNeighbour, currentBorder[currentBorderCell] + 1);
-                        }
+                    if (!nextBorder.ContainsKey(possibleNeighbour) && !discardedRange.Contains(possibleNeighbour) && !currentQueries[queryId].cellsInRange.Contains(possibleNeighbour))
+                    {
+                        nextBorder.Add(possibleNeighbour, currentBorder[currentBorderCell] + 1);
+                    }
                 }
             }
             currentBorder = nextBorder;
@@ -417,12 +427,12 @@ public class GameGridManager : MonoBehaviour
 
     public bool IsNeighbourViableForAttack(Vector3Int node, Vector3Int neighbour)
     {
-       return gridCoordinates.ContainsKey(neighbour);
+        return gridCoordinates.ContainsKey(neighbour);
     }
 
     public IEnumerator StartUnitAttackRangeQuery(int minRange, int maxRange, Vector3Int startingCell, int queryId)
     {
-        yield return StartCoroutine(ProcessAttackRangeQuery(minRange,maxRange, startingCell, queryId));
+        yield return StartCoroutine(ProcessAttackRangeQuery(minRange, maxRange, startingCell, queryId));
         currentQueries[queryId].hasFinished = true;
     }
 
@@ -478,8 +488,8 @@ public class GameGridManager : MonoBehaviour
                 {
                     Vector3Int[] pathToPosition = CalculateShortestPath(thisUnit.GetCoordinates(), possiblePositionToCover);
                     Vector3Int[] pathFromCoverToEnemy = CalculateShortestPath(possiblePositionToCover, possibleTargetUnit.GetCoordinates());
-                    possiblePaths.Add(pathToPosition,pathFromCoverToEnemy.Length);
-                    
+                    possiblePaths.Add(pathToPosition, pathFromCoverToEnemy.Length);
+
                 }
             }
         }
@@ -489,7 +499,7 @@ public class GameGridManager : MonoBehaviour
 
         foreach (KeyValuePair<Vector3Int[], int> existingPath in possiblePaths)
         {
-            int stepsToUnit = existingPath.Value; 
+            int stepsToUnit = existingPath.Value;
             if (stepsToUnit <= stepsToUnitFromClosestCover)
             {
                 stepsToUnitFromClosestCover = stepsToUnit;
@@ -536,7 +546,7 @@ public class GameGridManager : MonoBehaviour
         suitableSide = new Vector3Int(-1, -1, -1);
         if (unit.currentCovers.Contains(covers[cover])) return false;
         Vector3Int unitCoords = unit.GetCoordinates();
-        
+
         bool coversXAxis = cover.IsCellMovementDirectionInXAxis();
         if (coversXAxis)
         {
