@@ -70,34 +70,34 @@ MonoBehaviour:
   - side1: {x: 6, y: 13, z: 0}
     side2: {x: 5, y: 13, z: 0}
   coversPrefabNames:
-  - HighCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - HighCover
-  - LowCover
-  - LowCover
-  - HighCover
-  - HighCover
-  - HighCover
-  - HighCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - HighCover
-  - LowCover
-  - HighCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
+  - HighCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
+  - HighCoverBloc
+  - WoodFenceLCover
+  - WoodFenceLCover
+  - HighCoverBloc
+  - HighCoverBloc
+  - HighCoverBloc
+  - HighCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
+  - WoodFenceLCover
+  - HighCoverBloc
+  - WoodFenceLCover
+  - HighCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
   cellsCoordinates:
   - {x: 1, y: 1, z: 0}
   - {x: 1, y: 2, z: 0}
