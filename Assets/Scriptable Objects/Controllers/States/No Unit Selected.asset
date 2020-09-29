@@ -15,3 +15,4 @@ MonoBehaviour:
   stateName: unitDeselected
   transitions:
   - {fileID: 11400000, guid: 6ed585f228e4ee44b94518bceb8103f8, type: 2}
+  - {fileID: 11400000, guid: 55871812d6815b74aab8e10b0fc09f42, type: 2}

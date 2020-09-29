@@ -10,66 +10,67 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7013174ab35f824197f1421999825dd, type: 3}
-  m_Name: level 1
+  m_Name: level1
   m_EditorClassIdentifier: 
   coversData:
-  - side1: {x: 11, y: 10, z: 0}
-    side2: {x: 10, y: 10, z: 0}
-  - side1: {x: 9, y: 8, z: 0}
-    side2: {x: 8, y: 8, z: 0}
-  - side1: {x: 11, y: 4, z: 0}
-    side2: {x: 10, y: 4, z: 0}
-  - side1: {x: 9, y: 6, z: 0}
-    side2: {x: 8, y: 6, z: 0}
-  - side1: {x: 4, y: 6, z: 0}
-    side2: {x: 5, y: 6, z: 0}
-  - side1: {x: 5, y: 8, z: 0}
-    side2: {x: 4, y: 8, z: 0}
-  - side1: {x: 3, y: 3, z: 0}
-    side2: {x: 2, y: 3, z: 0}
-  - side1: {x: 2, y: 5, z: 0}
-    side2: {x: 2, y: 4, z: 0}
-  - side1: {x: 3, y: 4, z: 0}
-    side2: {x: 2, y: 4, z: 0}
-  - side1: {x: 3, y: 10, z: 0}
-    side2: {x: 2, y: 10, z: 0}
-  - side1: {x: 2, y: 10, z: 0}
-    side2: {x: 2, y: 9, z: 0}
-  - side1: {x: 3, y: 11, z: 0}
-    side2: {x: 2, y: 11, z: 0}
-  - side1: {x: 7, y: 1, z: 0}
-    side2: {x: 6, y: 1, z: 0}
-  - side1: {x: 7, y: 2, z: 0}
-    side2: {x: 7, y: 1, z: 0}
-  - side1: {x: 7, y: 12, z: 0}
-    side2: {x: 7, y: 13, z: 0}
-  - side1: {x: 7, y: 13, z: 0}
-    side2: {x: 6, y: 13, z: 0}
-  - side1: {x: 13, y: 6, z: 0}
-    side2: {x: 13, y: 5, z: 0}
-  - side1: {x: 13, y: 9, z: 0}
-    side2: {x: 13, y: 8, z: 0}
-  - side1: {x: 1, y: 5, z: 0}
-    side2: {x: 1, y: 6, z: 0}
-  - side1: {x: 1, y: 8, z: 0}
-    side2: {x: 1, y: 9, z: 0}
-  - side1: {x: 5, y: 11, z: 0}
-    side2: {x: 5, y: 10, z: 0}
-  - side1: {x: 6, y: 11, z: 0}
-    side2: {x: 6, y: 10, z: 0}
-  - side1: {x: 5, y: 3, z: 0}
-    side2: {x: 5, y: 4, z: 0}
-  - side1: {x: 6, y: 4, z: 0}
-    side2: {x: 6, y: 3, z: 0}
-  - side1: {x: 11, y: 11, z: 0}
-    side2: {x: 10, y: 11, z: 0}
-  - side1: {x: 10, y: 3, z: 0}
+  - side1: {x: 3, y: 2, z: 0}
+    side2: {x: 3, y: 3, z: 0}
+  - side1: {x: 4, y: 2, z: 0}
+    side2: {x: 4, y: 3, z: 0}
+  - side1: {x: 4, y: 2, z: 0}
+    side2: {x: 5, y: 2, z: 0}
+  - side1: {x: 6, y: 1, z: 0}
+    side2: {x: 5, y: 1, z: 0}
+  - side1: {x: 9, y: 1, z: 0}
+    side2: {x: 8, y: 1, z: 0}
+  - side1: {x: 10, y: 2, z: 0}
+    side2: {x: 9, y: 2, z: 0}
+  - side1: {x: 10, y: 2, z: 0}
+    side2: {x: 10, y: 3, z: 0}
+  - side1: {x: 11, y: 2, z: 0}
     side2: {x: 11, y: 3, z: 0}
-  - side1: {x: 8, y: 9, z: 0}
-    side2: {x: 9, y: 9, z: 0}
+  - side1: {x: 6, y: 5, z: 0}
+    side2: {x: 6, y: 4, z: 0}
   - side1: {x: 8, y: 5, z: 0}
-    side2: {x: 9, y: 5, z: 0}
+    side2: {x: 8, y: 4, z: 0}
+  - side1: {x: 3, y: 5, z: 0}
+    side2: {x: 4, y: 5, z: 0}
+  - side1: {x: 3, y: 6, z: 0}
+    side2: {x: 4, y: 6, z: 0}
+  - side1: {x: 11, y: 5, z: 0}
+    side2: {x: 10, y: 5, z: 0}
+  - side1: {x: 11, y: 6, z: 0}
+    side2: {x: 10, y: 6, z: 0}
+  - side1: {x: 13, y: 6, z: 0}
+    side2: {x: 13, y: 7, z: 0}
+  - side1: {x: 12, y: 7, z: 0}
+    side2: {x: 13, y: 7, z: 0}
+  - side1: {x: 1, y: 6, z: 0}
+    side2: {x: 1, y: 7, z: 0}
+  - side1: {x: 2, y: 7, z: 0}
+    side2: {x: 1, y: 7, z: 0}
+  - side1: {x: 6, y: 8, z: 0}
+    side2: {x: 6, y: 9, z: 0}
+  - side1: {x: 5, y: 8, z: 0}
+    side2: {x: 5, y: 9, z: 0}
+  - side1: {x: 8, y: 8, z: 0}
+    side2: {x: 8, y: 9, z: 0}
+  - side1: {x: 9, y: 8, z: 0}
+    side2: {x: 9, y: 9, z: 0}
+  - side1: {x: 4, y: 11, z: 0}
+    side2: {x: 4, y: 10, z: 0}
+  - side1: {x: 3, y: 10, z: 0}
+    side2: {x: 3, y: 11, z: 0}
+  - side1: {x: 10, y: 10, z: 0}
+    side2: {x: 10, y: 11, z: 0}
+  - side1: {x: 11, y: 10, z: 0}
+    side2: {x: 11, y: 11, z: 0}
+  - side1: {x: 9, y: 13, z: 0}
+    side2: {x: 8, y: 13, z: 0}
+  - side1: {x: 6, y: 13, z: 0}
+    side2: {x: 5, y: 13, z: 0}
   coversPrefabNames:
+  - HighCover
   - LowCover
   - LowCover
   - LowCover
@@ -79,7 +80,16 @@ MonoBehaviour:
   - HighCover
   - LowCover
   - LowCover
+  - HighCover
+  - HighCover
+  - HighCover
+  - HighCover
   - LowCover
+  - LowCover
+  - LowCover
+  - LowCover
+  - LowCover
+  - HighCover
   - LowCover
   - HighCover
   - LowCover
@@ -88,16 +98,6 @@ MonoBehaviour:
   - LowCover
   - LowCover
   - LowCover
-  - LowCover
-  - LowCover
-  - HighCover
-  - HighCover
-  - HighCover
-  - HighCover
-  - LowCover
-  - LowCover
-  - HighCover
-  - HighCover
   cellsCoordinates:
   - {x: 1, y: 1, z: 0}
   - {x: 1, y: 2, z: 0}

@@ -192,6 +192,7 @@ public class GridBuilder : MonoBehaviour
             Cover cover = Instantiate(coverToInstantiate);
             cover.basePrefabName = prefabName;
             cover.SetGridManagerReference(gameGridManager);
+            cover.coverData = coverInfo;
             cover.transform.position = position;
             cover.transform.parent = gameGridManager.coversRootTransform;
             if (!coverInfo.IsCellMovementDirectionInXAxis())

@@ -60,6 +60,36 @@ Transform:
   m_Father: {fileID: 6409168009872196253}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5680531032085477627
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3382640925051958261}
+  m_Layer: 0
+  m_Name: cellIndicators
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3382640925051958261
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5680531032085477627}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6409168009872196253}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6409168009872196240
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,6 +122,7 @@ Transform:
   m_Children:
   - {fileID: 1969876207}
   - {fileID: 1567534016}
+  - {fileID: 3382640925051958261}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -122,6 +153,7 @@ MonoBehaviour:
   grid: {fileID: 6409168009872196242}
   cellsRootTransform: {fileID: 1567534016}
   coversRootTransform: {fileID: 1969876207}
+  cellIndicatorsRootTransform: {fileID: 0}
   gridCoordinates:
     reorderableList:
       canAdd: 1
@@ -176,6 +208,9 @@ MonoBehaviour:
     _values: []
   savedData: {fileID: 0}
   elementsDatabase: {fileID: 11400000, guid: 6ebd11e2af9456940b92dec658c18bfa, type: 2}
+  gameManager: {fileID: 0}
+  gridIndicatorPrefab: {fileID: 0}
+  indicatorHeight: 0
 --- !u!114 &1097648072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,9 +283,4 @@ MonoBehaviour:
   baseHighCover: {fileID: 4098854264101785450, guid: 191dcff9d3e56fa4882c97bc95e6e835,
     type: 3}
   indicatorCover: {fileID: 0}
-  editCoverMode: 1
   gameGridSize: {x: 10, y: 10}
-  testStartNode: {x: 0, y: 0, z: 0}
-  testEndNode: {x: 0, y: 0, z: 0}
-  baseUnit: {fileID: 2807073053509591690, guid: 82ae073d21cc0fe4e9c4b49aa516c2f3,
-    type: 3}
