@@ -420,7 +420,7 @@ PrefabInstance:
     - target: {fileID: 2569395813481714970, guid: 505c6f4bf1f15594d953fd9d8973967b,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -1.6
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 2569395813481714970, guid: 505c6f4bf1f15594d953fd9d8973967b,
         type: 3}
@@ -432,6 +432,32 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: -93.3
       objectReference: {fileID: 0}
+    - target: {fileID: 2569395813481714970, guid: 505c6f4bf1f15594d953fd9d8973967b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -186
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569395813762740277, guid: 505c6f4bf1f15594d953fd9d8973967b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 270.00027
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569395813762740277, guid: 505c6f4bf1f15594d953fd9d8973967b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -189
+      objectReference: {fileID: 0}
+    - target: {fileID: 2569395813793365369, guid: 505c6f4bf1f15594d953fd9d8973967b,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9e815f53d5b3835419b5ed8d09e00d63,
+        type: 3}
+    - target: {fileID: 2569395815026481506, guid: 505c6f4bf1f15594d953fd9d8973967b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 34
+      objectReference: {fileID: 0}
     - target: {fileID: 5582062521082605232, guid: 505c6f4bf1f15594d953fd9d8973967b,
         type: 3}
       propertyPath: m_FontData.m_Font
@@ -441,13 +467,18 @@ PrefabInstance:
     - target: {fileID: 5582062521082605232, guid: 505c6f4bf1f15594d953fd9d8973967b,
         type: 3}
       propertyPath: m_Text
-      value: "Develope By\n\nGonzalo Ignacio Ferretti Da Silva\n                                     &\n
-        \      Jose Angel Casta\xF1on Khan\n"
+      value: "Developed    By\n\nGonzalo Ignacio Ferretti Da Silva\n                                     &\n
+        \      Jose Angel Castanon Khan\n"
       objectReference: {fileID: 0}
     - target: {fileID: 5582062521082605235, guid: 505c6f4bf1f15594d953fd9d8973967b,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 52
+      value: 68
+      objectReference: {fileID: 0}
+    - target: {fileID: 5582062521082605235, guid: 505c6f4bf1f15594d953fd9d8973967b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -179.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 505c6f4bf1f15594d953fd9d8973967b, type: 3}
