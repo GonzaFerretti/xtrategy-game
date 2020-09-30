@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -39,6 +40,10 @@ public class GameManager : MonoBehaviour
         foreach (BaseController player in players)
         {
             allUnits.AddRange(player.unitsControlled);
+            if (player.unitsControlled.Count == 0)
+            {
+                players.Remove(player);
+            }
         }
     }
 
@@ -71,6 +76,8 @@ public class GameManager : MonoBehaviour
     {
        BaseController loserPlayer = players.OrderBy(player => player.GetAmountOfUnitsLeft()).Last();
        loserPlayer.DestroyPlayer();
-       // Here should be the UI part of the end of the match
+       SceneManager.LoadScene("GameOver");
+       SceneManager.LoadScene("Win");
+        // Here should be the UI part of the end of the match
     }
 }

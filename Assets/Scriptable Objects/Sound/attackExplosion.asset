@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0a36f5f7abc9e74989121752217073b, type: 3}
   m_Name: attackExplosion
   m_EditorClassIdentifier: 
-  file: {fileID: 8300000, guid: 8269cbbf549bb344ca20598b8b91164d, type: 3}
+  file: {fileID: 8300000, guid: f96b1123558cb634cb6bb0234e63bb11, type: 3}
   volume: 0.496
   shouldLoop: 0

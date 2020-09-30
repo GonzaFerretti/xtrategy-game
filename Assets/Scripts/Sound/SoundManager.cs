@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Audio;
 public class SoundManager : MonoBehaviour
 {
-    public AudioMixerGroup amg;
     
     public Dictionary<SoundClip, AudioSource> currentlyInitiatedSources = new Dictionary<SoundClip, AudioSource>();
 
@@ -55,7 +54,6 @@ public class SoundManager : MonoBehaviour
         newAs.clip = clip.file;
         newAs.volume = clip.volume;
         newAs.loop = clip.shouldLoop;
-        newAs.outputAudioMixerGroup = amg;
         currentlyInitiatedSources.Add(clip, newAs);
     }
 }
