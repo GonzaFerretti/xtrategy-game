@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: Start Action
   m_EditorClassIdentifier: 
   destinationState: {fileID: 11400000, guid: bf58395188953d44d9fdc5ef38629fee, type: 2}
+  hudElementsToEnable:
+  - MenuButton
+  - YourTurn

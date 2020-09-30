@@ -20,5 +20,13 @@ public class ControllerTransitionOtherActionAvailable : ControllerStateTransitio
         {
             controller.GetGridReference().EnableCellIndicators(controller.currentlySelectedUnit.possibleMovements, GridIndicatorMode.possibleMovement);
         }
+
+        if (controller.currentlySelectedUnit.attackState == currentActionState.notStarted)
+        {
+            controller.GetGridReference().gameManager.hud.EnableHudElementByName("SwitchToAttack");
+        }
+
+        controller.GetGridReference().EnableCellIndicator(controller.currentlySelectedUnit.GetCoordinates(), GridIndicatorMode.selectedUnit);
+
     }
 }

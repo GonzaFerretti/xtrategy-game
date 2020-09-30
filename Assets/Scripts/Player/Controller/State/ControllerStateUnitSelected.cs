@@ -38,6 +38,7 @@ public class ControllerStateUnitSelected : ControllerState
             Vector3Int target = objectSelected.transform.parent.GetComponent<GameGridCell>().GetCoordinates();
             if (controller.currentlySelectedUnit.possibleMovements.Contains(target))
             {
+                controller.currentlySelectedUnit.possibleAttacks = new List<Vector3Int>();
                 controller.MoveUnit(target);
             }
         }

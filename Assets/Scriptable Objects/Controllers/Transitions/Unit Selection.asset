@@ -13,3 +13,8 @@ MonoBehaviour:
   m_Name: Unit Selection
   m_EditorClassIdentifier: 
   destinationState: {fileID: 11400000, guid: 69902d7e36afdde488c0f7abe5e192af, type: 2}
+  hudElementsToEnable:
+  - RightClick
+  - LeftClick
+  - YourTurn
+  - MenuButton

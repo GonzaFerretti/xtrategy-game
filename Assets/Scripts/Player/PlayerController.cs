@@ -28,6 +28,15 @@ public class PlayerController : BaseController
         return hasHitObject;
     }
 
+    public override void StartTurn()
+    {
+        base.StartTurn();
+        if (GetCurrentStateName() == "waitForTurn")
+        {
+            currentState.ForceFirstTransition();
+        }
+    }
+
     public void OnHoverGrid(GridIndicatorMode possibleCellsMode, GridIndicatorMode selectedCellsMode, List<Vector3Int> listToCheck)
     {
         GameObject objectSelected;

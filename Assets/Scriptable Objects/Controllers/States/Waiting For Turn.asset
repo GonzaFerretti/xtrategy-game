@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e0b74a48161d4441886fa5b4746fe25, type: 3}
-  m_Name: Skip Turn
+  m_Script: {fileID: 11500000, guid: 022a8791223aa45408e4dc4af5932c77, type: 3}
+  m_Name: Waiting For Turn
   m_EditorClassIdentifier: 
-  destinationState: {fileID: 11400000, guid: 47460bbf9f6ec2144b744420d16adffa, type: 2}
-  hudElementsToEnable:
-  - MenuButton
-  - EnemyTurn
+  stateName: waitForTurn
+  transitions:
+  - {fileID: 11400000, guid: 258372b6d062c2840ab45d9b860f37fd, type: 2}

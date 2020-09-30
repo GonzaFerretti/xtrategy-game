@@ -152,6 +152,7 @@ public class Unit : GameGridElement
     public virtual void Select()
     {
         if (moveState == currentActionState.ended) return;
+        grid.EnableCellIndicator(GetCoordinates(), GridIndicatorMode.selectedUnit);
         if (possibleMovements.Count == 0)
         {
             currentRangeQuery = StartRangeQuery();
@@ -176,6 +177,7 @@ public class Unit : GameGridElement
 
     public virtual void PrepareAttack()
     {
+        grid.EnableCellIndicator(GetCoordinates(), GridIndicatorMode.selectedUnit);
         if (possibleAttacks.Count == 0)
         {
             currentRangeQuery = StartAttackRangeQuery();

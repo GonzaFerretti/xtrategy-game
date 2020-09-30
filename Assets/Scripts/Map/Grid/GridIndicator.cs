@@ -26,4 +26,5 @@ public enum GridIndicatorMode
     possibleAttack,
     selectedAttack,
     selectedMovement,
+    selectedUnit,
 }

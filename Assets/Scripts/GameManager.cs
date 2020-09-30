@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public List<BaseController> players;
     public List<BaseController> playersRemaining;
     public List<Unit> allUnits;
+    public HUDManager hud;
 
     public BaseController currentPlayer;
     [SerializeField] GameGridManager grid;
@@ -21,6 +22,11 @@ public class GameManager : MonoBehaviour
         CompleteRemaingPlayerList();
         InitGridRefAndUnitList();
         StartPlayerTurn();
+    }
+
+    public void Update()
+    {
+        CheckForMenuKey();
     }
 
     public void CompleteRemaingPlayerList()
@@ -59,6 +65,14 @@ public class GameManager : MonoBehaviour
         else
         {
             SceneManager.LoadScene("GameOver");
+        }
+    }
+
+    public void CheckForMenuKey()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            hud.SwitchMenu();
         }
     }
 

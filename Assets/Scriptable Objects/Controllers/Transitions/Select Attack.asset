@@ -13,4 +13,10 @@ MonoBehaviour:
   m_Name: Select Attack
   m_EditorClassIdentifier: 
   destinationState: {fileID: 11400000, guid: 6910220df67a2584f830a8439b03065d, type: 2}
+  hudElementsToEnable:
+  - RightClick
+  - LeftClick
+  - SkipTurn
+  - MenuButton
+  - YourTurn
   requiredKeyCode: 98

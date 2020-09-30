@@ -13,11 +13,5 @@ public class ControllerTransitionNoAvailableActions : ControllerStateTransition
     public override void Transition(BaseController controller)
     {
         base.Transition(controller);
-        if (!controller.HasAnyMovesLeft())
-        {
-            controller.GetGridReference().gameManager.EndPlayerTurn();
-            controller.currentlySelectedUnit.Deselect();
-            controller.currentlySelectedUnit = null;
-        }
     }
 }

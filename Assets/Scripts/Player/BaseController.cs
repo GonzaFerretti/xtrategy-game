@@ -10,7 +10,7 @@ public class BaseController : MonoBehaviour
 
     [SerializeField] ControllerState[] controllerStates;
     Dictionary<string, ControllerState> runtimeControllerStates = new Dictionary<string, ControllerState>();
-    [SerializeField] ControllerState currentState;
+    [SerializeField] protected ControllerState currentState;
 
     [SerializeField] public List<Unit> unitsControlled;
     public Color playerColor;
@@ -82,6 +82,11 @@ public class BaseController : MonoBehaviour
     public virtual void SwitchStates(string identifier)
     {
         currentState = runtimeControllerStates[identifier];
+    }
+
+    public string GetCurrentStateName()
+    {
+        return currentState.stateName;
     }
 
     public virtual void Update()

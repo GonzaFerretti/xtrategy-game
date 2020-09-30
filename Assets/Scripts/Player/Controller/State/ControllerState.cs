@@ -26,6 +26,11 @@ public class ControllerState : ScriptableObject
         }
     }
 
+    public void ForceFirstTransition()
+    {
+        transitions[0].Transition(controller);
+    }
+
     public virtual void Init(BaseController controller)
     {
         this.controller = controller;
