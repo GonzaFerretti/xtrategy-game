@@ -147,6 +147,8 @@ MonoBehaviour:
   AI: {fileID: 0}
   anim: {fileID: 4472303251248192136}
   model: {fileID: 7404351020143953377}
+  soundManager: {fileID: 0}
+  sounds: {fileID: 11400000, guid: 7f8d7166b86e9bc4c95ddf42de38305d, type: 2}
   hpBar: {fileID: 1000348679702126091}
   rens: []
   seethroughBaseMaterial: {fileID: 2100000, guid: ca513be433aaadc4880a30f58ebac19f,

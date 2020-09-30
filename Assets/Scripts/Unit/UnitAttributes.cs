@@ -11,4 +11,6 @@ public class UnitAttributes : ScriptableObject
     public int maxAttackRange;
     public int damage;
     public AIBehaviour aiBehaviour;
+
+    public SoundClip attackSound;
 }

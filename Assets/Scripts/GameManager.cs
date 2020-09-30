@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
             playersRemaining.Add(players[i]);
     }
 
-    void InitGridRefAndUnitList()
+    public void InitGridRefAndUnitList()
     {
         if (!grid)
         {

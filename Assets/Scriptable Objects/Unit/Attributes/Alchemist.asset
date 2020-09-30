@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25b523493f5b01c4088b388fe729cab4, type: 3}
-  m_Name: Soldier
+  m_Name: Alchemist
   m_EditorClassIdentifier: 
-  maxHp: 10
-  movementRange: 3
-  minAttackRange: 0
-  maxAttackRange: 1
-  damage: 3
-  aiBehaviour: {fileID: 11400000, guid: f7ed7888e75d7a74a9adce2ac213f3bb, type: 2}
-  attackSound: {fileID: 11400000, guid: 930a90c393486d74b890d1046b051ab8, type: 2}
+  maxHp: 5
+  movementRange: 1
+  minAttackRange: 2
+  maxAttackRange: 4
+  damage: 4
+  aiBehaviour: {fileID: 11400000, guid: 12b1cb45640a73f45aaaad86e0f2dcd4, type: 2}
+  attackSound: {fileID: 11400000, guid: 5a074d92974e3fe459d96f55d559187d, type: 2}

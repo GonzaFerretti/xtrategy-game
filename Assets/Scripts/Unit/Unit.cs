@@ -16,10 +16,13 @@ public class Unit : GameGridElement
     [SerializeField] [HideInInspector] int minAttackRange;
     [SerializeField] [HideInInspector] int maxAttackRange;
     [SerializeField] [HideInInspector] public int damage;
-    [SerializeField] UnitAttributes unitAttributes;
+    [SerializeField] public UnitAttributes unitAttributes;
     [SerializeField] [HideInInspector] public AIBehaviour AI;
     [SerializeField] public Animator anim;
     [SerializeField] public GameObject model;
+
+    [SerializeField] SoundManager soundManager;
+    [SerializeField] SoundRepository sounds;
 
     [SerializeField] private UiHpBar hpBar;
 
@@ -31,6 +34,16 @@ public class Unit : GameGridElement
     public BaseController owner;
     public List<Vector3Int> possibleMovements;
     public List<Vector3Int> possibleAttacks;
+
+    public void PlaySound(string name)
+    {
+        soundManager.Play(sounds.GetSoundClip(name));
+    }
+
+    public void PlaySound(SoundClip clip)
+    {
+        soundManager.Play(clip);
+    }
 
     void InitShader()
     {
@@ -74,7 +87,9 @@ public class Unit : GameGridElement
         if (currentHp <= 0)
         {
             Destroy(hpBar.gameObject);
+            soundManager.Play(sounds.GetSoundClip("death"));
             anim.Play("death");
+            owner.RemoveUnit(this);
             owner.StartCoroutine(DestroyBody(model));
             Destroy(this);
         }
@@ -82,6 +97,7 @@ public class Unit : GameGridElement
         {
             model.transform.forward = (attackingUnit.transform.position - transform.position).normalized;
             anim.Play("hit");
+            soundManager.Play(sounds.GetSoundClip("hit"));
             hpBar.UpdateHPbar(1f * currentHp / (1f * unitAttributes.maxHp));
         }
     }
@@ -107,6 +123,7 @@ public class Unit : GameGridElement
     {
         SetUnitAttributes();
         //InitShader();
+        soundManager = FindObjectOfType<SoundManager>();
     }
 
     public void ResetActions()

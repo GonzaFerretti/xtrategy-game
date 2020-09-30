@@ -62,6 +62,12 @@ public class BaseController : MonoBehaviour
         return gridManager;
     }
 
+    public void RemoveUnit(Unit unit)
+    {
+        unitsControlled.Remove(unit);
+        gridManager.gameManager.InitGridRefAndUnitList();
+    }
+
     public virtual void InitControllerStates()
     {
         foreach (ControllerState state in controllerStates)

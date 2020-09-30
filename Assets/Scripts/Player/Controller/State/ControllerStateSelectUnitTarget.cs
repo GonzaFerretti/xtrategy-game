@@ -51,6 +51,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
     IEnumerator AttackEnemy(Unit enemyToAttack)
     {
         controller.currentlySelectedUnit.anim.Play("attack");
+        controller.currentlySelectedUnit.PlaySound(controller.currentlySelectedUnit.unitAttributes.attackSound);
         controller.currentlySelectedUnit.model.transform.forward = (enemyToAttack.transform.position - controller.currentlySelectedUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);
         controller.currentlySelectedUnit.anim.SetTrigger("endCurrentAnim");

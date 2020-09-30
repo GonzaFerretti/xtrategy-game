@@ -18,3 +18,4 @@ MonoBehaviour:
   maxAttackRange: 5
   damage: 3
   aiBehaviour: {fileID: 11400000, guid: 12b1cb45640a73f45aaaad86e0f2dcd4, type: 2}
+  attackSound: {fileID: 11400000, guid: 8a684f153a37e6145921cc017e894c13, type: 2}

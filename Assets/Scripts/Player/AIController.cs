@@ -27,6 +27,7 @@ public class AIController : BaseController
     IEnumerator Attack(Unit attackedUnit, Unit attackingUnit)
     {
         attackingUnit.anim.Play("attack");
+        attackingUnit.PlaySound(attackingUnit.unitAttributes.attackSound);
         attackingUnit.model.transform.forward = (attackedUnit.transform.position - attackingUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
