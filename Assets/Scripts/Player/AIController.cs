@@ -13,7 +13,7 @@ public class AIController : BaseController
 
     IEnumerator ExecuteUnitBehaviours()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1.5f);
         foreach (Unit unit in unitsControlled)
         {
             yield return StartCoroutine(unit.AI.ExecuteBehaviour(this, unit));

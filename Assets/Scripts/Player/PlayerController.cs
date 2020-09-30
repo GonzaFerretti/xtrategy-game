@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class PlayerController : BaseController
 {
+    public override void SwitchStates(string identifier)
+    {
+        //if (lastSelectedCoord) gridManager.DisableCellIndicator(lastSelectedCoord.GetCoordinates());
+        lastSelectedCoord = null;
+        base.SwitchStates(identifier);
+    }
+
     GameGridCell lastSelectedCoord = null;
     public bool GetObjectUnderMouse(out GameObject hitObject, int layerMaskOfObject)
     {
