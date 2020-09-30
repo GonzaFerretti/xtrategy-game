@@ -12,13 +12,14 @@ public class Unit : GameGridElement
     [SerializeField] public int currentHp;
     [SerializeField] public currentActionState moveState = currentActionState.notStarted;
     [SerializeField] public currentActionState attackState = currentActionState.notStarted;
-    [SerializeField] public int movementRange;
-    [SerializeField] int minAttackRange;
-    [SerializeField] int maxAttackRange;
-    [SerializeField] public int damage;
+    [SerializeField] [HideInInspector] public int movementRange;
+    [SerializeField] [HideInInspector] int minAttackRange;
+    [SerializeField] [HideInInspector] int maxAttackRange;
+    [SerializeField] [HideInInspector] public int damage;
     [SerializeField] UnitAttributes unitAttributes;
-    [SerializeField] private Renderer rend;
-    [SerializeField] public AIBehaviour AI;
+    [SerializeField] [HideInInspector] public AIBehaviour AI;
+    [SerializeField] public Animator anim;
+    [SerializeField] public GameObject model;
 
     [SerializeField] private UiHpBar hpBar;
 
@@ -69,17 +70,26 @@ public class Unit : GameGridElement
                 break;
             }
         }
-        Debug.Log(isCoverInTheWay);
-        currentHp = (isCoverInTheWay) ? currentHp - baseDamage - 1 : currentHp - baseDamage;
+        currentHp = (isCoverInTheWay) ? currentHp - (baseDamage - 1) : currentHp - baseDamage;
         if (currentHp <= 0)
         {
             Destroy(hpBar.gameObject);
-            Destroy(this.gameObject);
+            anim.Play("death");
+            owner.StartCoroutine(DestroyBody(model));
+            Destroy(this);
         }
         else
         {
+            model.transform.forward = (attackingUnit.transform.position - transform.position).normalized;
+            anim.Play("hit");
             hpBar.UpdateHPbar(1f * currentHp / (1f * unitAttributes.maxHp));
         }
+    }
+
+    IEnumerator DestroyBody(GameObject body)
+    {
+        yield return new WaitForSeconds(3);
+        Destroy(body);
     }
 
     public void Update()
@@ -96,7 +106,7 @@ public class Unit : GameGridElement
     public virtual void Start()
     {
         SetUnitAttributes();
-        InitShader();
+        //InitShader();
     }
 
     public void ResetActions()
@@ -164,17 +174,22 @@ public class Unit : GameGridElement
     public IEnumerator MoveByDestinationCoords(Vector3Int destinationCoords)
     {
         moveState = currentActionState.inProgress;
+        anim.Play("move");
         currentCovers = new List<Cover>();
         Vector3Int[] path = grid.CalculateShortestPath(currentCell.GetCoordinates(), destinationCoords);
+        Vector3 lastPosition = transform.position;
         for (int i = 0; i < path.Length; i++)
         {
+            model.transform.forward = (grid.GetWorldPositionFromCoords(path[i]) - lastPosition).normalized;
             transform.position = grid.GetWorldPositionFromCoords(path[i]);
+            lastPosition = transform.position;
             yield return new WaitForSeconds(0.25f);
         }
         possibleMovements = new List<Vector3Int>();
         currentCell = grid.GetCellAtCoordinate(path[path.Length - 1]);
         currentCovers = grid.GetCoversFromCoord(GetCoordinates());
         moveState = currentActionState.ended;
+        anim.SetTrigger("endCurrentAnim");
         grid.DisableCellIndicators(possibleMovements);
     }
 
@@ -182,14 +197,19 @@ public class Unit : GameGridElement
     {
         moveState = currentActionState.inProgress;
         currentCovers = new List<Cover>();
+        anim.Play("move");
+        Vector3 lastPosition = transform.position;
         for (int i = 0; i < givenPath.Length; i++)
         {
+            model.transform.forward = (grid.GetWorldPositionFromCoords(givenPath[i]) - lastPosition).normalized;
             transform.position = grid.GetWorldPositionFromCoords(givenPath[i]);
             yield return new WaitForSeconds(0.25f);
         }
         possibleMovements = new List<Vector3Int>();
         currentCell = grid.GetCellAtCoordinate(givenPath[givenPath.Length - 1]);
         currentCovers = grid.GetCoversFromCoord(GetCoordinates());
+
+        anim.SetTrigger("endCurrentAnim");
         moveState = currentActionState.ended;
     }
 

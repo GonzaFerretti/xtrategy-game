@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     {
         CompleteRemaingPlayerList();
         InitGridRefAndUnitList();
-        Invoke("StartPlayerTurn", 3);
+        StartPlayerTurn();
     }
 
     public void CompleteRemaingPlayerList()

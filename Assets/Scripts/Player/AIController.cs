@@ -13,17 +13,24 @@ public class AIController : BaseController
 
     IEnumerator ExecuteUnitBehaviours()
     {
+        yield return new WaitForSeconds(3);
         foreach (Unit unit in unitsControlled)
         {
             yield return StartCoroutine(unit.AI.ExecuteBehaviour(this, unit));
+            yield return new WaitForSeconds(2);
         }
         gridManager.gameManager.EndPlayerTurn();
 
     }
 
-    public void Attack(Unit attackedUnit, Unit attackingUnit)
+
+    IEnumerator Attack(Unit attackedUnit, Unit attackingUnit)
     {
-        attackedUnit.TakeDamage(attackingUnit.damage, attackingUnit);
+        attackingUnit.anim.Play("attack");
+        attackingUnit.model.transform.forward = (attackedUnit.transform.position - attackingUnit.transform.position).normalized;
+        yield return new WaitForSeconds(1);
+        attackingUnit.anim.SetTrigger("endCurrentAnim");
+        attackedUnit.TakeDamage(attackingUnit.damage, attackedUnit);
         attackingUnit.attackState = currentActionState.ended;
     }
 
@@ -124,7 +131,7 @@ public class AIController : BaseController
             Unit lowestHpUnitInRange = GetLowestUnitInAttackRange(attackQuery.cellsInRange);
             if (lowestHpUnitInRange)
             {
-                Attack(lowestHpUnitInRange, actingUnit);
+                StartCoroutine(Attack(lowestHpUnitInRange, actingUnit));
                 currentActions[id].endedSuccesfully = true;
             }
             else

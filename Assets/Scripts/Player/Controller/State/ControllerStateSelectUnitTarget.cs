@@ -50,7 +50,10 @@ public class ControllerStateSelectUnitTarget : ControllerState
 
     IEnumerator AttackEnemy(Unit enemyToAttack)
     {
+        controller.currentlySelectedUnit.anim.Play("attack");
+        controller.currentlySelectedUnit.model.transform.forward = (enemyToAttack.transform.position - controller.currentlySelectedUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);
+        controller.currentlySelectedUnit.anim.SetTrigger("endCurrentAnim");
         enemyToAttack.TakeDamage(controller.currentlySelectedUnit.damage, controller.currentlySelectedUnit);
         controller.currentlySelectedUnit.attackState = currentActionState.ended;
     }
