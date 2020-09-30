@@ -43,7 +43,22 @@ public class GameManager : MonoBehaviour
             if (player.unitsControlled.Count == 0)
             {
                 players.Remove(player);
+                break;
             }
+        }
+        CheckLoser();
+    }
+
+    public void CheckLoser()
+    {
+        if (players.Count > 1) return;
+        if (players[0] is PlayerController)
+        {
+            SceneManager.LoadScene("Win");
+        }
+        else
+        {
+            SceneManager.LoadScene("GameOver");
         }
     }
 
@@ -62,7 +77,7 @@ public class GameManager : MonoBehaviour
                 CompleteRemaingPlayerList();
                 StartPlayerTurn();
             }
-            else EndMatch();
+            else EndMatchNoTurnsLeft();
         }
     }
 
@@ -72,12 +87,9 @@ public class GameManager : MonoBehaviour
         currentPlayer.StartTurn();
     }
 
-    void EndMatch()
+    void EndMatchNoTurnsLeft()
     {
        BaseController loserPlayer = players.OrderBy(player => player.GetAmountOfUnitsLeft()).Last();
        loserPlayer.DestroyPlayer();
-       SceneManager.LoadScene("GameOver");
-       SceneManager.LoadScene("Win");
-        // Here should be the UI part of the end of the match
     }
 }

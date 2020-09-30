@@ -13,6 +13,7 @@ public class ControllerTransitionSkipTurn : ControllerStateTransition
     public override void Transition(BaseController controller)
     {
         base.Transition(controller);
+        controller.GetGridReference().DisableAllCellIndicators();
         controller.GetGridReference().gameManager.EndPlayerTurn();
     }
 }

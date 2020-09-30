@@ -3183,6 +3183,75 @@ MonoBehaviour:
   grid: {fileID: 805588128}
   basePrefabName: GrassFloorCell
   coordinates: {x: 8, y: 8, z: 0}
+--- !u!1001 &66163820
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3579446825372778896, guid: ae3f9ba7c92fa544c8a5dc948add3b55,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.08312464
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579446825372778896, guid: ae3f9ba7c92fa544c8a5dc948add3b55,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -4.4642034
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579446825372778896, guid: ae3f9ba7c92fa544c8a5dc948add3b55,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.3842702
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579446825372778896, guid: ae3f9ba7c92fa544c8a5dc948add3b55,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579446825372778896, guid: ae3f9ba7c92fa544c8a5dc948add3b55,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579446825372778896, guid: ae3f9ba7c92fa544c8a5dc948add3b55,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579446825372778896, guid: ae3f9ba7c92fa544c8a5dc948add3b55,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579446825372778896, guid: ae3f9ba7c92fa544c8a5dc948add3b55,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579446825372778896, guid: ae3f9ba7c92fa544c8a5dc948add3b55,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579446825372778896, guid: ae3f9ba7c92fa544c8a5dc948add3b55,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579446825372778896, guid: ae3f9ba7c92fa544c8a5dc948add3b55,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579446825372778898, guid: ae3f9ba7c92fa544c8a5dc948add3b55,
+        type: 3}
+      propertyPath: m_Name
+      value: SoundManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ae3f9ba7c92fa544c8a5dc948add3b55, type: 3}
 --- !u!1 &68736556
 GameObject:
   m_ObjectHideFlags: 0

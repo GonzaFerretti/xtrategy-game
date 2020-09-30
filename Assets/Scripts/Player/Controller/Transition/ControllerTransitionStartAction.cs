@@ -9,4 +9,10 @@ public class ControllerTransitionStartAction : ControllerStateTransition
     {
         return controller.currentlySelectedUnit && (controller.currentlySelectedUnit.moveState == currentActionState.inProgress || controller.currentlySelectedUnit.attackState == currentActionState.inProgress);
     }
+
+    public override void Transition(BaseController controller)
+    {
+        base.Transition(controller);
+        controller.GetGridReference().DisableAllCellIndicators();
+    }
 }
