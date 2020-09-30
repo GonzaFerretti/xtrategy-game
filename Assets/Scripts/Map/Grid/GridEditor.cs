@@ -5,6 +5,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(GridBuilder), true)]
 public class GridEditor : Editor
 {
@@ -182,3 +183,4 @@ public class GridEditor : Editor
 
 
 }
+#endif
