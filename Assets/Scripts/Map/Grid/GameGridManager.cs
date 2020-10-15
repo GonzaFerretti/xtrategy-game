@@ -10,19 +10,19 @@ public class GameGridManager : MonoBehaviour
     // I'm using Unity grid class to handle grid to world or viceversa conversions.
     [Header("Cell Info")]
     [SerializeField] private Grid grid;
-    [SerializeField] public Transform cellsRootTransform;
-    [SerializeField] public Transform coversRootTransform;
-    [SerializeField] public Transform cellIndicatorsRootTransform;
+    public Transform cellsRootTransform;
+    public Transform coversRootTransform;
+    public Transform cellIndicatorsRootTransform;
 
 
-    [SerializeField] public GridCoordinates gridCoordinates;
-    [SerializeField] public CoverInformation covers;
+    public GridCoordinates gridCoordinates;
+    public CoverInformation covers;
 
     [SerializeField] private Dictionary<int, AsyncRangeQuery> currentQueries = new Dictionary<int, AsyncRangeQuery>();
     [SerializeField] private Dictionary<Vector3Int, GridIndicator> gridIndicators = new Dictionary<Vector3Int, GridIndicator>();
-    [SerializeField] public MapDictData savedData;
-    [SerializeField] public MapElementsDB elementsDatabase;
-    [SerializeField] public GameManager gameManager;
+    public MapDictData savedData;
+    public MapElementsDB elementsDatabase;
+    public GameManager gameManager;
 
     [SerializeField] GridIndicator gridIndicatorPrefab;
     [SerializeField] float indicatorHeight;

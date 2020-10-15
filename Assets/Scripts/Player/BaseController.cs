@@ -5,14 +5,14 @@ using UnityEngine;
 [System.Serializable]
 public class BaseController : MonoBehaviour
 {
-    [SerializeField] public Unit currentlySelectedUnit;
+    public Unit currentlySelectedUnit;
     [SerializeField] protected GameGridManager gridManager;
 
     [SerializeField] ControllerState[] controllerStates;
     Dictionary<string, ControllerState> runtimeControllerStates = new Dictionary<string, ControllerState>();
     [SerializeField] protected ControllerState currentState;
 
-    [SerializeField] public List<Unit> unitsControlled;
+    public List<Unit> unitsControlled;
     public Color playerColor;
 
     public virtual void Start()

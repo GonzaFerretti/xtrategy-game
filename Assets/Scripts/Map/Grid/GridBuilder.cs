@@ -5,8 +5,8 @@ using UnityEngine;
 public class GridBuilder : MonoBehaviour
 {
     public GameGridManager gameGridManager;
-    [SerializeField] public GridCoordinates gridCoordinates;
-    [SerializeField] public CoverInformation covers;
+    public GridCoordinates gridCoordinates;
+    public CoverInformation covers;
     [SerializeField] private GameGridCell baseGridCell;
     [SerializeField] private Cover baseLowCover;
     [SerializeField] private Cover baseHighCover;
@@ -14,7 +14,7 @@ public class GridBuilder : MonoBehaviour
 
 
     [Header("Test Parameters")]
-    [SerializeField] public Vector2Int gameGridSize;
+    public Vector2Int gameGridSize;
     public void InitGrid()
     {
         int rows = gameGridSize.x;
