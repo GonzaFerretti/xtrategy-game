@@ -6,19 +6,19 @@ using UnityEngine;
 public class Unit : GameGridElement
 {
     [SerializeField] GameGridCell currentCell;
-    [SerializeField] public List<Cover> currentCovers;
+    public List<Cover> currentCovers;
 
-    [SerializeField] public int currentHp;
-    [SerializeField] public currentActionState moveState = currentActionState.notStarted;
-    [SerializeField] public currentActionState attackState = currentActionState.notStarted;
-    [SerializeField] [HideInInspector] public int movementRange;
-    [SerializeField] [HideInInspector] int minAttackRange;
-    [SerializeField] [HideInInspector] int maxAttackRange;
-    [SerializeField] [HideInInspector] public int damage;
-    [SerializeField] public UnitAttributes unitAttributes;
-    [SerializeField] [HideInInspector] public AIBehaviour AI;
-    [SerializeField] public Animator anim;
-    [SerializeField] public GameObject model;
+    public int currentHp;
+    public currentActionState moveState = currentActionState.notStarted;
+    public currentActionState attackState = currentActionState.notStarted;
+    [HideInInspector] public int movementRange;
+    [HideInInspector] int minAttackRange;
+    [HideInInspector] int maxAttackRange;
+    [HideInInspector] public int damage;
+    public UnitAttributes unitAttributes;
+    [HideInInspector] public AIBehaviour AI;
+    public Animator anim;
+    public GameObject model;
 
     [SerializeField] SoundManager soundManager;
     [SerializeField] SoundRepository sounds;
