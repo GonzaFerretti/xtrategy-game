@@ -305,8 +305,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.39754248, y: 1.7925248, z: 0.42373228}
-  m_Center: {x: -0.028550863, y: 0.9048089, z: 0.009223461}
+  m_Size: {x: 0.6, y: 1.7925248, z: 0.6}
+  m_Center: {x: 0, y: 0.9048089, z: 0}
 --- !u!114 &2324533783231505964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,8 +327,6 @@ MonoBehaviour:
   moveState: 2
   attackState: 2
   movementRange: 1
-  minAttackRange: 0
-  maxAttackRange: 0
   damage: 0
   unitAttributes: {fileID: 11400000, guid: 9c8989348f466374a95d624127af1d01, type: 2}
   AI: {fileID: 0}
