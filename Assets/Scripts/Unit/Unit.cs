@@ -112,7 +112,7 @@ public class Unit : GameGridElement
         // REMOVE LATER
         if (!currentCell)
         {
-            currentCell = grid.GetCellAtCoordinate(new Vector3Int(Random.Range(1, 10), Random.Range(1, 10), 0));
+            currentCell = grid.GetRandomUnusedCell();
             transform.position = currentCell.transform.position;
             currentCovers = grid.GetCoversFromCoord(GetCoordinates());
         }

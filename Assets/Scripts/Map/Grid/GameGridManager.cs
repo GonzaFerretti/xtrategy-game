@@ -33,6 +33,24 @@ public class GameGridManager : MonoBehaviour
         BuildCellsFromData();
         BuildCoversFromData();
         InitializeGridIndicators();
+        CopyListOfCellsToUnusedList();
+    }
+
+    void CopyListOfCellsToUnusedList()
+    {
+        foreach (GameGridCell cell in gridCoordinates.Values)
+        {
+            unusedCells.Add(cell);
+        }
+    }
+
+    List<GameGridCell> unusedCells = new List<GameGridCell>();
+
+    public GameGridCell GetRandomUnusedCell()
+    {
+        GameGridCell cell = unusedCells[Random.Range(1, unusedCells.Count)];
+        unusedCells.Remove(cell);
+        return cell;
     }
 
     public void InitializeGridIndicators()
