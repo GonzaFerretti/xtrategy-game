@@ -18,3 +18,4 @@ MonoBehaviour:
   - LeftClick
   - YourTurn
   - MenuButton
+  - ChangeMode

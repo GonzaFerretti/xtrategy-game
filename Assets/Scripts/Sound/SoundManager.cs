@@ -7,12 +7,6 @@ public class SoundManager : MonoBehaviour
     
     public Dictionary<SoundClip, AudioSource> currentlyInitiatedSources = new Dictionary<SoundClip, AudioSource>();
 
-    public void Start()
-    {
-        //if (FindObjectOfType<SoundManager>() && FindObjectOfType<SoundManager>() != this) Destroy(gameObject);
-        //DontDestroyOnLoad(this);
-    }
-
     public void Play(SoundClip clip)
     {
         if (currentlyInitiatedSources.ContainsKey(clip))

@@ -7,21 +7,9 @@ public class Select : MonoBehaviour
 {
     public string nombreEscenaDestino;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     public void CambiarEscena()
     {
 
         SceneManager.LoadScene(nombreEscenaDestino);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

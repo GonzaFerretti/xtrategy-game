@@ -81,9 +81,7 @@ public class GridEditor : Editor
         {
             Vector3 mousePosition = Event.current.mousePosition;
             Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
-            mousePosition = ray.origin;
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 100f))
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f))
             {
                 if (Event.current.shift)
                 {
@@ -116,7 +114,7 @@ public class GridEditor : Editor
         }
     }
 
-    public T GetNextPrefab<T>(string layer, RaycastHit hit)
+    public T GetNextPrefab<T>(string layer, RaycastHit hit) where T : Component
     {
         GameObject[] possibleFloorPrefabs = gridBuilder.gameGridManager.elementsDatabase.prefabs.Where(n => n.layer == LayerMask.NameToLayer(layer)).ToArray();
         int length = possibleFloorPrefabs.Length;
@@ -149,8 +147,7 @@ public class GridEditor : Editor
     {
         if (Application.isPlaying) return;
         Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100f, 1 << LayerMask.NameToLayer("GroundBase")))
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f, 1 << LayerMask.NameToLayer("GroundBase")))
         {
             Transform currentlyHoveredCell = hit.transform.parent;
             if (currentlyHoveredCell == lastHoveredCell)

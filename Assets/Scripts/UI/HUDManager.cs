@@ -7,6 +7,7 @@ public class HUDManager : MonoBehaviour
 {
     Dictionary<string,GameObject> HUDElements;
     [SerializeField] GameObject menu;
+    [SerializeField] Transform switchableItemsPivot;
 
     public void Start()
     {
@@ -30,20 +31,20 @@ public class HUDManager : MonoBehaviour
 
     public void EnableHudElementByName(string name)
     {
-        HUDElements[name].SetActive(true);
+        if (HUDElements.ContainsKey(name)) HUDElements[name].SetActive(true);
     }
 
     public void DisableHudElementByName(string name)
     {
-        HUDElements[name].SetActive(false);
+        if (HUDElements.ContainsKey(name))HUDElements[name].SetActive(false);
     }
 
     void InitElementList()
     {
         HUDElements = new Dictionary<string, GameObject>();
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 0; i < switchableItemsPivot.childCount; i++)
         {
-            GameObject HudElement = transform.GetChild(i).gameObject;
+            GameObject HudElement = switchableItemsPivot.GetChild(i).gameObject;
             HUDElements.Add(HudElement.name, HudElement);
         }
     }

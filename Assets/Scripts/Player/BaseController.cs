@@ -9,7 +9,7 @@ public class BaseController : MonoBehaviour
     [SerializeField] protected GameGridManager gridManager;
 
     [SerializeField] ControllerState[] controllerStates;
-    Dictionary<string, ControllerState> runtimeControllerStates = new Dictionary<string, ControllerState>();
+    readonly Dictionary<string, ControllerState> runtimeControllerStates = new Dictionary<string, ControllerState>();
     [SerializeField] protected ControllerState currentState;
 
     public List<Unit> unitsControlled;

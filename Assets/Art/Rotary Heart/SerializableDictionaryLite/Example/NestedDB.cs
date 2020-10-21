@@ -7,8 +7,10 @@ namespace RotaryHeart.Lib
     [CreateAssetMenu(fileName = "NestedDB.asset", menuName = "Nested DB")]
     public class NestedDB : ScriptableObject
     {
+#pragma warning disable UNT0013 // Remove invalid SerializeField attribute
         [SerializeField, ID("id")]
         public MainDict nested;
+#pragma warning restore UNT0013 // Remove invalid SerializeField attribute
     }
 
     [System.Serializable]

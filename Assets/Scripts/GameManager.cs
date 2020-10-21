@@ -24,11 +24,6 @@ public class GameManager : MonoBehaviour
         StartPlayerTurn();
     }
 
-    public void Update()
-    {
-        CheckForMenuKey();
-    }
-
     public void CompleteRemaingPlayerList()
     {
         playersRemaining = new List<BaseController>();
@@ -68,12 +63,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void CheckForMenuKey()
+    public void SwitchMenu()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
             hud.SwitchMenu();
-        }
     }
 
     public void EndPlayerTurn()

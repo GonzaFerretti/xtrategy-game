@@ -7,15 +7,19 @@ public class ControllerTransitionSkipTurn : ControllerStateTransition
 {
     public override bool CheckCondition(BaseController controller)
     {
-        return Input.GetKeyDown(KeyCode.F) || !controller.HasAnyMovesLeft();
+        return (controller as PlayerController).GetButtonState("skipTurn") || !controller.HasAnyMovesLeft();
     }
 
     public override void Transition(BaseController controller)
     {
         base.Transition(controller);
+        (controller as PlayerController).SetButtonState("skipTurn", false);
         controller.GetGridReference().DisableAllCellIndicators();
         controller.GetGridReference().gameManager.EndPlayerTurn();
-        controller.currentlySelectedUnit.Deselect();
-        controller.currentlySelectedUnit = null;
+        if (controller.currentlySelectedUnit)
+        {
+            controller.currentlySelectedUnit.Deselect();
+            controller.currentlySelectedUnit = null;
+        }
     }
 }

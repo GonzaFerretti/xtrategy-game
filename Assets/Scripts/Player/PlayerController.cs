@@ -16,10 +16,8 @@ public class PlayerController : BaseController
     {
         hitObject = null;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Vector3 mousePosition = ray.origin;
-        RaycastHit hit;
         Debug.DrawLine(ray.origin, ray.origin + ray.direction * 500f, Color.red, 5);
-        bool hasHitObject = Physics.Raycast(ray, out hit, 500f, layerMaskOfObject);
+        bool hasHitObject = Physics.Raycast(ray, out RaycastHit hit, 500f, layerMaskOfObject);
         if (hasHitObject)
         {
             hitObject = hit.transform.gameObject;
@@ -36,10 +34,45 @@ public class PlayerController : BaseController
         }
     }
 
+    public bool GetButtonState(string identifier)
+    {
+        return (buttonPressStates.ContainsKey(identifier)) ? buttonPressStates[identifier] : false;
+    }
+
+    public void SetButtonState(string identifier, bool state)
+    {
+        if (buttonPressStates.ContainsKey(identifier)) buttonPressStates[identifier] = state;
+    }
+
+    readonly Dictionary<string, bool> buttonPressStates = new Dictionary<string, bool>();
+
+    public void OnButtonPressDown(string identifier)
+    {
+        if (buttonPressStates.ContainsKey(identifier))
+        {
+            buttonPressStates[identifier] = true;
+        }
+        else
+        {
+            buttonPressStates.Add(identifier, true);
+        }
+    }
+
+    public void OnButtonPressUp(string identifier)
+    {
+        if (buttonPressStates.ContainsKey(identifier))
+        {
+            buttonPressStates[identifier] = false;
+        }
+        else
+        {
+            buttonPressStates.Add(identifier, false);
+        }
+    }
+
     public void OnHoverGrid(GridIndicatorMode possibleCellsMode, GridIndicatorMode selectedCellsMode, List<Vector3Int> listToCheck)
     {
-        GameObject objectSelected;
-        if (GetObjectUnderMouse(out objectSelected, 1 << LayerMask.NameToLayer("GroundBase")))
+        if (GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("GroundBase")))
         {
             GameGridCell cell = objectSelected.transform.parent.GetComponent<GameGridCell>();
             if (cell == lastSelectedCoord) return;

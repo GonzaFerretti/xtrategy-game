@@ -574,10 +574,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
-    - target: {fileID: 2785893735610482014, guid: 03e64b46ad5d24949902eb88c76c6245,
+    - target: {fileID: 2785893736779439475, guid: 03e64b46ad5d24949902eb88c76c6245,
         type: 3}
-      propertyPath: nombreEscenaDestino
-      value: Credit
+      propertyPath: m_AnchoredPosition.y
+      value: -25.199951
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03e64b46ad5d24949902eb88c76c6245, type: 3}
