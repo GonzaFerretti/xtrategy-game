@@ -15,7 +15,6 @@ public class AIBehaviourMeleeUnit : AIBehaviour
         }
         else
         {
-            AsyncAIActionResult movementAction = controller.GenerateNewAIActionResult();
             yield return controller.StartCoroutine(controller.MoveTowardsClosestEnemy(actingUnit));
             
             

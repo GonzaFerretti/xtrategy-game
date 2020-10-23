@@ -67,7 +67,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
             Vector3Int unitPosition = unitSelected.GetCoordinates();
             if (controller.currentlySelectedUnit.possibleAttacks.Contains(unitPosition))
             {
-                controller.currentlySelectedUnit.attackState = currentActionState.inProgress;
+                controller.currentlySelectedUnit.attackState = CurrentActionState.inProgress;
                 controller.StartCoroutine(AttackEnemy(unitSelected));
                 return true;
             }
@@ -89,6 +89,6 @@ public class ControllerStateSelectUnitTarget : ControllerState
         yield return new WaitForSeconds(1);
         controller.currentlySelectedUnit.anim.SetTrigger("endCurrentAnim");
         enemyToAttack.TakeDamage(controller.currentlySelectedUnit.damage, controller.currentlySelectedUnit);
-        controller.currentlySelectedUnit.attackState = currentActionState.ended;
+        controller.currentlySelectedUnit.attackState = CurrentActionState.ended;
     }
 }

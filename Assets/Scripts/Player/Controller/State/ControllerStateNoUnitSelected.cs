@@ -13,8 +13,7 @@ public class ControllerStateNoUnitSelected : ControllerState
 
     public void CheckUnitSelect()
     {
-        GameObject objectSelected;
-        if ((controller as PlayerController).GetObjectUnderMouse(out objectSelected, 1 << LayerMask.NameToLayer("Unit")))
+        if ((controller as PlayerController).GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("Unit")))
         {
             Unit unitSelected = objectSelected.GetComponent<Unit>();
             if (!controller.OwnsUnit(unitSelected)) return;

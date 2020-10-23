@@ -29,8 +29,6 @@ public class GridBuilder : MonoBehaviour
                 CreateCell(cellCoordinates, baseGridCell);
             }
         }
-
-        Vector3Int randomPositionInGrid = new Vector3Int(Random.Range(1, rows), Random.Range(1, columns), 0);
     }
 
     public void CreateCell(Vector3Int cellCoordinates, GameGridCell prefab)
@@ -152,7 +150,7 @@ public class GridBuilder : MonoBehaviour
             Vector3Int coordinates = savedData.cellsCoordinates[i];
             string prefabName = savedData.cellsPrefabNames[i];
             Vector3 cellPosition = gameGridManager.GetWorldPositionFromCoords(coordinates);
-            GameGridCell cellToInstantiate = null;
+            GameGridCell cellToInstantiate;
             if (gridElementCache.ContainsKey(prefabName))
             {
                 cellToInstantiate = gridElementCache[prefabName];
@@ -179,7 +177,7 @@ public class GridBuilder : MonoBehaviour
             CoverData coverInfo = savedData.coversData[i];
             string prefabName = savedData.coversPrefabNames[i];
             Vector3 position = (gameGridManager.GetWorldPositionFromCoords(coverInfo.side1) + gameGridManager.GetWorldPositionFromCoords(coverInfo.side2)) / 2;
-            Cover coverToInstantiate = null;
+            Cover coverToInstantiate;
             if (coverElementsCache.ContainsKey(prefabName))
             {
                 coverToInstantiate = coverElementsCache[prefabName];

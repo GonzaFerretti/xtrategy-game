@@ -35,7 +35,7 @@ public class PlayerController : BaseController
 
     public bool GetButtonState(string identifier)
     {
-        return (buttonPressStates.ContainsKey(identifier)) ? buttonPressStates[identifier] : false;
+        return buttonPressStates.ContainsKey(identifier) ? buttonPressStates[identifier] : false;
     }
 
     public void SetButtonState(string identifier, bool state)

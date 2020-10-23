@@ -7,7 +7,7 @@ public class ControllerTransitionStartAction : ControllerStateTransition
 {
     public override bool CheckCondition(BaseController controller)
     {
-        return controller.currentlySelectedUnit && (controller.currentlySelectedUnit.moveState == currentActionState.inProgress || controller.currentlySelectedUnit.attackState == currentActionState.inProgress);
+        return controller.currentlySelectedUnit && (controller.currentlySelectedUnit.moveState == CurrentActionState.inProgress || controller.currentlySelectedUnit.attackState == CurrentActionState.inProgress);
     }
 
     public override void Transition(BaseController controller)

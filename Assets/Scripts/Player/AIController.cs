@@ -32,7 +32,7 @@ public class AIController : BaseController
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
         attackedUnit.TakeDamage(attackingUnit.damage, attackedUnit);
-        attackingUnit.attackState = currentActionState.ended;
+        attackingUnit.attackState = CurrentActionState.ended;
     }
 
     public override void Update()

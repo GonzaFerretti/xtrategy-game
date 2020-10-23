@@ -9,8 +9,8 @@ public class Unit : GameGridElement
     public List<Cover> currentCovers;
 
     public int currentHp;
-    public currentActionState moveState = currentActionState.notStarted;
-    public currentActionState attackState = currentActionState.notStarted;
+    public CurrentActionState moveState = CurrentActionState.notStarted;
+    public CurrentActionState attackState = CurrentActionState.notStarted;
     [HideInInspector] public int movementRange;
     [HideInInspector] int minAttackRange;
     [HideInInspector] int maxAttackRange;
@@ -42,27 +42,6 @@ public class Unit : GameGridElement
     public void PlaySound(SoundClip clip)
     {
         soundManager.Play(clip);
-    }
-
-    void InitShader()
-    {
-        rens = GetComponentsInChildren<Renderer>();
-        foreach (Renderer ren in rens)
-        {
-            Material[] usualMat = ren.materials;
-            Material[] transMat = new Material[ren.materials.Length];
-            for (int i = 0; i < ren.materials.Length; i++)
-            {
-                Material mat = new Material(seethroughBaseMaterial);
-                mat.SetTexture("_Albedo", usualMat[i].GetTexture("_MainTex"));
-                mat.SetTexture("_Normal", usualMat[i].GetTexture("_BumpMap"));
-                mat.SetFloat("_Glossiness", usualMat[i].GetFloat("_Glossiness"));
-                mat.SetFloat("_Metallic", usualMat[i].GetFloat("_Metallic"));
-                mat.SetColor("_Color", owner.playerColor);
-                transMat[i] = mat;
-            }
-            ren.materials = transMat;
-        }
     }
 
     public Vector3Int GetCoordinates()
@@ -127,8 +106,8 @@ public class Unit : GameGridElement
 
     public void ResetActions()
     {
-        attackState = currentActionState.notStarted;
-        moveState = currentActionState.notStarted;
+        attackState = CurrentActionState.notStarted;
+        moveState = CurrentActionState.notStarted;
         possibleAttacks = new List<Vector3Int>();
         possibleMovements = new List<Vector3Int>();
     }
@@ -145,12 +124,12 @@ public class Unit : GameGridElement
 
     public bool HasActionsLeft()
     {
-        return moveState != currentActionState.ended || attackState != currentActionState.ended;
+        return moveState != CurrentActionState.ended || attackState != CurrentActionState.ended;
     }
 
     public virtual void Select()
     {
-        if (moveState == currentActionState.ended) return;
+        if (moveState == CurrentActionState.ended) return;
         grid.EnableCellIndicator(GetCoordinates(), GridIndicatorMode.selectedUnit);
         grid.SetAllCoverIndicators(true);
         if (possibleMovements.Count == 0)
@@ -193,7 +172,7 @@ public class Unit : GameGridElement
     public IEnumerator MoveByDestinationCoords(Vector3Int destinationCoords)
     {
         grid.SetAllCoverIndicators(false);
-        moveState = currentActionState.inProgress;
+        moveState = CurrentActionState.inProgress;
         anim.Play("move");
         currentCovers = new List<Cover>();
         Vector3Int[] path = grid.CalculateShortestPath(currentCell.GetCoordinates(), destinationCoords);
@@ -208,14 +187,14 @@ public class Unit : GameGridElement
         possibleMovements = new List<Vector3Int>();
         currentCell = grid.GetCellAtCoordinate(path[path.Length - 1]);
         currentCovers = grid.GetCoversFromCoord(GetCoordinates());
-        moveState = currentActionState.ended;
+        moveState = CurrentActionState.ended;
         anim.SetTrigger("endCurrentAnim");
         grid.DisableCellIndicators(possibleMovements);
     }
 
     public IEnumerator MoveAlongPath(Vector3Int[] givenPath)
     {
-        moveState = currentActionState.inProgress;
+        moveState = CurrentActionState.inProgress;
         currentCovers = new List<Cover>();
         anim.Play("move");
         Vector3 lastPosition = transform.position;
@@ -230,7 +209,7 @@ public class Unit : GameGridElement
         currentCovers = grid.GetCoversFromCoord(GetCoordinates());
 
         anim.SetTrigger("endCurrentAnim");
-        moveState = currentActionState.ended;
+        moveState = CurrentActionState.ended;
     }
 
     public IEnumerator WaitForRangeQuery()
@@ -266,7 +245,7 @@ public class Unit : GameGridElement
     }
 }
 
-public enum currentActionState
+public enum CurrentActionState
 {
     notStarted,
     inProgress,

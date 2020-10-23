@@ -189,7 +189,7 @@ public class GameGridManager : MonoBehaviour
             Node node = openSet.Values.ElementAt(0);
             for (int i = 1; i < openSet.Count; i++)
             {
-                if (openSet.Values.ElementAt(i).fCost < node.fCost || openSet.Values.ElementAt(i).fCost == node.fCost)
+                if (openSet.Values.ElementAt(i).GetFCost() < node.GetFCost() || openSet.Values.ElementAt(i).GetFCost() == node.GetFCost())
                 {
                     if (openSet.Values.ElementAt(i).hCost < node.hCost)
                         node = openSet.Values.ElementAt(i);
@@ -345,8 +345,10 @@ public class GameGridManager : MonoBehaviour
 
     public IEnumerator ProcessUnitRangeQuery(int maxSteps, Vector3Int currentCell, int queryId)
     {
-        Dictionary<Vector3Int, int> currentBorder = new Dictionary<Vector3Int, int>();
-        currentBorder.Add(currentCell, 0);
+        Dictionary<Vector3Int, int> currentBorder = new Dictionary<Vector3Int, int>
+        {
+            { currentCell, 0 }
+        };
         int depth = 0;
         DisableCellIndicators(gridCoordinates.Keys);
         while (depth <= maxSteps)
@@ -559,13 +561,13 @@ public class GameGridManager : MonoBehaviour
 
     public void CheckNeighbourAttackViabilityAndAdd(ref List<Vector3Int> coordinatesList, Vector3Int currentNode, Vector3Int direction)
     {
-        if (IsNeighbourViableForAttack(currentNode, currentNode + direction))
+        if (IsNeighbourViableForAttack(currentNode + direction))
         {
             coordinatesList.Add(currentNode + direction);
         }
     }
 
-    public bool IsNeighbourViableForAttack(Vector3Int node, Vector3Int neighbour)
+    public bool IsNeighbourViableForAttack(Vector3Int neighbour)
     {
         return gridCoordinates.ContainsKey(neighbour);
     }
@@ -623,8 +625,7 @@ public class GameGridManager : MonoBehaviour
         {
             foreach (CoverData cover in covers.Keys)
             {
-                Vector3Int possiblePositionToCover;
-                if (isCoverSuitableToDefendAgainstUnit(cover, possibleTargetUnit, out possiblePositionToCover))
+                if (IsCoverSuitableToDefendAgainstUnit(cover, possibleTargetUnit, out Vector3Int possiblePositionToCover))
                 {
                     if (possiblePositionToCover == thisUnit.GetCoordinates()) continue;
                     Vector3Int[] pathToPosition = CalculateShortestPath(thisUnit.GetCoordinates(), possiblePositionToCover);
@@ -681,7 +682,7 @@ public class GameGridManager : MonoBehaviour
         return closestPath;
     }
 
-    public bool isCoverSuitableToDefendAgainstUnit(CoverData cover, Unit unit, out Vector3Int suitableSide)
+    public bool IsCoverSuitableToDefendAgainstUnit(CoverData cover, Unit unit, out Vector3Int suitableSide)
     {
         suitableSide = new Vector3Int(-1, -1, -1);
         if (unit.currentCovers.Contains(covers[cover])) return false;

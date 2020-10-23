@@ -9,7 +9,7 @@ public class MapElementsDB : ScriptableObject
 
     public T GetElementByType<T>(string name)
     {
-        T valueToReturn = default(T);
+        T valueToReturn = default;
         foreach (GameObject go in prefabs)
         {
             if (go.name == name)

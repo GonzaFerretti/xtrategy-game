@@ -8,7 +8,7 @@ public class ControllerTransitionSelectAttackTarget : ControllerStateTransition
     public KeyCode requiredKeyCode;
     public override bool CheckCondition(BaseController controller)
     {
-        bool test = (controller as PlayerController).GetButtonState("changeMode") && controller.currentlySelectedUnit.attackState == currentActionState.notStarted;
+        bool test = (controller as PlayerController).GetButtonState("changeMode") && controller.currentlySelectedUnit.attackState == CurrentActionState.notStarted;
 
         return test;
     }

@@ -7,7 +7,7 @@ public class ControllerTransitionNoAvailableActions : ControllerStateTransition
 {
     public override bool CheckCondition(BaseController controller)
     {
-        return (controller.currentlySelectedUnit.moveState == currentActionState.ended && controller.currentlySelectedUnit.attackState == currentActionState.ended);
+        return (controller.currentlySelectedUnit.moveState == CurrentActionState.ended && controller.currentlySelectedUnit.attackState == CurrentActionState.ended);
     }
 
     public override void Transition(BaseController controller)
