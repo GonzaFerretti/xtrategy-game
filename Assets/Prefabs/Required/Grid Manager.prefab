@@ -211,6 +211,9 @@ MonoBehaviour:
   gameManager: {fileID: 0}
   gridIndicatorPrefab: {fileID: 0}
   indicatorHeight: 0
+  coverIndicatorPrefab: {fileID: 7155721654018654700, guid: f2cf7a74987d4a045a43f96a15f2137f,
+    type: 3}
+  IndicatorDistanceFromCoverPosition: {x: 0, y: 0}
 --- !u!114 &1097648072
 MonoBehaviour:
   m_ObjectHideFlags: 0

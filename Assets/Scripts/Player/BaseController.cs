@@ -25,6 +25,17 @@ public class BaseController : MonoBehaviour
         return currentState;
     }
 
+    public IEnumerator WaitForTransitionIn()
+    {
+        string startingController = GetCurrentStateName();
+        while (startingController == GetCurrentStateName())
+        {
+            yield return null;
+        }
+
+        currentState.OnTransitionIn();
+    }
+
     public List<Vector3Int> GetOwnedUnitsPosition()
     {
         List<Vector3Int> unitsPositions = new List<Vector3Int>();

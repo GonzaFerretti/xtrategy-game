@@ -13,13 +13,26 @@ public class ControllerState : ScriptableObject
         CheckTransitions();
     }
 
+    public virtual void OnTransitionIn()
+    {
+
+    }
+
+    public virtual void OnTransitionOut()
+    {
+
+    }
+
     protected void CheckTransitions()
     {
         foreach (ControllerStateTransition transition in transitions)
         {
             if (transition.CheckCondition(controller))
             {
+                OnTransitionOut();
                 transition.Transition(controller);
+                controller.StartCoroutine(controller.WaitForTransitionIn());
+                break;
             }
         }
     }

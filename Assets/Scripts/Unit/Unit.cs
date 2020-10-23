@@ -152,6 +152,7 @@ public class Unit : GameGridElement
     {
         if (moveState == currentActionState.ended) return;
         grid.EnableCellIndicator(GetCoordinates(), GridIndicatorMode.selectedUnit);
+        grid.SetAllCoverIndicators(true);
         if (possibleMovements.Count == 0)
         {
             currentRangeQuery = StartRangeQuery();
@@ -191,6 +192,7 @@ public class Unit : GameGridElement
 
     public IEnumerator MoveByDestinationCoords(Vector3Int destinationCoords)
     {
+        grid.SetAllCoverIndicators(false);
         moveState = currentActionState.inProgress;
         anim.Play("move");
         currentCovers = new List<Cover>();
@@ -260,6 +262,7 @@ public class Unit : GameGridElement
     public virtual void Deselect()
     {
         grid.DisableAllCellIndicators();
+        grid.SetAllCoverIndicators(false);
     }
 }
 

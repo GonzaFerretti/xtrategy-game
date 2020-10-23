@@ -13,6 +13,27 @@ public class ControllerStateSelectUnitTarget : ControllerState
         if (controller.currentlySelectedUnit) (controller as PlayerController).OnHoverGrid(GridIndicatorMode.possibleAttack, GridIndicatorMode.selectedAttack, controller.currentlySelectedUnit.possibleAttacks);
     }
 
+    public override void OnTransitionIn()
+    {
+        controller.StartCoroutine(WaitForAttackListReady());
+    }
+
+    IEnumerator WaitForAttackListReady()
+    {
+        float startTime = Time.time;
+        while (controller.currentlySelectedUnit.possibleAttacks.Count == 0)
+        {
+            if (Time.time - startTime > 2f) 
+            {
+                yield break;
+            }
+            yield return null;
+        }
+
+        GameGridManager gm = controller.GetGridReference();
+        gm.SetCoverIndicators(controller.currentlySelectedUnit.possibleAttacks, true);
+    }
+
     bool CheckUnitDeselect()
     {
         if ((controller as PlayerController).GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("Unit")))
@@ -52,6 +73,11 @@ public class ControllerStateSelectUnitTarget : ControllerState
             }
         }
         return false;
+    }
+
+    public override void OnTransitionOut()
+    {
+        controller.GetGridReference().SetAllCoverIndicators(false);
     }
 
     IEnumerator AttackEnemy(Unit enemyToAttack)

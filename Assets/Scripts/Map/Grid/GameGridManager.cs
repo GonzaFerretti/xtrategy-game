@@ -20,12 +20,19 @@ public class GameGridManager : MonoBehaviour
 
     [SerializeField] private Dictionary<int, AsyncRangeQuery> currentQueries = new Dictionary<int, AsyncRangeQuery>();
     [SerializeField] private Dictionary<Vector3Int, GridIndicator> gridIndicators = new Dictionary<Vector3Int, GridIndicator>();
+    [SerializeField] private CoverIndicatorInformation coverIndicators = new CoverIndicatorInformation();
+
     public MapDictData savedData;
     public MapElementsDB elementsDatabase;
     public GameManager gameManager;
 
     [SerializeField] GridIndicator gridIndicatorPrefab;
     [SerializeField] float indicatorHeight;
+
+    [SerializeField] GameObject LowCoverIndicatorPrefab;
+    [SerializeField] GameObject HighCoverIndicatorPrefab;
+    // Distance in X here is used for horizontal distance, and Y for vertical distance.
+    [SerializeField] float CoverIndicatorHeight;
 
 
     public void Start()
@@ -34,6 +41,45 @@ public class GameGridManager : MonoBehaviour
         BuildCoversFromData();
         InitializeGridIndicators();
         CopyListOfCellsToUnusedList();
+    }
+
+    public void InitCoverIndicator(Vector3 coverPosition, Cover cover)
+    {
+        bool isXAxis = cover.coverData.IsCellMovementDirectionInXAxis();
+        bool isHighCover = cover is HighCover;
+        GameObject coverIndicatorObj = Instantiate((isHighCover) ? HighCoverIndicatorPrefab : LowCoverIndicatorPrefab);
+
+        coverIndicatorObj.transform.position = coverPosition + new Vector3(0, CoverIndicatorHeight, 0);
+
+        coverIndicatorObj.transform.parent = cover.transform;
+
+        coverIndicators.Add((cover.coverData.side1, coverIndicatorObj));
+        coverIndicators.Add((cover.coverData.side2, coverIndicatorObj));
+        coverIndicatorObj.SetActive(false);
+    }
+
+    public void SetCoverIndicator(Vector3Int coords, bool state)
+    {
+        foreach ((Vector3Int cellCoordinates, GameObject indicatorObject) indicatorData in coverIndicators)
+        {
+            if (coords == indicatorData.cellCoordinates) indicatorData.indicatorObject.SetActive(state);
+        }
+    }
+
+    public void SetAllCoverIndicators(bool state)
+    {
+        foreach ((Vector3Int cellCoordinates, GameObject indicatorObject) indicatorData in coverIndicators)
+        {
+            indicatorData.indicatorObject.SetActive(state);
+        }
+    }
+
+    public void SetCoverIndicators(List<Vector3Int> coords, bool state)
+    {
+        foreach (Vector3Int coord in coords)
+        {
+            SetCoverIndicator(coord, state);
+        }
     }
 
     void CopyListOfCellsToUnusedList()
@@ -114,6 +160,9 @@ public class GameGridManager : MonoBehaviour
             cover.transform.position = position;
             cover.transform.parent = coversRootTransform;
             cover.coverData = coverInfo;
+
+            InitCoverIndicator(position, cover);
+
             if (!coverInfo.IsCellMovementDirectionInXAxis())
             {
                 cover.transform.localEulerAngles = new Vector3(0, 90, 0);
@@ -581,7 +630,7 @@ public class GameGridManager : MonoBehaviour
                     if (possiblePositionToCover == thisUnit.GetCoordinates()) continue;
                     Vector3Int[] pathToPosition = CalculateShortestPath(thisUnit.GetCoordinates(), possiblePositionToCover);
                     Vector3Int[] pathFromCoverToEnemy = CalculateShortestPath(possiblePositionToCover, possibleTargetUnit.GetCoordinates());
-                    if (!possiblePaths.ContainsKey(pathToPosition))  possiblePaths.Add(pathToPosition, pathFromCoverToEnemy.Length);
+                    if (!possiblePaths.ContainsKey(pathToPosition)) possiblePaths.Add(pathToPosition, pathFromCoverToEnemy.Length);
 
                 }
             }
@@ -696,4 +745,7 @@ public class GridCoordinates : SerializableDictionaryBase<Vector3Int, GameGridCe
 
 [System.Serializable]
 public class CoverInformation : SerializableDictionaryBase<CoverData, Cover> { }
+
+public class CoverIndicatorInformation : List<(Vector3Int cellCoordinates, GameObject indicatorObject)> { }
+
 
