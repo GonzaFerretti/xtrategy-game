@@ -16,6 +16,7 @@ public class ControllerStateUnitSelected : ControllerState
     public override void OnTransitionOut()
     {
         controller.GetGridReference().SetAllCoverIndicators(false);
+        controller.GetGridReference().DisableAllCellIndicators();
     }
 
     bool CheckUnitDeselect()
@@ -39,6 +40,11 @@ public class ControllerStateUnitSelected : ControllerState
             }
             return false;
         }
+    }
+
+    public override void OnTransitionIn()
+    {
+        controller.GetGridReference().EnableCellIndicator(controller.currentlySelectedUnit.GetCoordinates(), GridIndicatorMode.selectedUnit);
     }
 
     bool CheckUnitMovement()

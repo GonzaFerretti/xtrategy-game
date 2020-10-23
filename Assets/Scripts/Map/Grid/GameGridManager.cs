@@ -45,7 +45,6 @@ public class GameGridManager : MonoBehaviour
 
     public void InitCoverIndicator(Vector3 coverPosition, Cover cover)
     {
-        bool isXAxis = cover.coverData.IsCellMovementDirectionInXAxis();
         bool isHighCover = cover is HighCover;
         GameObject coverIndicatorObj = Instantiate((isHighCover) ? HighCoverIndicatorPrefab : LowCoverIndicatorPrefab);
 
@@ -60,7 +59,7 @@ public class GameGridManager : MonoBehaviour
 
     public void SetCoverIndicator(Vector3Int coords, bool state)
     {
-        foreach ((Vector3Int cellCoordinates, GameObject indicatorObject) indicatorData in coverIndicators)
+        foreach (var indicatorData in coverIndicators)
         {
             if (coords == indicatorData.cellCoordinates) indicatorData.indicatorObject.SetActive(state);
         }
@@ -68,7 +67,7 @@ public class GameGridManager : MonoBehaviour
 
     public void SetAllCoverIndicators(bool state)
     {
-        foreach ((Vector3Int cellCoordinates, GameObject indicatorObject) indicatorData in coverIndicators)
+        foreach (var indicatorData in coverIndicators)
         {
             indicatorData.indicatorObject.SetActive(state);
         }
@@ -90,7 +89,7 @@ public class GameGridManager : MonoBehaviour
         }
     }
 
-    List<GameGridCell> unusedCells = new List<GameGridCell>();
+    readonly List<GameGridCell> unusedCells = new List<GameGridCell>();
 
     public GameGridCell GetRandomUnusedCell()
     {
@@ -119,7 +118,7 @@ public class GameGridManager : MonoBehaviour
             Vector3Int coordinates = savedData.cellsCoordinates[i];
             string prefabName = savedData.cellsPrefabNames[i];
             Vector3 cellPosition = GetWorldPositionFromCoords(coordinates);
-            GameGridCell cellToInstantiate = null;
+            GameGridCell cellToInstantiate;
             if (gridElementCache.ContainsKey(prefabName))
             {
                 cellToInstantiate = gridElementCache[prefabName];
@@ -145,7 +144,7 @@ public class GameGridManager : MonoBehaviour
             CoverData coverInfo = savedData.coversData[i];
             string prefabName = savedData.coversPrefabNames[i];
             Vector3 position = (GetWorldPositionFromCoords(coverInfo.side1) + GetWorldPositionFromCoords(coverInfo.side2)) / 2;
-            Cover coverToInstantiate = null;
+            Cover coverToInstantiate;
             if (coverElementsCache.ContainsKey(prefabName))
             {
                 coverToInstantiate = coverElementsCache[prefabName];

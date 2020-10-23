@@ -16,6 +16,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
     public override void OnTransitionIn()
     {
         controller.StartCoroutine(WaitForAttackListReady());
+        controller.GetGridReference().EnableCellIndicator(controller.currentlySelectedUnit.GetCoordinates(), GridIndicatorMode.selectedUnit);
     }
 
     IEnumerator WaitForAttackListReady()
@@ -68,7 +69,6 @@ public class ControllerStateSelectUnitTarget : ControllerState
             {
                 controller.currentlySelectedUnit.attackState = currentActionState.inProgress;
                 controller.StartCoroutine(AttackEnemy(unitSelected));
-                controller.GetGridReference().DisableAllCellIndicators();
                 return true;
             }
         }
@@ -78,6 +78,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
     public override void OnTransitionOut()
     {
         controller.GetGridReference().SetAllCoverIndicators(false);
+        controller.GetGridReference().DisableAllCellIndicators();
     }
 
     IEnumerator AttackEnemy(Unit enemyToAttack)
