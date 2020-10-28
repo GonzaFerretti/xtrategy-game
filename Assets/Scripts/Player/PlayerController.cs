@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class PlayerController : BaseController
 {
+    public override void Update()
+    {
+        base.Update();
+        CheckMovementAxis();
+    }
     public override void SwitchStates(string identifier)
     {
         lastSelectedCoord = null;
@@ -66,6 +71,16 @@ public class PlayerController : BaseController
         else
         {
             buttonPressStates.Add(identifier, false);
+        }
+    }
+
+    // REMOVE LATER
+    public void CheckMovementAxis()
+    {
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        {
+            Vector2 movementVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            Camera.main.GetComponent<CameraController>().MoveCamera(movementVector);
         }
     }
 

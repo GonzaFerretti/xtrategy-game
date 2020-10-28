@@ -29,10 +29,10 @@ public class GameGridManager : MonoBehaviour
     [SerializeField] GridIndicator gridIndicatorPrefab;
     [SerializeField] float indicatorHeight;
 
-    [SerializeField] GameObject LowCoverIndicatorPrefab;
-    [SerializeField] GameObject HighCoverIndicatorPrefab;
+    [SerializeField] CoverIndicator LowCoverIndicatorPrefab;
+    [SerializeField] CoverIndicator HighCoverIndicatorPrefab;
     // Distance in X here is used for horizontal distance, and Y for vertical distance.
-    [SerializeField] float CoverIndicatorHeight;
+    [SerializeField] Vector2 coverIndicatorDistance;
 
 
     public void Start()
@@ -46,22 +46,24 @@ public class GameGridManager : MonoBehaviour
     public void InitCoverIndicator(Vector3 coverPosition, Cover cover)
     {
         bool isHighCover = cover is HighCover;
-        GameObject coverIndicatorObj = Instantiate((isHighCover) ? HighCoverIndicatorPrefab : LowCoverIndicatorPrefab);
+        CoverIndicator coverIndicator = Instantiate((isHighCover) ? HighCoverIndicatorPrefab : LowCoverIndicatorPrefab);
 
-        coverIndicatorObj.transform.position = coverPosition + new Vector3(0, CoverIndicatorHeight, 0);
+        coverIndicator.transform.position = coverPosition + new Vector3(0, coverIndicatorDistance.y, 0);
 
-        coverIndicatorObj.transform.parent = cover.transform;
+        coverIndicator.SetDistance(coverIndicatorDistance.x);
 
-        coverIndicators.Add((cover.coverData.side1, coverIndicatorObj));
-        coverIndicators.Add((cover.coverData.side2, coverIndicatorObj));
-        coverIndicatorObj.SetActive(false);
+        coverIndicator.transform.parent = cover.transform;
+
+        coverIndicators.Add((cover.coverData.side1, coverIndicator));
+        coverIndicators.Add((cover.coverData.side2, coverIndicator));
+        coverIndicator.gameObject.SetActive(false);
     }
 
     public void SetCoverIndicator(Vector3Int coords, bool state)
     {
         foreach (var indicatorData in coverIndicators)
         {
-            if (coords == indicatorData.cellCoordinates) indicatorData.indicatorObject.SetActive(state);
+            if (coords == indicatorData.cellCoordinates) indicatorData.indicator.gameObject.SetActive(state);
         }
     }
 
@@ -69,7 +71,7 @@ public class GameGridManager : MonoBehaviour
     {
         foreach (var indicatorData in coverIndicators)
         {
-            indicatorData.indicatorObject.SetActive(state);
+            indicatorData.indicator.gameObject.SetActive(state);
         }
     }
 
@@ -746,6 +748,6 @@ public class GridCoordinates : SerializableDictionaryBase<Vector3Int, GameGridCe
 [System.Serializable]
 public class CoverInformation : SerializableDictionaryBase<CoverData, Cover> { }
 
-public class CoverIndicatorInformation : List<(Vector3Int cellCoordinates, GameObject indicatorObject)> { }
+public class CoverIndicatorInformation : List<(Vector3Int cellCoordinates, CoverIndicator indicator)> { }
 
 

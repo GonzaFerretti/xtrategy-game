@@ -136,6 +136,7 @@ public class Unit : GameGridElement
         {
             currentRangeQuery = StartRangeQuery();
             possibleMovements = new List<Vector3Int>();
+            Camera.main.GetComponent<CameraController>().SetFollowTarget(transform);
             StartCoroutine(WaitForRangeQuery());
         }
         else
