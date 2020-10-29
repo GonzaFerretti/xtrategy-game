@@ -38,6 +38,7 @@ public class GridBuilder : MonoBehaviour
         cell.name = "cell(" + cellCoordinates.x + "," + cellCoordinates.y + ")";
         //cell.transform.localScale = grid.cellSize;
         cell.basePrefabName = prefab.name;
+        cell.transform.localEulerAngles = new Vector3(0, 0, 0);
         cell.SetCoordinates(cellCoordinates);
         cell.SetGridManagerReference(gameGridManager);
         gridCoordinates.Add(cellCoordinates, cell);
@@ -114,6 +115,10 @@ public class GridBuilder : MonoBehaviour
         {
             cover.transform.localEulerAngles = new Vector3(0, 90, 0);
         }
+        else
+        {
+            cover.transform.localEulerAngles = new Vector3(0, 0, 0);
+        }
         covers.Add(cellMovement, cover);
         cover.SetGridManagerReference(gameGridManager);
         cover.coverData = cellMovement;
@@ -125,21 +130,53 @@ public class GridBuilder : MonoBehaviour
         if (gridCoordinates.ContainsKey(currentlyHoveredCell))
         {
             if (this == null) return null;
-            Vector3 gridCellPosition = gridCoordinates[currentlyHoveredCell].transform.position;
-            Vector3 scaledDirection = currentMousePosition - gridCellPosition;
-            float AbsX = Mathf.Abs(scaledDirection.x);
-            float AbsY = Mathf.Abs(scaledDirection.z);
-            Vector3Int vectorToCheck = (AbsX > AbsY) ? Vector3Int.right * (int)Mathf.Sign(scaledDirection.x) : Vector3Int.up * (int)Mathf.Sign(scaledDirection.z);
-            if (gridCoordinates.ContainsKey(currentlyHoveredCell + vectorToCheck))
-            {
-                return gridCoordinates[currentlyHoveredCell + vectorToCheck];
-            }
-            else
-            {
-                return null;
-            }
+
+            List<Vector3Int> adjacentCells = GetNeighbourCells(currentlyHoveredCell);
+
+            GameGridCell nearestCell = GetNearestCellToPosition(adjacentCells, currentMousePosition);
+            return nearestCell;
         }
         else return null;
+    }
+
+    public List<Vector3Int> GetNeighbourCells(Vector3Int currentCellCoords)
+    {
+        List<Vector3Int> possibleNeighbourCoordinates = new List<Vector3Int>();
+
+        CheckBuildNeighbourViabilityAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(1, 0, 0));
+        CheckBuildNeighbourViabilityAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(-1, 0, 0));
+        CheckBuildNeighbourViabilityAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(0, 1, 0));
+        CheckBuildNeighbourViabilityAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(0, -1, 0));
+
+        return possibleNeighbourCoordinates;
+    }
+
+    public void CheckBuildNeighbourViabilityAndAdd(ref List<Vector3Int> coordinatesList, Vector3Int currentNode, Vector3Int direction)
+    {
+        if (gridCoordinates.ContainsKey(currentNode + direction))
+        {
+            coordinatesList.Add(currentNode + direction);
+        }
+    }
+
+    public GameGridCell GetNearestCellToPosition(List<Vector3Int> cellsToCheck, Vector3 currentPosition) 
+    {
+        GameGridCell nearestCell = null;
+        float nearestDistance = float.MaxValue;
+
+        foreach (Vector3Int cellCoordToCheck in cellsToCheck)
+        {
+            GameGridCell currentlyCheckingCell = gridCoordinates[cellCoordToCheck];
+            Vector3 cellToCheckPos = currentlyCheckingCell.transform.position;
+            float currentDistance = Vector3.Distance(currentPosition, cellToCheckPos);
+            if (currentDistance < nearestDistance)
+            {
+                nearestDistance = currentDistance;
+                nearestCell = currentlyCheckingCell;
+            }
+        }
+
+        return nearestCell;
     }
 
     void BuildCellsFromData(MapDictData savedData)
@@ -165,6 +202,7 @@ public class GridBuilder : MonoBehaviour
             cell.SetCoordinates(coordinates);
             cell.basePrefabName = prefabName;
             cell.SetGridManagerReference(gameGridManager);
+            cell.transform.localEulerAngles = new Vector3(0, 0, 0);
             gridCoordinates.Add(coordinates, cell);
         }
     }
@@ -196,6 +234,10 @@ public class GridBuilder : MonoBehaviour
             if (!coverInfo.IsCellMovementDirectionInXAxis())
             {
                 cover.transform.localEulerAngles = new Vector3(0, 90, 0);
+            }
+            else
+            {
+                cover.transform.localEulerAngles = new Vector3(0, 0, 0);
             }
             covers.Add(coverInfo, cover);
         }

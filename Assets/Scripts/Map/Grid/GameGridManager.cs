@@ -107,7 +107,7 @@ public class GameGridManager : MonoBehaviour
             GridIndicator newGridIndicator = Instantiate(gridIndicatorPrefab);
             newGridIndicator.transform.position = cellData.Value.transform.position + Vector3.up * indicatorHeight;
             newGridIndicator.transform.parent = cellIndicatorsRootTransform;
-
+            newGridIndicator.transform.localRotation = Quaternion.identity;
             gridIndicators.Add(cellData.Key, newGridIndicator);
         }
     }
@@ -131,6 +131,7 @@ public class GameGridManager : MonoBehaviour
                 gridElementCache.Add(prefabName, cellToInstantiate);
             }
             GameGridCell cell = Instantiate(cellToInstantiate, cellPosition, Quaternion.identity, cellsRootTransform);
+            cell.transform.localRotation = Quaternion.identity;
             cell.name = "cell(" + coordinates.x + "," + coordinates.y + ")";
             cell.SetCoordinates(coordinates);
             cell.SetGridManagerReference(this);
@@ -167,6 +168,10 @@ public class GameGridManager : MonoBehaviour
             if (!coverInfo.IsCellMovementDirectionInXAxis())
             {
                 cover.transform.localEulerAngles = new Vector3(0, 90, 0);
+            }
+            else
+            {
+                cover.transform.localEulerAngles = new Vector3(0, 0, 0);
             }
             covers.Add(coverInfo, cover);
         }

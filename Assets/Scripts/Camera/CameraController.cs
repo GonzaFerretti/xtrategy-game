@@ -24,7 +24,7 @@ public class CameraController : MonoBehaviour
     public void MoveCamera(Vector2 movementVector)
     {
         if (currentFollowEvent != null) InterruptTargetFollow();
-        transform.position += new Vector3(movementVector.x,0,movementVector.y) * Time.deltaTime * moveSpeed;
+        transform.position += new Vector3(movementVector.x,0, movementVector.y) * Time.deltaTime * moveSpeed;
     }
 
     IEnumerator FollowTarget()
