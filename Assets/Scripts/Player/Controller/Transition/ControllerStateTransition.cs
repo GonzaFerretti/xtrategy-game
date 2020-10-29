@@ -9,7 +9,6 @@ public abstract class ControllerStateTransition : ScriptableObject
 
     public virtual void Transition(BaseController controller)
     {
-        Debug.Log(destinationState.stateName);
         controller.SwitchStates(destinationState.stateName);
         controller.GetGridReference().gameManager.hud.DisableAllElements();
         foreach (string hudElementName in hudElementsToEnable)

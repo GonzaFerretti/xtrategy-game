@@ -209,7 +209,6 @@ public class GameGridManager : MonoBehaviour
             safeguard++;
             if (safeguard > 500)
             {
-                Debug.Log("nope");
                 break;
             }
 
