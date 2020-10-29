@@ -183,6 +183,7 @@ public class Unit : GameGridElement
             model.transform.forward = (grid.GetWorldPositionFromCoords(path[i]) - lastPosition).normalized;
             transform.position = grid.GetWorldPositionFromCoords(path[i]);
             lastPosition = transform.position;
+            Camera.main.GetComponent<CameraController>().SetFollowTarget(transform);
             yield return new WaitForSeconds(0.25f);
         }
         possibleMovements = new List<Vector3Int>();
