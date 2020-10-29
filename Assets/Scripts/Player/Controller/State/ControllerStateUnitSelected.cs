@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 [CreateAssetMenu(menuName = "Controller/State/Unit selected")]
 public class ControllerStateUnitSelected : ControllerState
@@ -9,7 +8,7 @@ public class ControllerStateUnitSelected : ControllerState
     public override void OnUpdate()
     {
         base.OnUpdate();
-        if (Input.GetMouseButtonDown(0) && !CheckUnitMovement()) CheckUnitDeselect();
+        if (Input.GetMouseButtonDown(0) && !CheckUnitMovement()) (controller as PlayerController).CheckUnitDeselect();
         if (controller.currentlySelectedUnit) (controller as PlayerController).OnHoverGrid(GridIndicatorMode.possibleMovement, GridIndicatorMode.selectedMovement, controller.currentlySelectedUnit.possibleMovements);
     }
 
@@ -17,29 +16,6 @@ public class ControllerStateUnitSelected : ControllerState
     {
         controller.GetGridReference().SetAllCoverIndicators(false);
         controller.GetGridReference().DisableAllCellIndicators();
-    }
-
-    bool CheckUnitDeselect()
-    {
-        if ((controller as PlayerController).GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("Unit")))
-        {
-            Unit unitSelected = objectSelected.GetComponent<Unit>();
-            if (!controller.OwnsUnit(unitSelected)) return false;
-            controller.currentlySelectedUnit.Deselect();
-            controller.currentlySelectedUnit = unitSelected;
-                controller.currentlySelectedUnit.Select();
-            return true;
-        }
-        else
-        {
-            if (!EventSystem.current.currentSelectedGameObject)
-            {
-                controller.currentlySelectedUnit.Deselect();
-                controller.currentlySelectedUnit = null;
-                return true;
-            }
-            return false;
-        }
     }
 
     public override void OnTransitionIn()

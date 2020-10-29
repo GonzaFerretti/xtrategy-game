@@ -46550,9 +46550,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd2983c4d21c5494fb8a41e3bdf56d71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transitionTime: 1
+  transitionTime: 0.25
   cam: {fileID: 1384094735}
-  moveSpeed: 50
+  moveSpeed: 25
+  maxZoom: 8.2
+  selectZoom: 5
+  minZoom: 3
+  zoomSensitivity: 3
 --- !u!1 &1384668449
 GameObject:
   m_ObjectHideFlags: 0

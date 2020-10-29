@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerController : BaseController
 {
@@ -8,6 +9,7 @@ public class PlayerController : BaseController
     {
         base.Update();
         CheckMovementAxis();
+        CheckZoom();
     }
     public override void SwitchStates(string identifier)
     {
@@ -81,6 +83,39 @@ public class PlayerController : BaseController
         {
             Vector2 movementVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             Camera.main.GetComponent<CameraController>().MoveCamera(movementVector);
+        }
+    }
+
+    // REMOVE LATER
+    public void CheckZoom()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") != 0)
+        {
+            Camera.main.GetComponent<CameraController>().ScrollZoom(-Input.GetAxis("Mouse ScrollWheel"));
+        }
+    }
+
+    public bool CheckUnitDeselect()
+    {
+        if (GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("Unit")))
+        {
+            Unit unitSelected = objectSelected.GetComponent<Unit>();
+            if (!OwnsUnit(unitSelected)) return false;
+            currentlySelectedUnit.Deselect();
+            currentlySelectedUnit = unitSelected;
+            currentlySelectedUnit.Select();
+            return true;
+        }
+        else
+        {
+            if (!EventSystem.current.currentSelectedGameObject)
+            {
+                currentlySelectedUnit.Deselect();
+                currentlySelectedUnit = null;
+
+                return true;
+            }
+            return false;
         }
     }
 

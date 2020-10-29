@@ -132,11 +132,11 @@ public class Unit : GameGridElement
         if (moveState == CurrentActionState.ended) return;
         grid.EnableCellIndicator(GetCoordinates(), GridIndicatorMode.selectedUnit);
         grid.SetAllCoverIndicators(true);
+        Camera.main.GetComponent<CameraController>().SetFollowTarget(transform);
         if (possibleMovements.Count == 0)
         {
             currentRangeQuery = StartRangeQuery();
             possibleMovements = new List<Vector3Int>();
-            Camera.main.GetComponent<CameraController>().SetFollowTarget(transform);
             StartCoroutine(WaitForRangeQuery());
         }
         else
