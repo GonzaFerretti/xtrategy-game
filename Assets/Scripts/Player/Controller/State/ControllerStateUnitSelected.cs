@@ -20,14 +20,17 @@ public class ControllerStateUnitSelected : ControllerState
 
     public override void OnTransitionIn()
     {
+        base.OnTransitionIn();
         controller.GetGridReference().EnableCellIndicator(controller.currentlySelectedUnit.GetCoordinates(), GridIndicatorMode.selectedUnit);
     }
 
     bool CheckUnitMovement()
     {
+        (controller as PlayerController).CheckUnitUISwitch();
         if ((controller as PlayerController).GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("GroundBase")))
         {
             Vector3Int target = objectSelected.transform.parent.GetComponent<GameGridCell>().GetCoordinates();
+            if (!controller.currentlySelectedUnit) return false;
             if (controller.currentlySelectedUnit.possibleMovements.Contains(target))
             {
                 controller.currentlySelectedUnit.possibleAttacks = new List<Vector3Int>();

@@ -15,7 +15,6 @@ public class ControllerState : ScriptableObject
 
     public virtual void OnTransitionIn()
     {
-
     }
 
     public virtual void OnTransitionOut()

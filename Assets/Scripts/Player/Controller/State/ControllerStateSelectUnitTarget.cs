@@ -14,6 +14,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
 
     public override void OnTransitionIn()
     {
+        base.OnTransitionIn();
         controller.StartCoroutine(WaitForAttackListReady());
         controller.GetGridReference().EnableCellIndicator(controller.currentlySelectedUnit.GetCoordinates(), GridIndicatorMode.selectedUnit);
     }
@@ -36,6 +37,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
 
     bool CheckPossibleAttackTarget()
     {
+        (controller as PlayerController).CheckUnitUISwitch();
         if ((controller as PlayerController).GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("Unit")))
         {
             Unit unitSelected = objectSelected.GetComponent<Unit>();

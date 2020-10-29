@@ -45,6 +45,51 @@ public class PlayerController : BaseController
         return buttonPressStates.ContainsKey(identifier) ? buttonPressStates[identifier] : false;
     }
 
+    public bool CheckUnitUISwitch()
+    {
+        int currentIndex = unitsControlled.IndexOf(currentlySelectedUnit);
+        int difference = 0;
+        if (GetButtonState("PreviousUnit"))
+        {
+            difference = -1;
+            SetButtonState("PreviousUnit", false);
+        }
+        else if (GetButtonState("NextUnit"))
+        {
+            difference = 1;
+            SetButtonState("NextUnit", false);
+        }
+
+        if (difference != 0)
+        {
+            int nextIndex = currentIndex + difference;
+            if (nextIndex >= unitsControlled.Count)
+            {
+                nextIndex = 0;
+            }
+            else if (nextIndex < 0 )
+            {
+                nextIndex = unitsControlled.Count - 1;
+            }
+            currentlySelectedUnit.Deselect();
+            currentlySelectedUnit = null;
+            StartCoroutine(WaitForUnitSwitch(unitsControlled[nextIndex]));
+            return true;
+        }
+        return false;
+    }
+
+    IEnumerator WaitForUnitSwitch(Unit unitToSwitchTo)
+    {
+        string startState = GetCurrentStateName();
+        while (startState == GetCurrentStateName())
+        {
+            yield return null;
+        }
+        currentlySelectedUnit = unitToSwitchTo;
+        currentlySelectedUnit.Select();
+    }
+
     public void SetButtonState(string identifier, bool state)
     {
         if (buttonPressStates.ContainsKey(identifier)) buttonPressStates[identifier] = state;
@@ -102,8 +147,8 @@ public class PlayerController : BaseController
             Unit unitSelected = objectSelected.GetComponent<Unit>();
             if (!OwnsUnit(unitSelected)) return false;
             currentlySelectedUnit.Deselect();
-            currentlySelectedUnit = unitSelected;
-            currentlySelectedUnit.Select();
+            currentlySelectedUnit = null;
+            StartCoroutine(WaitForUnitSwitch(unitSelected));
             return true;
         }
         else
