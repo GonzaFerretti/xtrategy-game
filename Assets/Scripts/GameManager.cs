@@ -19,10 +19,68 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
+        CheckGridManagerReferences();
+        CheckUnitOwnerReferences();
+        InitUnitAndPlayerList();
+        GetHudReference();
         CompleteRemaingPlayerList();
-        InitGridRefAndUnitList();
+        CheckLoser();
         StartPlayerTurn();
     }
+
+    void GetHudReference()
+    {
+        hud = FindObjectOfType<HUDManager>();
+    }
+
+    void CheckGridManagerReferences()
+    {
+        if (!grid) grid = FindObjectOfType<GameGridManager>();
+        if (!grid.gameManager) grid.gameManager = this;
+    }
+
+    void InitUnitAndPlayerList()
+    {
+        players = FindObjectsOfType<BaseController>().ToList();
+        foreach (BaseController player in players)
+        {
+            player.SetGridReference(grid);
+        }
+        allUnits = FindObjectsOfType<Unit>().ToList();
+    }
+
+    void CheckUnitOwnerReferences()
+    {
+        List<Unit> uncheckedUnits = new List<Unit>();
+
+        foreach (Unit unit in allUnits)
+        {
+            uncheckedUnits.Add(unit);
+        }
+
+        while (uncheckedUnits.Count > 0)
+        {
+            Unit uncheckedUnit = uncheckedUnits[0];
+            if (!uncheckedUnit.owner)
+            {
+                foreach (BaseController uncheckedController in players)
+                {
+                    foreach (Unit unit in uncheckedController.unitsControlled)
+                    {
+                        if (uncheckedUnit == unit)
+                        {
+                            uncheckedUnit.owner = uncheckedController;
+                            break;
+                        }
+                    }
+                    if (uncheckedUnit.owner) break;
+                }
+            }
+            uncheckedUnits.Remove(uncheckedUnit);
+        }
+    }
+
+
 
     public void CompleteRemaingPlayerList()
     {
@@ -31,12 +89,8 @@ public class GameManager : MonoBehaviour
             playersRemaining.Add(players[i]);
     }
 
-    public void InitGridRefAndUnitList()
+    public void UpdateUnitList()
     {
-        if (!grid)
-        {
-            grid = players[0].GetGridReference();
-        }
         allUnits = new List<Unit>();
         foreach (BaseController player in players)
         {

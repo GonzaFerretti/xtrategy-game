@@ -5,10 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Controller/Transition/Select Attack")]
 public class ControllerTransitionSelectAttackTarget : ControllerStateTransition
 {
-    public KeyCode requiredKeyCode;
     public override bool CheckCondition(BaseController controller)
     {
-        bool test = (controller as PlayerController).GetButtonState("changeMode") && controller.currentlySelectedUnit.attackState == CurrentActionState.notStarted;
+        bool test = (controller as PlayerController).GetButtonState("changeMode", true) && controller.currentlySelectedUnit.attackState == CurrentActionState.notStarted;
 
         return test;
     }

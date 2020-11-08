@@ -7,7 +7,7 @@ public class ControllerTransitionSkipTurn : ControllerStateTransition
 {
     public override bool CheckCondition(BaseController controller)
     {
-        return (controller as PlayerController).GetButtonState("skipTurn") || !controller.HasAnyMovesLeft();
+        return (controller as PlayerController).GetButtonState("skipTurn",true) || !controller.HasAnyMovesLeft();
     }
 
     public override void Transition(BaseController controller)

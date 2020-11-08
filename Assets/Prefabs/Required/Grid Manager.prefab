@@ -153,7 +153,7 @@ MonoBehaviour:
   grid: {fileID: 6409168009872196242}
   cellsRootTransform: {fileID: 1567534016}
   coversRootTransform: {fileID: 1969876207}
-  cellIndicatorsRootTransform: {fileID: 0}
+  cellIndicatorsRootTransform: {fileID: 3382640925051958261}
   gridCoordinates:
     reorderableList:
       canAdd: 1
@@ -209,11 +209,14 @@ MonoBehaviour:
   savedData: {fileID: 0}
   elementsDatabase: {fileID: 11400000, guid: 6ebd11e2af9456940b92dec658c18bfa, type: 2}
   gameManager: {fileID: 0}
-  gridIndicatorPrefab: {fileID: 0}
-  indicatorHeight: 0
-  coverIndicatorPrefab: {fileID: 7155721654018654700, guid: f2cf7a74987d4a045a43f96a15f2137f,
+  gridIndicatorPrefab: {fileID: 7021019133523631581, guid: 932832e07ebdd594ca6753f9bec4d409,
     type: 3}
-  IndicatorDistanceFromCoverPosition: {x: 0, y: 0}
+  indicatorHeight: 0
+  LowCoverIndicatorPrefab: {fileID: 4927382475311194824, guid: a11b35826a1eeac4faec543d56e5018f,
+    type: 3}
+  HighCoverIndicatorPrefab: {fileID: 240087029261144798, guid: f2cf7a74987d4a045a43f96a15f2137f,
+    type: 3}
+  coverIndicatorDistance: {x: 0, y: 0}
 --- !u!114 &1097648072
 MonoBehaviour:
   m_ObjectHideFlags: 0

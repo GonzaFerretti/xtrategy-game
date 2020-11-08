@@ -47,7 +47,5 @@ MonoBehaviour:
   gridManager: {fileID: 0}
   controllerStates: []
   currentState: {fileID: 0}
-  unitsControlled:
-  - {fileID: 0}
-  - {fileID: 0}
+  unitsControlled: []
   playerColor: {r: 1, g: 0, b: 0, a: 1}

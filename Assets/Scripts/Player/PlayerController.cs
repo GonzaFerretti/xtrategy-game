@@ -40,24 +40,28 @@ public class PlayerController : BaseController
         }
     }
 
-    public bool GetButtonState(string identifier)
+    public bool GetButtonState(string identifier, bool shouldConsume)
     {
-        return buttonPressStates.ContainsKey(identifier) && buttonPressStates[identifier];
+        if (buttonPressStates.ContainsKey(identifier))
+        {
+            bool initialState = buttonPressStates[identifier];
+            if (shouldConsume) buttonPressStates[identifier] = false;
+            return initialState;
+        }
+        return false;
     }
 
     public bool CheckUnitUISwitch()
     {
         int currentIndex = unitsControlled.IndexOf(currentlySelectedUnit);
         int difference = 0;
-        if (GetButtonState("PreviousUnit"))
+        if (GetButtonState("PreviousUnit", true))
         {
             difference = -1;
-            SetButtonState("PreviousUnit", false);
         }
-        else if (GetButtonState("NextUnit"))
+        else if (GetButtonState("NextUnit", true))
         {
             difference = 1;
-            SetButtonState("NextUnit", false);
         }
 
         if (difference != 0)

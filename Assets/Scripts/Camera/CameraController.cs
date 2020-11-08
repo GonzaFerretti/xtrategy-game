@@ -11,6 +11,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] float selectZoom;
     [SerializeField] float minZoom;
     [SerializeField] float zoomSensitivity;
+    [SerializeField] float minZoomMovementMultiplier;
+    [SerializeField] float maxZoomMovementMultiplier;
     FollowEvent currentFollowEvent = null;
 
     public void SetFollowTarget(Transform target)
@@ -31,7 +33,9 @@ public class CameraController : MonoBehaviour
     public void MoveCamera(Vector2 movementVector)
     {
         if (currentFollowEvent != null) InterruptTargetFollow();
-        transform.position += new Vector3(movementVector.x,0, movementVector.y) * Time.deltaTime * moveSpeed;
+        float currentZoomPercentage = Mathf.InverseLerp(minZoom,maxZoom, cam.orthographicSize);
+        float zoomMultiplier = Mathf.Lerp(minZoomMovementMultiplier, maxZoomMovementMultiplier, currentZoomPercentage);
+        transform.position += new Vector3(movementVector.x,0, movementVector.y) * Time.deltaTime * moveSpeed * zoomMultiplier;
     }
 
     IEnumerator FollowTarget(Vector3 groundPos)

@@ -21,4 +21,4 @@ MonoBehaviour:
   - YourTurn
   - NextUnit
   - PreviousUnit
-  requiredKeyCode: 98
+  - SwitchToMovement

@@ -66,17 +66,22 @@ public class BaseController : MonoBehaviour
             }
         }
         return hasAnyMovesLeft;
-    }    
+    }
 
     public GameGridManager GetGridReference()
     {
         return gridManager;
     }
 
+    public void SetGridReference(GameGridManager grid)
+    {
+        gridManager = grid;
+    }
+
     public void RemoveUnit(Unit unit)
     {
         unitsControlled.Remove(unit);
-        gridManager.gameManager.InitGridRefAndUnitList();
+        gridManager.gameManager.UpdateUnitList();
     }
 
     public virtual void InitControllerStates()

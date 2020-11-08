@@ -43,11 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95748e828e1dcc4459f3974bceca21d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  players:
-  - {fileID: 0}
-  - {fileID: 0}
+  players: []
   playersRemaining: []
   allUnits: []
+  hud: {fileID: 0}
   currentPlayer: {fileID: 0}
   grid: {fileID: 0}
   totalTurns: 9999
