@@ -20,10 +20,11 @@ public class GameManager : MonoBehaviour
     public void Start()
     {
         CheckGridManagerReferences();
-        CheckUnitOwnerReferences();
         InitUnitAndPlayerList();
+        CheckUnitOwnerReferences();
         GetHudReference();
         CompleteRemaingPlayerList();
+        SetUnitMaterials();
         CheckLoser();
         StartPlayerTurn();
     }
@@ -37,6 +38,14 @@ public class GameManager : MonoBehaviour
     {
         if (!grid) grid = FindObjectOfType<GameGridManager>();
         if (!grid.gameManager) grid.gameManager = this;
+    }
+
+    void SetUnitMaterials()
+    {
+        foreach (Unit unit in allUnits)
+        {
+            unit.SetTeamColor(unit.owner.playerColor);
+        }
     }
 
     void InitUnitAndPlayerList()
@@ -115,11 +124,6 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene("GameOver");
         }
-    }
-
-    public void SwitchMenu()
-    {
-            hud.SwitchMenu();
     }
 
     public void EndPlayerTurn()

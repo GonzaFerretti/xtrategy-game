@@ -15,6 +15,15 @@ public class CameraController : MonoBehaviour
     [SerializeField] float maxZoomMovementMultiplier;
     FollowEvent currentFollowEvent = null;
 
+    public void Start()
+    {
+        if (Application.isEditor)
+        {
+            zoomSensitivity = zoomSensitivity * 100f;
+            moveSpeed = moveSpeed * 100f;
+        }
+    }
+
     public void SetFollowTarget(Transform target)
     {
         if (Physics.Raycast(transform.position,transform.forward, out RaycastHit hit, float.MaxValue, 1 << LayerMask.NameToLayer("GroundBase")))

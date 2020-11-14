@@ -2,16 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class HUDManager : MonoBehaviour
 {
     Dictionary<string,GameObject> HUDElements;
     [SerializeField] GameObject menu;
     [SerializeField] Transform switchableItemsPivot;
+    [SerializeField] List<NamedButtonTrigger> namedButtonTriggers;
+    GameManager gm;
 
     public void Start()
     {
         InitElementList();
+        gm = GetComponent<GameManager>();
+    }
+
+    public void Awake()
+    {
+        InitNamedTriggers();
+    }
+
+    public void InitNamedTriggers()
+    {
+        PlayerController pc = FindObjectOfType<PlayerController>();
+
+        foreach (var trigger in namedButtonTriggers)
+        {
+            trigger.SetPlayerController(pc);
+        }
     }
 
     public void RestartLevel()

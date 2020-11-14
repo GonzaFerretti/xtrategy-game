@@ -116,6 +116,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menu: {fileID: 4612570648701700245}
   switchableItemsPivot: {fileID: 4612570650486090501}
+  namedButtonTriggers:
+  - {fileID: 190778225}
+  - {fileID: 1290367807}
+  - {fileID: 913690531}
+  - {fileID: 59928729}
+  - {fileID: 563318933}
 --- !u!1 &4612570648701700245
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,7 +433,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4612570648675753520}
         m_MethodName: SwitchMenu
         m_Mode: 1
         m_Arguments:
@@ -604,7 +610,7 @@ GameObject:
   - component: {fileID: 4612570648817978589}
   - component: {fileID: 4612570648817978586}
   - component: {fileID: 4612570648817978587}
-  - component: {fileID: 4612570648817978584}
+  - component: {fileID: 190778225}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -711,7 +717,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4612570648817978584
+--- !u!114 &190778225
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -720,40 +726,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4612570648817978566}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Script: {fileID: 11500000, guid: 1bf2a30c99cc116498e3fec12711349d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: OnButtonPressDown
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: skipTurn
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: OnButtonPressUp
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: skipTurn
-            m_BoolArgument: 0
-          m_CallState: 2
+  m_Delegates: []
+  buttonName: skipTurn
 --- !u!1 &4612570648921013830
 GameObject:
   m_ObjectHideFlags: 0
@@ -1046,7 +1023,7 @@ GameObject:
   - component: {fileID: 4612570649154323121}
   - component: {fileID: 4612570649154323134}
   - component: {fileID: 4612570649154323135}
-  - component: {fileID: 4612570649154323120}
+  - component: {fileID: 913690531}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1153,7 +1130,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4612570649154323120
+--- !u!114 &913690531
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1162,40 +1139,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4612570649154323133}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Script: {fileID: 11500000, guid: 1bf2a30c99cc116498e3fec12711349d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: OnButtonPressDown
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: changeMode
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: OnButtonPressUp
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: changeMode
-            m_BoolArgument: 0
-          m_CallState: 2
+  m_Delegates: []
+  buttonName: changeMode
 --- !u!1 &4612570649165590880
 GameObject:
   m_ObjectHideFlags: 0
@@ -1400,7 +1348,7 @@ GameObject:
   - component: {fileID: 4612570649384263690}
   - component: {fileID: 4612570649384263691}
   - component: {fileID: 4612570649384263688}
-  - component: {fileID: 4612570649384263689}
+  - component: {fileID: 59928729}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1507,7 +1455,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4612570649384263689
+--- !u!114 &59928729
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1516,40 +1464,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4612570649384263735}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Script: {fileID: 11500000, guid: 1bf2a30c99cc116498e3fec12711349d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: OnButtonPressDown
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: NextUnit
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: OnButtonPressUp
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: NextUnit
-            m_BoolArgument: 0
-          m_CallState: 2
+  m_Delegates: []
+  buttonName: NextUnit
 --- !u!1 &4612570649562272376
 GameObject:
   m_ObjectHideFlags: 0
@@ -1718,7 +1637,7 @@ GameObject:
   - component: {fileID: 4612570649887705359}
   - component: {fileID: 4612570649887705356}
   - component: {fileID: 4612570649887705357}
-  - component: {fileID: 4612570649887705354}
+  - component: {fileID: 563318933}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1825,7 +1744,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4612570649887705354
+--- !u!114 &563318933
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1834,40 +1753,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4612570649887705352}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Script: {fileID: 11500000, guid: 1bf2a30c99cc116498e3fec12711349d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: OnButtonPressDown
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: PreviousUnit
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: OnButtonPressUp
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: PreviousUnit
-            m_BoolArgument: 0
-          m_CallState: 2
+  m_Delegates: []
+  buttonName: PreviousUnit
 --- !u!1 &4612570649922826884
 GameObject:
   m_ObjectHideFlags: 0
@@ -2393,7 +2283,7 @@ GameObject:
   - component: {fileID: 4612570650510661677}
   - component: {fileID: 4612570650510661674}
   - component: {fileID: 4612570650510661675}
-  - component: {fileID: 4612570650510661672}
+  - component: {fileID: 1290367807}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -2500,7 +2390,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4612570650510661672
+--- !u!114 &1290367807
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2509,40 +2399,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4612570650510662102}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Script: {fileID: 11500000, guid: 1bf2a30c99cc116498e3fec12711349d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: OnButtonPressDown
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: changeMode
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: OnButtonPressUp
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: changeMode
-            m_BoolArgument: 0
-          m_CallState: 2
+  m_Delegates: []
+  buttonName: changeMode
 --- !u!1 &4612570650518117246
 GameObject:
   m_ObjectHideFlags: 0
@@ -2689,7 +2550,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 15.400024, y: 18}
+  m_AnchoredPosition: {x: 15.399902, y: 18}
   m_SizeDelta: {x: 70, y: 70}
   m_Pivot: {x: 0, y: 0}
 --- !u!1 &4612570650585215476

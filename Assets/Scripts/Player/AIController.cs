@@ -145,12 +145,18 @@ public class AIController : BaseController
             currentActions[id].endedSuccesfully = false;
         }
 
-        attackQuery.EndQuery();
+        attackQuery.End();
     }
 
     public IEnumerator MoveTowardsClosestEnemy(Unit actingUnit)
     {
-        Vector3Int[] pathToClosestEnemy = GetGridReference().GetBestPathToGetToClosestUnit(actingUnit, GetUnitsFromOthers());
+        GameGridManager grid = GetGridReference();
+        AsyncPathQuery query = grid.StartBestPathToClosestUnitQuery(actingUnit, GetUnitsFromOthers());
+        while (!query.hasFinished)
+        {
+            yield return null;
+        }
+        Vector3Int[] pathToClosestEnemy = query.GetPathArray();
         if (pathToClosestEnemy.Length > 0)
         {
             int movementRange = actingUnit.movementRange;
@@ -169,7 +175,17 @@ public class AIController : BaseController
 
     public IEnumerator MoveTowardsCoverCloseToEnemy(Unit actingUnit, int id)
     {
-        Vector3Int[] pathToClosestEnemy = GetGridReference().GetPathToCoverClosestToEnemy(actingUnit, GetUnitsFromOthers());
+        AsyncPathQuery query = GetGridReference().StartPathCoverClosestToEnemyQuery(actingUnit, GetUnitsFromOthers());
+
+        while (!query.hasFinished)
+        {
+            yield return null;
+        }
+
+        Vector3Int[] pathToClosestEnemy = query.GetPathArray();
+
+        query.End();
+
         if (pathToClosestEnemy.Length > 0)
         {
             int movementRange = actingUnit.movementRange;

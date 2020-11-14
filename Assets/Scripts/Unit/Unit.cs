@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public class Unit : GameGridElement
@@ -17,7 +18,7 @@ public class Unit : GameGridElement
     [HideInInspector] public int damage;
     public UnitAttributes unitAttributes;
     [HideInInspector] public AIBehaviour AI;
-    public Animator anim;
+    [HideInInspector] public Animator anim;
     public GameObject model;
 
     [SerializeField] SoundManager soundManager;
@@ -102,6 +103,34 @@ public class Unit : GameGridElement
         SetUnitAttributes();
         //InitShader();
         soundManager = FindObjectOfType<SoundManager>();
+        if (!grid) grid = FindObjectOfType<GameGridManager>();
+        InitModel();
+    }
+
+    void InitModel()
+    {
+        GameObject go = Instantiate(model, transform);
+        go.transform.localPosition = Vector3.zero;
+        anim = go.GetComponent<Animator>();
+        model = go;
+    }
+
+    public void SetTeamColor(Color teamColor)
+    {
+        StartCoroutine(WaitForModelAndSetTeamColor(teamColor));
+    }
+
+    IEnumerator WaitForModelAndSetTeamColor(Color teamColor)
+    {
+        while (model.gameObject.scene.name == null)
+        {
+            yield return null;
+        }
+        Renderer meshRen = model.transform.GetChild(1).GetComponent<Renderer>();
+        Material baseMaterial = meshRen.material;
+        Material modifiedMaterial = Instantiate<Material>(baseMaterial);
+        modifiedMaterial.SetColor("_Color", teamColor);
+        meshRen.material = modifiedMaterial;
     }
 
     public void ResetActions()
@@ -176,7 +205,18 @@ public class Unit : GameGridElement
         moveState = CurrentActionState.inProgress;
         anim.Play("move");
         currentCovers = new List<Cover>();
-        Vector3Int[] path = grid.CalculateShortestPath(currentCell.GetCoordinates(), destinationCoords);
+
+        AsyncPathQuery query = grid.StartShortestPathQuery(currentCell.GetCoordinates(), destinationCoords);
+
+        while (!query.hasFinished)
+        {
+            yield return null;
+        }
+
+        Vector3Int[] path = query.GetPathArray();
+
+        query.End();
+
         Vector3 lastPosition = transform.position;
         for (int i = 0; i < path.Length; i++)
         {
@@ -223,7 +263,7 @@ public class Unit : GameGridElement
 
         possibleMovements = currentRangeQuery.cellsInRange;
         grid.EnableCellIndicators(possibleMovements, GridIndicatorMode.possibleMovement);
-        currentRangeQuery.EndQuery();
+        currentRangeQuery.End();
     }
 
     public IEnumerator WaitForAttackRangeQuery()
@@ -237,7 +277,7 @@ public class Unit : GameGridElement
         List<Vector3Int> allyPositionsInRange = possibleAttacks.Intersect(owner.GetOwnedUnitsPosition()).ToList();
         possibleAttacks.RemoveAll(x => allyPositionsInRange.Contains(x));
         grid.EnableCellIndicators(possibleAttacks, GridIndicatorMode.possibleAttack);
-        currentRangeQuery.EndQuery();
+        currentRangeQuery.End();
     }
 
     public virtual void Deselect()
