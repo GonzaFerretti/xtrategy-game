@@ -60342,14 +60342,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 376188351097875309, guid: 8ff19d27e94243d4180840fc93cd07f7,
         type: 3}
-      propertyPath: unitsControlled.Array.size
-      value: 3
+      propertyPath: controllerStates.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 376188351097875309, guid: 8ff19d27e94243d4180840fc93cd07f7,
         type: 3}
-      propertyPath: gridManager
-      value: 
-      objectReference: {fileID: 805588128}
+      propertyPath: unitsControlled.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 376188351097875309, guid: 8ff19d27e94243d4180840fc93cd07f7,
         type: 3}
       propertyPath: unitsControlled.Array.data[0]
@@ -60360,11 +60360,6 @@ PrefabInstance:
       propertyPath: unitsControlled.Array.data[1]
       value: 
       objectReference: {fileID: 295535109}
-    - target: {fileID: 376188351097875309, guid: 8ff19d27e94243d4180840fc93cd07f7,
-        type: 3}
-      propertyPath: currentlySelectedUnit
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 376188351097875309, guid: 8ff19d27e94243d4180840fc93cd07f7,
         type: 3}
       propertyPath: unitsControlled.Array.data[2]

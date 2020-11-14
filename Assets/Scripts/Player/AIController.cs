@@ -17,6 +17,7 @@ public class AIController : BaseController
         foreach (Unit unit in unitsControlled)
         {
             currentlySelectedUnit = unit;
+            Camera.main.GetComponent<CameraController>().SetFollowTarget(unit.transform);
             yield return StartCoroutine(unit.AI.ExecuteBehaviour(this, unit));
             yield return new WaitForSeconds(2);
         }

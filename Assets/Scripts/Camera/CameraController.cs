@@ -28,6 +28,7 @@ public class CameraController : MonoBehaviour
     {
         if (Physics.Raycast(transform.position,transform.forward, out RaycastHit hit, float.MaxValue, 1 << LayerMask.NameToLayer("GroundBase")))
         {
+            if (currentFollowEvent != null) InterruptTargetFollow();
             Vector3 hitPoint = hit.transform.position;
             currentFollowEvent = new FollowEvent(target);
             StartCoroutine(FollowTarget(hitPoint));
@@ -56,6 +57,7 @@ public class CameraController : MonoBehaviour
 
         while (currentTime < transitionTime)
         {
+            if (currentFollowEvent == null) break;
             if (currentFollowEvent.shouldStop)
             {
                 break;
