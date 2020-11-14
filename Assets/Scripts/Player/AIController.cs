@@ -16,9 +16,11 @@ public class AIController : BaseController
         yield return new WaitForSeconds(1.5f);
         foreach (Unit unit in unitsControlled)
         {
+            currentlySelectedUnit = unit;
             yield return StartCoroutine(unit.AI.ExecuteBehaviour(this, unit));
             yield return new WaitForSeconds(2);
         }
+        currentlySelectedUnit = null;
         gridManager.gameManager.EndPlayerTurn();
 
     }
@@ -122,6 +124,7 @@ public class AIController : BaseController
     public IEnumerator AttemptAttack(Unit actingUnit, int id)
     {
         AsyncRangeQuery attackQuery = actingUnit.StartAttackRangeQuery();
+        Debug.Log("attempting attack");
 
         while (!attackQuery.hasFinished)
         {
@@ -151,6 +154,7 @@ public class AIController : BaseController
     public IEnumerator MoveTowardsClosestEnemy(Unit actingUnit)
     {
         GameGridManager grid = GetGridReference();
+        Debug.Log("Start Closest To Enemy Move");
         AsyncPathQuery query = grid.StartBestPathToClosestUnitQuery(actingUnit, GetUnitsFromOthers());
         while (!query.hasFinished)
         {

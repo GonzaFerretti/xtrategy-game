@@ -50,7 +50,8 @@ public class GameManager : MonoBehaviour
 
     void InitUnitAndPlayerList()
     {
-        players = FindObjectsOfType<BaseController>().ToList();
+        if (players.Count == 0)
+            players = FindObjectsOfType<BaseController>().ToList();
         foreach (BaseController player in players)
         {
             player.SetGridReference(grid);
