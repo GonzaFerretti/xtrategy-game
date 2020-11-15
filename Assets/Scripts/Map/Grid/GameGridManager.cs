@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Jobs;
+using Unity.Collections;
 
 public class GameGridManager : MonoBehaviour
 {
@@ -15,6 +17,7 @@ public class GameGridManager : MonoBehaviour
     public Transform coversRootTransform;
     public Transform cellIndicatorsRootTransform;
     public Dictionary<Vector3Int, List<Vector3Int>> neighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
+    public NativeMultiHashMap<Vector3Int, Vector3Int> neighbourDictJob;
 
 
     public GridCoordinates gridCoordinates;
@@ -185,6 +188,18 @@ public class GameGridManager : MonoBehaviour
         return gridCoordinates[coord];
     }
 
+    public JobHandle ScheduleShortestPathJob(Vector3Int startCoordinates, Vector3Int destinationCoordinates, out ShortestPathJob job)
+    {
+        job = new ShortestPathJob(startCoordinates,gridCoordinates.Count, destinationCoordinates,neighbourDictJob, new NativeList<Vector3Int>(Allocator.TempJob));
+        return job.Schedule();
+    }
+
+    public JobHandle ScheduleShortestPathJob(Vector3Int startCoordinates, Vector3Int destinationCoordinates, out ShortestPathJob job, JobHandle previousJobHandle)
+    {
+        job = new ShortestPathJob(startCoordinates, gridCoordinates.Count, destinationCoordinates, neighbourDictJob, new NativeList<Vector3Int>(Allocator.TempJob));
+        return job.Schedule(previousJobHandle);
+    }
+
     public AsyncPathQuery StartShortestPathQuery(Vector3Int startCoordinates, Vector3Int destinationCoordinates)
     {
         int queryId = GetAvailableQueryId();
@@ -216,16 +231,6 @@ public class GameGridManager : MonoBehaviour
                         node = possibleNode;
                 }
             }
-
-            /*
-            for (int i = 1; i < openSet.Count; i++)
-            {
-                if (openSet.Values.ElementAt(i).GetFCost() < node.GetFCost() || openSet.Values.ElementAt(i).GetFCost() == node.GetFCost())
-                {
-                    if (openSet.Values.ElementAt(i).hCost < node.hCost)
-                        node = openSet.Values.ElementAt(i);
-                }
-            }*/
 
             openSet.Remove(node.coordinates);
             closedSet.Add(node.coordinates, node);
@@ -322,9 +327,15 @@ public class GameGridManager : MonoBehaviour
 
     public void GenerateAllPossibleNeighbours()
     {
+        neighbourDictJob = new NativeMultiHashMap<Vector3Int, Vector3Int>(gridCoordinates.Count, Allocator.Persistent);
         foreach (var node in gridCoordinates)
         {
-            neighbourDict.Add(node.Key, GetViableNeighbourCellsForMovement(node.Key));
+            List<Vector3Int> possibleNeighbours = GetViableNeighbourCellsForMovement(node.Key);
+            neighbourDict.Add(node.Key, possibleNeighbours);
+            foreach (var neighbour in possibleNeighbours)
+            {
+                neighbourDictJob.Add(node.Key,neighbour);
+            }
         }
     }
 
@@ -682,10 +693,24 @@ public class GameGridManager : MonoBehaviour
         return currentQuery;
     }
 
+    public bool AreAllHandlesComplete(NativeList<JobHandle> handleList)
+    {
+        foreach (var handle in handleList)
+        {
+            if (!handle.IsCompleted) return false;
+        }
+        return true;
+    }
+
     public IEnumerator ProcessPathCoverClosestToEnemyQuery(Unit thisUnit, List<Unit> otherUnits, int queryId)
     {
         Dictionary<Vector3Int[], int> possiblePaths = new Dictionary<Vector3Int[], int>();
         AsyncPathQuery query = currentQueries[queryId] as AsyncPathQuery;
+        NativeList<JobHandle> pathToCoverJobHandles = new NativeList<JobHandle>(Allocator.TempJob);
+        List<ShortestPathJob> pathToCoverJobs = new List<ShortestPathJob>();
+
+        NativeList<JobHandle> coverToTargetJobHandles = new NativeList<JobHandle>(Allocator.TempJob);
+        List<ShortestPathJob> coverToTargetJobs = new List<ShortestPathJob>();
 
         foreach (Unit possibleTargetUnit in otherUnits)
         {
@@ -695,32 +720,34 @@ public class GameGridManager : MonoBehaviour
                 {
                     if (possiblePositionToCover == thisUnit.GetCoordinates()) continue;
 
-                    AsyncPathQuery pathToPositionQuery = StartShortestPathQuery(thisUnit.GetCoordinates(), possiblePositionToCover);
+                    pathToCoverJobHandles.Add(ScheduleShortestPathJob(thisUnit.GetCoordinates(), possiblePositionToCover, out ShortestPathJob pathToCoverJob));
+                    pathToCoverJobs.Add(pathToCoverJob);
 
-                    while (!pathToPositionQuery.hasFinished)
-                    {
-                        yield return null;
-                    }
+                    coverToTargetJobHandles.Add(ScheduleShortestPathJob(possiblePositionToCover, possibleTargetUnit.GetCoordinates(), out ShortestPathJob CoverToTargetJob, pathToCoverJobHandles[pathToCoverJobHandles.Length -1]));
+                    coverToTargetJobs.Add(CoverToTargetJob);
 
-                    Vector3Int[] pathToPosition = pathToPositionQuery.GetPathArray();
-
-                    pathToPositionQuery.End();
-
-                    AsyncPathQuery pathFromCoverToEnemyQuery = StartShortestPathQuery(thisUnit.GetCoordinates(), possiblePositionToCover);
-
-                    while (!pathFromCoverToEnemyQuery.hasFinished)
-                    {
-                        yield return null;
-                    }
-
-                    Vector3Int[] pathFromCoverToEnemy = pathFromCoverToEnemyQuery.GetPathArray();
-
-                    pathFromCoverToEnemyQuery.End();
-
-                    if (!possiblePaths.ContainsKey(pathToPosition)) possiblePaths.Add(pathToPosition, pathFromCoverToEnemy.Length);
+                    //if (!possiblePaths.ContainsKey(pathToPosition)) possiblePaths.Add(pathToPosition, pathFromCoverToEnemy.Length);
 
                 }
             }
+        }
+
+        while (!AreAllHandlesComplete(pathToCoverJobHandles))
+        {
+            yield return null;
+        }
+        while (!AreAllHandlesComplete(coverToTargetJobHandles))
+        {
+            yield return null;
+        }
+
+        for (int i = 0; i < pathToCoverJobHandles.Length; i++)
+        {
+            Vector3Int[] pathToCover = pathToCoverJobs[i].finalPath.ToArray();
+            Vector3Int[] coverToTarget = coverToTargetJobs[i].finalPath.ToArray();
+            if (!possiblePaths.ContainsKey(pathToCover)) possiblePaths.Add(pathToCover, coverToTarget.Length);
+            pathToCoverJobs[i].finalPath.Dispose();
+            coverToTargetJobs[i].finalPath.Dispose();
         }
 
         int stepsToUnitFromClosestCover = int.MaxValue;
