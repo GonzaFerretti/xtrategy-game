@@ -15,6 +15,14 @@ public class CameraController : MonoBehaviour
     [SerializeField] float maxZoomMovementMultiplier;
     FollowEvent currentFollowEvent = null;
 
+
+    [SerializeField] float minX;
+    [SerializeField] float maxX;
+
+    [SerializeField] float minZ;
+    [SerializeField] float maxZ;
+
+
     public void Start()
     {
         if (Application.isEditor)
@@ -45,7 +53,13 @@ public class CameraController : MonoBehaviour
         if (currentFollowEvent != null) InterruptTargetFollow();
         float currentZoomPercentage = Mathf.InverseLerp(minZoom,maxZoom, cam.orthographicSize);
         float zoomMultiplier = Mathf.Lerp(minZoomMovementMultiplier, maxZoomMovementMultiplier, currentZoomPercentage);
-        transform.position += new Vector3(movementVector.x,0, movementVector.y) * Time.deltaTime * moveSpeed * zoomMultiplier;
+        transform.position += LimitVectorToBoundaries(new Vector3(movementVector.x,0, movementVector.y) * Time.deltaTime * moveSpeed * zoomMultiplier);
+    }
+
+    Vector3 LimitVectorToBoundaries(Vector3 baseVector)
+    {
+        return baseVector;
+        //return new Vector3(Mathf.Clamp(baseVector.x, minX, maxX), baseVector.y, Mathf.Clamp(baseVector.z, minZ, maxZ));
     }
 
     IEnumerator FollowTarget(Vector3 groundPos)
@@ -64,7 +78,7 @@ public class CameraController : MonoBehaviour
             }
             Vector3 targetPosition = new Vector3(currentFollowEvent.target.position.x, selectZoom, currentFollowEvent.target.position.z);
             Vector3 currentPosition = Vector3.Lerp(startPos, targetPosition, currentTime / transitionTime);
-            transform.position = new Vector3(currentPosition.x - offset.x, transform.position.y, currentPosition.z - offset.z);
+            transform.position = LimitVectorToBoundaries(new Vector3(currentPosition.x - offset.x, transform.position.y, currentPosition.z - offset.z));
             cam.orthographicSize = currentPosition.y;
             currentTime = Time.time - startTime;
             yield return null;

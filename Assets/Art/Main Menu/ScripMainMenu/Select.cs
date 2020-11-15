@@ -7,6 +7,11 @@ public class Select : MonoBehaviour
 {
     public string nombreEscenaDestino;
 
+    public void Start()
+    {
+        Screen.orientation = ScreenOrientation.Landscape;
+    }
+
     public void CambiarEscena()
     {
 
