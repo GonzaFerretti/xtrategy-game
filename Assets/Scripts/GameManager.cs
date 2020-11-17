@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public List<BaseController> playersRemaining;
     public List<Unit> allUnits;
     public HUDManager hud;
+    SaveManager saveManager;
+    bool hasUsedPower = false;
 
     public BaseController currentPlayer;
     [SerializeField] GameGridManager grid;
@@ -19,6 +21,25 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
+        saveManager = FindObjectOfType<SaveManager>();
+        if (saveManager.isLoadingFromSave)
+        {
+            SetupGameFromLoad();
+        }
+        ExecuteInitMethods();
+    }
+
+    void SetupGameFromLoad()
+    {
+        SaveData saveData = saveManager.Load();
+        if (saveData != null)
+        {
+
+        }
+    }
+
+    public void ExecuteInitMethods()
+    {
         CheckGridManagerReferences();
         InitUnitAndPlayerList();
         CheckUnitOwnerReferences();
@@ -27,6 +48,11 @@ public class GameManager : MonoBehaviour
         SetUnitMaterials();
         CheckLoser();
         StartPlayerTurn();
+    }
+
+    public void SaveMatch()
+    {
+        saveManager.ProcessDataAndSave(SceneManager.GetActiveScene().name, allUnits, hasUsedPower, currentPlayer is AIController);
     }
 
     void GetHudReference()
@@ -154,7 +180,7 @@ public class GameManager : MonoBehaviour
 
     void EndMatchNoTurnsLeft()
     {
-       BaseController loserPlayer = players.OrderBy(player => player.GetAmountOfUnitsLeft()).Last();
-       loserPlayer.DestroyPlayer();
+        BaseController loserPlayer = players.OrderBy(player => player.GetAmountOfUnitsLeft()).Last();
+        loserPlayer.DestroyPlayer();
     }
 }

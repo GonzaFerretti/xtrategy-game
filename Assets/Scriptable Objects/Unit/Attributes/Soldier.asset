@@ -19,3 +19,5 @@ MonoBehaviour:
   damage: 3
   aiBehaviour: {fileID: 11400000, guid: f7ed7888e75d7a74a9adce2ac213f3bb, type: 2}
   attackSound: {fileID: 11400000, guid: 930a90c393486d74b890d1046b051ab8, type: 2}
+  defaultPrefab: {fileID: 241448454624865456, guid: 99406b8408547a84e83a8f8036062b51,
+    type: 3}

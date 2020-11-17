@@ -15,7 +15,7 @@ public class HUDManager : MonoBehaviour
     public void Start()
     {
         InitElementList();
-        gm = GetComponent<GameManager>();
+        gm = FindObjectOfType<GameManager>();
     }
 
     public void Awake()
@@ -46,6 +46,11 @@ public class HUDManager : MonoBehaviour
     public void SwitchMenu()
     {
         menu.SetActive(!menu.activeSelf);
+    }
+
+    public void Save()
+    {
+        gm.SaveMatch();
     }
 
     public void EnableHudElementByName(string name)

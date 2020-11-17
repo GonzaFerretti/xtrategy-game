@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Unit/UnitAttributes")]
+[CreateAssetMenu(menuName = "Unit/UnitAttributes")] [System.Serializable]
 public class UnitAttributes : ScriptableObject
 {
     public int maxHp;
@@ -13,4 +13,5 @@ public class UnitAttributes : ScriptableObject
     public AIBehaviour aiBehaviour;
 
     public SoundClip attackSound;
+    public GameObject defaultPrefab;
 }
