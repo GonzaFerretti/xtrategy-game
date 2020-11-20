@@ -12,7 +12,7 @@ public class HUDManager : MonoBehaviour
     [SerializeField] List<NamedButtonTrigger> namedButtonTriggers;
     GameManager gm;
 
-    public void Start()
+    public void Init()
     {
         InitElementList();
         gm = FindObjectOfType<GameManager>();

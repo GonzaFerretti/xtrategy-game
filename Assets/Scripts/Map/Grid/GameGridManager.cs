@@ -37,7 +37,7 @@ public class GameGridManager : MonoBehaviour
     [SerializeField] Vector2 coverIndicatorDistance;
 
 
-    public void Start()
+    public void Init()
     {
         BuildCellsFromData();
         BuildCoversFromData();
@@ -98,7 +98,7 @@ public class GameGridManager : MonoBehaviour
 
     public GameGridCell GetRandomUnusedCell()
     {
-        GameGridCell cell = unusedCells[Random.Range(1, unusedCells.Count)];
+        GameGridCell cell = unusedCells[Random.Range(0, unusedCells.Count - 1)];
         unusedCells.Remove(cell);
         return cell;
     }

@@ -5,9 +5,9 @@ using UnityEngine;
 public class AIController : BaseController
 {
     public Dictionary<int, AsyncAIActionResult> currentActions = new Dictionary<int, AsyncAIActionResult>();
-    public override void StartTurn()
+    public override void StartTurn(bool shouldRestart = false)
     {
-        base.StartTurn();
+        base.StartTurn(shouldRestart);
         StartCoroutine(ExecuteUnitBehaviours());
     }
 
@@ -17,9 +17,12 @@ public class AIController : BaseController
         foreach (Unit unit in unitsControlled)
         {
             currentlySelectedUnit = unit;
-            Camera.main.GetComponent<CameraController>().SetFollowTarget(unit.transform);
-            yield return StartCoroutine(unit.AI.ExecuteBehaviour(this, unit));
-            yield return new WaitForSeconds(2);
+            if (currentlySelectedUnit.HasActionsLeft())
+            {
+                Camera.main.GetComponent<CameraController>().SetFollowTarget(unit.transform);
+                yield return StartCoroutine(unit.AI.ExecuteBehaviour(this, unit));
+                yield return new WaitForSeconds(2);
+            }
         }
         currentlySelectedUnit = null;
         gridManager.gameManager.EndPlayerTurn();
@@ -40,7 +43,6 @@ public class AIController : BaseController
 
     public override void Update()
     {
-
     }
 
     public bool WaitForAction()
@@ -125,7 +127,14 @@ public class AIController : BaseController
     public IEnumerator AttemptAttack(Unit actingUnit, int id)
     {
         AsyncRangeQuery attackQuery = actingUnit.StartAttackRangeQuery();
-        Debug.Log("attempting attack");
+
+        if (currentlySelectedUnit.attackState == CurrentActionState.ended)
+        {
+            currentActions[id].endedSuccesfully = false;
+            yield break;
+        }
+
+        currentlySelectedUnit.attackState = CurrentActionState.inProgress;
 
         while (!attackQuery.hasFinished)
         {
@@ -154,9 +163,15 @@ public class AIController : BaseController
 
     public IEnumerator MoveTowardsClosestEnemy(Unit actingUnit)
     {
+        if (currentlySelectedUnit.moveState == CurrentActionState.ended)
+        {
+            yield break;
+        }
+
         GameGridManager grid = GetGridReference();
         Debug.Log("Start Closest To Enemy Move");
         AsyncPathQuery query = grid.StartBestPathToClosestUnitQuery(actingUnit, GetUnitsFromOthers());
+        currentlySelectedUnit.moveState = CurrentActionState.inProgress;
         while (!query.hasFinished)
         {
             yield return null;
@@ -180,8 +195,14 @@ public class AIController : BaseController
 
     public IEnumerator MoveTowardsCoverCloseToEnemy(Unit actingUnit, int id)
     {
-        AsyncPathQuery query = GetGridReference().StartPathCoverClosestToEnemyQuery(actingUnit, GetUnitsFromOthers());
+        if (currentlySelectedUnit.moveState == CurrentActionState.ended)
+        {
+            yield break;
+        }
+        currentActions[id].endedSuccesfully = false;
 
+        AsyncPathQuery query = GetGridReference().StartPathCoverClosestToEnemyQuery(actingUnit, GetUnitsFromOthers());
+        currentlySelectedUnit.moveState = CurrentActionState.inProgress;
         while (!query.hasFinished)
         {
             yield return null;

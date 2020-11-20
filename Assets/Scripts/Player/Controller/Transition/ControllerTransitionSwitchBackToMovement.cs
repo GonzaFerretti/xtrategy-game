@@ -7,7 +7,6 @@ public class ControllerTransitionSwitchBackToMovement : ControllerStateTransitio
 {
     public override bool CheckCondition(BaseController controller)
     {
-
         return (controller as PlayerController).GetButtonState("changeMode", true) && controller.currentlySelectedUnit.moveState == CurrentActionState.notStarted;
     }
 

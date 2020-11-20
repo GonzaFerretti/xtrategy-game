@@ -15,7 +15,7 @@ public class BaseController : MonoBehaviour
     public List<Unit> unitsControlled;
     public Color playerColor;
 
-    public virtual void Start()
+    public virtual void Init()
     {
         InitControllerStates();
         SetUnitOwnership();
@@ -78,10 +78,10 @@ public class BaseController : MonoBehaviour
         gridManager = grid;
     }
 
-    public void RemoveUnit(Unit unit)
+    public void RemoveUnit(Unit unit, bool updateUnitList = true)
     {
         unitsControlled.Remove(unit);
-        gridManager.gameManager.UpdateUnitList();
+        if (updateUnitList) gridManager.gameManager.UpdateUnitList();
     }
 
     public virtual void InitControllerStates()
@@ -110,8 +110,9 @@ public class BaseController : MonoBehaviour
         currentState.OnUpdate();
     }
 
-    public virtual void StartTurn()
+    public virtual void StartTurn(bool shouldResetUnits = true)
     {
+        if (!shouldResetUnits) return;
         foreach (Unit unit in unitsControlled)
         {
             unit.ResetActions();

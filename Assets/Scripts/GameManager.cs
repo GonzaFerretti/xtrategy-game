@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
     public List<Unit> allUnits;
     public HUDManager hud;
     SaveManager saveManager;
+    SoundManager soundManager;
     bool hasUsedPower = false;
 
     public BaseController currentPlayer;
@@ -21,33 +23,107 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        saveManager = FindObjectOfType<SaveManager>();
+        ExecuteReferenceFillingMethods();
+        grid.Init();
         if (saveManager.isLoadingFromSave)
         {
             SetupGameFromLoad();
         }
+        else
+        {
+            PrepareAlreadyExistingUnits();
+        }
         ExecuteInitMethods();
+        if (saveManager.isLoadingFromSave)
+        {
+            saveManager.ResetStagedData();
+        }
+    }
+
+    void SanitizeControllerUnitList()
+    {
+        foreach (var player in players)
+        {
+            player.unitsControlled.Clear();
+        }
+    }
+
+    void PrepareAlreadyExistingUnits()
+    {
+        allUnits = FindObjectsOfType<Unit>().ToList();
+        foreach (Unit unit in allUnits)
+        {
+            unit.InitUnit(grid, soundManager);
+        }
+    }
+
+    public void CleanExistingUnits()
+    {
+        foreach (var unit in FindObjectsOfType<Unit>())
+        {
+            Destroy(unit.gameObject);
+        }
     }
 
     void SetupGameFromLoad()
     {
-        SaveData saveData = saveManager.Load();
+        SaveData saveData = saveManager.stagedSaveDataToLoad;
         if (saveData != null)
         {
-
+            CleanExistingUnits();
+            LoadUnits(saveData);
+            UpdatePowerStatus(saveData.hasUsedPower);
+            SetTurn(saveData.isEnemyTurn);
+            SanitizeControllerUnitList();
         }
+    }
+
+    void UpdatePowerStatus(bool hasUsedPower)
+    {
+        // TO DO
+    }
+
+    void SetTurn(bool isEnemyTurn)
+    {
+        currentPlayer = (isEnemyTurn) ? (BaseController)FindObjectOfType<AIController>() : (BaseController)FindObjectOfType<PlayerController>();
+    }
+
+    void LoadUnits(SaveData saveData)
+    {
+        foreach (var unitInfo in saveData.units)
+        {
+            Unit unit = Instantiate(unitInfo.unitType.defaultPrefab).GetComponent<Unit>();
+            unit.InitUnit(grid, soundManager, unitInfo);
+            allUnits.Add(unit);
+        }
+    }
+
+    public void ExecuteReferenceFillingMethods()
+    {
+        CheckGridManagerReferences();
+        GetHudReference();
+        saveManager = FindObjectOfType<SaveManager>();
+        soundManager = FindObjectOfType<SoundManager>();
+        InitUnitAndPlayerList();
     }
 
     public void ExecuteInitMethods()
     {
-        CheckGridManagerReferences();
-        InitUnitAndPlayerList();
         CheckUnitOwnerReferences();
-        GetHudReference();
         CompleteRemaingPlayerList();
         SetUnitMaterials();
+        hud.Init();
+        ExecuteControllerStarts();
         CheckLoser();
-        StartPlayerTurn();
+        StartPlayerTurn(saveManager.isLoadingFromSave);
+    }
+
+    private void ExecuteControllerStarts()
+    {
+        foreach (var controller in players)
+        {
+            controller.Init();
+        }
     }
 
     public void SaveMatch()
@@ -82,11 +158,15 @@ public class GameManager : MonoBehaviour
         {
             player.SetGridReference(grid);
         }
-        allUnits = FindObjectsOfType<Unit>().ToList();
     }
 
     void CheckUnitOwnerReferences()
     {
+        foreach (BaseController uncheckedController in players)
+        {
+            uncheckedController.unitsControlled.RemoveAll(item => item == null);
+        }
+
         List<Unit> uncheckedUnits = new List<Unit>();
 
         foreach (Unit unit in allUnits)
@@ -112,32 +192,48 @@ public class GameManager : MonoBehaviour
                     if (uncheckedUnit.owner) break;
                 }
             }
+            else
+            {
+                foreach (BaseController uncheckedController in players)
+                {
+                    if (uncheckedController == uncheckedUnit.owner)
+                    {
+                        if (!uncheckedController.unitsControlled.Contains(uncheckedUnit))
+                            uncheckedController.unitsControlled.Add(uncheckedUnit);
+
+                        break;
+                    }
+                }
+            }
             uncheckedUnits.Remove(uncheckedUnit);
         }
     }
 
 
-
     public void CompleteRemaingPlayerList()
     {
         playersRemaining = new List<BaseController>();
-        for (int i = 0; i < players.Count; i++)
-            playersRemaining.Add(players[i]);
-    }
+        int remainingIndex = 0;
+        int playersIndex = 0;
 
-    public void UpdateUnitList()
-    {
-        allUnits = new List<Unit>();
-        foreach (BaseController player in players)
+        if (currentPlayer)
         {
-            allUnits.AddRange(player.unitsControlled);
-            if (player.unitsControlled.Count == 0)
-            {
-                players.Remove(player);
-                break;
-            }
+            playersRemaining.Insert(0, currentPlayer);
+            remainingIndex = 1;
+            players.Remove(currentPlayer);
         }
-        CheckLoser();
+
+        do
+        {
+            playersRemaining.Add(players[playersIndex]);
+            remainingIndex++;
+            playersIndex++;
+        } while (remainingIndex < players.Count);
+
+        if (currentPlayer)
+        {
+            players.Insert(0, currentPlayer);
+        }
     }
 
     public void CheckLoser()
@@ -165,6 +261,7 @@ public class GameManager : MonoBehaviour
             if (currentTurn < totalTurns)
             {
                 currentTurn++;
+                currentPlayer = null;
                 CompleteRemaingPlayerList();
                 StartPlayerTurn();
             }
@@ -172,10 +269,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void StartPlayerTurn()
+    void StartPlayerTurn(bool isResumingAfterSave = false)
     {
         currentPlayer = playersRemaining[0];
-        currentPlayer.StartTurn();
+        currentPlayer.StartTurn(!isResumingAfterSave);
+    }
+
+    public void UpdateUnitList()
+    {
+        allUnits = new List<Unit>();
+        foreach (BaseController player in players)
+        {
+            allUnits.AddRange(player.unitsControlled);
+            if (player.unitsControlled.Count == 0)
+            {
+                players.Remove(player);
+                break;
+            }
+        }
+        CheckLoser();
     }
 
     void EndMatchNoTurnsLeft()

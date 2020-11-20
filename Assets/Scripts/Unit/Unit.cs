@@ -77,8 +77,13 @@ public class Unit : GameGridElement
             model.transform.forward = (attackingUnit.transform.position - transform.position).normalized;
             anim.Play("hit");
             soundManager.Play(sounds.GetSoundClip("hit"));
-            hpBar.UpdateHPbar(1f * currentHp / (1f * unitAttributes.maxHp));
+            UpdateHpBar();
         }
+    }
+
+    public void UpdateHpBar()
+    {
+        hpBar.UpdateHPbar(1f * currentHp / (1f * unitAttributes.maxHp));
     }
 
     IEnumerator DestroyBody(GameObject body)
@@ -87,24 +92,32 @@ public class Unit : GameGridElement
         Destroy(body);
     }
 
-    public void Update()
+    public void InitUnit(GameGridManager gridReference, SoundManager soundMReference, UnitSaveInfo savedInfo = null)
     {
-        // REMOVE LATER
-        if (!currentCell)
-        {
-            currentCell = grid.GetRandomUnusedCell();
-            transform.position = currentCell.transform.position;
-            currentCovers = grid.GetCoversFromCoord(GetCoordinates());
-        }
+        SetUnitAttributes(savedInfo != null);
+        soundManager = soundMReference;
+        grid = gridReference;
+        SetupAfterLoad(savedInfo);
+        InitModel();
+        SetupInitialPosition();
+        UpdateHpBar();
     }
 
-    public virtual void Start()
+    void SetupInitialPosition()
     {
-        SetUnitAttributes();
-        //InitShader();
-        soundManager = FindObjectOfType<SoundManager>();
-        if (!grid) grid = FindObjectOfType<GameGridManager>();
-        InitModel();
+        if (!currentCell) currentCell = grid.GetRandomUnusedCell();
+        transform.position = currentCell.transform.position;
+        currentCovers = grid.GetCoversFromCoord(GetCoordinates());
+    }
+
+    void SetupAfterLoad(UnitSaveInfo savedInfo)
+    {
+        if (savedInfo == null) return;
+        currentHp = savedInfo.hpLeft;
+        owner = GameObject.Find(savedInfo.owner).GetComponent<BaseController>();
+        currentCell = grid.GetCellAtCoordinate(savedInfo.position);
+        attackState = (savedInfo.hasAttacked) ? CurrentActionState.ended : CurrentActionState.notStarted;
+        moveState = (savedInfo.hasMoved) ? CurrentActionState.ended : CurrentActionState.notStarted;
     }
 
     void InitModel()
@@ -141,9 +154,9 @@ public class Unit : GameGridElement
         possibleMovements = new List<Vector3Int>();
     }
 
-    public virtual void SetUnitAttributes()
+    public virtual void SetUnitAttributes(bool isSaveLoad)
     {
-        currentHp = unitAttributes.maxHp;
+        if (!isSaveLoad) currentHp = unitAttributes.maxHp;
         movementRange = unitAttributes.movementRange;
         minAttackRange = unitAttributes.minAttackRange;
         maxAttackRange = unitAttributes.maxAttackRange;

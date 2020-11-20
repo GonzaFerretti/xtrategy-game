@@ -3,17 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
     string basePath;
     public bool isLoadingFromSave = false;
+    public SaveData stagedSaveDataToLoad;
+
+    public void ResetStagedData()
+    {
+        isLoadingFromSave = false;
+        stagedSaveDataToLoad = null;
+    }
 
     private void Start()
     {
         foreach (var saveManagerInstance in FindObjectsOfType<SaveManager>())
         {
-            if (saveManagerInstance != this) Destroy(gameObject);
+            if (saveManagerInstance != this)
+            {
+                if (SceneManager.GetActiveScene().name == "Inicial")
+                {
+                    Destroy(saveManagerInstance.gameObject);
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
+            }
         }
         DontDestroyOnLoad(gameObject);
         basePath = Application.streamingAssetsPath;
@@ -61,14 +79,17 @@ public class SaveManager : MonoBehaviour
         file.Close();
     }
 
-    public SaveData Load()
+    public void StageLoad()
     {
         DirectoryInfo di = new DirectoryInfo(basePath);
         FileInfo[] savesInFolder = di.GetFiles("*.json");
-        if (savesInFolder.Length == 0) return null;
+        if (savesInFolder.Length == 0) return;
 
         string saveDataRaw = File.ReadAllText(savesInFolder[0].FullName);
-        return JsonUtility.FromJson<SaveData>(saveDataRaw);
+        stagedSaveDataToLoad = JsonUtility.FromJson<SaveData>(saveDataRaw);
+
+        isLoadingFromSave = true;
+        SceneManager.LoadScene(stagedSaveDataToLoad.levelName);
     }
 
     public void DeleteExistingSave()

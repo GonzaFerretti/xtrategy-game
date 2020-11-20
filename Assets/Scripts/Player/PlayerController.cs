@@ -31,9 +31,9 @@ public class PlayerController : BaseController
         return hasHitObject;
     }
 
-    public override void StartTurn()
+    public override void StartTurn(bool shouldRestart = false)
     {
-        base.StartTurn();
+        base.StartTurn(shouldRestart);
         if (GetCurrentStateName() == "waitForTurn")
         {
             currentState.ForceFirstTransition();
