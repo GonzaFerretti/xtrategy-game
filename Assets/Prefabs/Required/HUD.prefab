@@ -3662,6 +3662,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddf7d5f0e3b7655429c8dcc091b9e04a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healSound: {fileID: 11400000, guid: 01edd2fe00a1bf74d8cffc731d302828, type: 2}
+  shieldSound: {fileID: 11400000, guid: b9cbad414f78f0d41acfb51023668577, type: 2}
   timeAfterAd: 3
   ImageAd: {fileID: 8500770049598031124}
   VideoAd: {fileID: 8500770049720136336}

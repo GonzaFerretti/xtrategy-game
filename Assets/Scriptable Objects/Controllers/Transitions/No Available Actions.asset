@@ -16,3 +16,4 @@ MonoBehaviour:
   hudElementsToEnable:
   - EnemyTurn
   - MenuButton
+  - AdButton

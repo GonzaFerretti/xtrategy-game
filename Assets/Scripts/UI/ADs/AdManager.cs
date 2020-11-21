@@ -6,6 +6,9 @@ using UnityEngine.Advertisements;
 
 public class AdManager : MonoBehaviour
 {
+    [SerializeField] SoundClip healSound;
+    [SerializeField] SoundClip shieldSound;
+
     string _adId = "3908583";
     string lastType;
 
@@ -14,6 +17,7 @@ public class AdManager : MonoBehaviour
     [SerializeField] GameObject ImageAd;
     [SerializeField] GameObject VideoAd;
     [SerializeField] HUDManager hud;
+    SoundManager soundManager;
 
     public bool isEnabled = false;
 
@@ -22,6 +26,7 @@ public class AdManager : MonoBehaviour
     private void Start()
     {
         Advertisement.Initialize(_adId, false);
+        soundManager = FindObjectOfType<SoundManager>();
     }
 
     public void ToggleVisibility()
@@ -55,6 +60,7 @@ public class AdManager : MonoBehaviour
 
     IEnumerator StartGiveBonusTimer()
     {
+        hud.DisableAdButton();
         yield return new WaitForSeconds(timeAfterAd);
         ImageAd.SetActive(false);
         VideoAd.SetActive(false);
@@ -72,11 +78,13 @@ public class AdManager : MonoBehaviour
         {
             VideoAd.SetActive(true);
             ImageAd.SetActive(false);
+            soundManager.Play(healSound);
         }
         else
         {
             ImageAd.SetActive(true);
             VideoAd.SetActive(false);
+            soundManager.Play(shieldSound);
         }
     }
 }

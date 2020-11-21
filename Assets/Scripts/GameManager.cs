@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
     void SetPowerUsageStatus(bool hasUsedPower = false)
     {
         this.hasUsedPower = hasUsedPower;
-        if (hasUsedPower)
+        if (hasUsedPower && hud != null)
         {
             hud.DisableAdButton();
         }

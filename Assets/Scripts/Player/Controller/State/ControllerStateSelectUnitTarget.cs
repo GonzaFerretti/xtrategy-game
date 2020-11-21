@@ -44,7 +44,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
             if (unitSelected == controller.currentlySelectedUnit) return false;
             Vector3Int unitPosition = unitSelected.GetCoordinates();
             if (controller.currentlySelectedUnit.possibleAttacks.Contains(unitPosition))
-            {
+            { 
                 controller.currentlySelectedUnit.attackState = CurrentActionState.inProgress;
                 controller.StartCoroutine(AttackEnemy(unitSelected));
                 return true;

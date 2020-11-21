@@ -67,7 +67,7 @@ public class Unit : GameGridElement
         if (isShielded)
         {
             isShielded = false;
-            // Hit shield sound here
+            PlaySound("shieldhit");
         }
         else
         {

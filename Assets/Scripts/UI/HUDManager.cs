@@ -27,6 +27,7 @@ public class HUDManager : MonoBehaviour
 
     public void DisableAdButton()
     {
+        if (adButton == null) return;
         HUDElements.Remove(adButton.name);
         GameObject.Destroy(adButton);
     }

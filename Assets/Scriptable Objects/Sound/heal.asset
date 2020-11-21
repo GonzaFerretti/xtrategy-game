@@ -9,13 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 208fababcce4bdf4291bc1b645619c6c, type: 3}
-  m_Name: Attack To Movement
+  m_Script: {fileID: 11500000, guid: e0a36f5f7abc9e74989121752217073b, type: 3}
+  m_Name: heal
   m_EditorClassIdentifier: 
-  destinationState: {fileID: 11400000, guid: 69902d7e36afdde488c0f7abe5e192af, type: 2}
-  hudElementsToEnable:
-  - YourTurn
-  - MenuButton
-  - AdButton
-  - NextUnit
-  - PreviousUnit
+  file: {fileID: 0}
+  volume: 0
+  shouldLoop: 0
