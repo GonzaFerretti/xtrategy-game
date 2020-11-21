@@ -9,6 +9,8 @@ public class Unit : GameGridElement
     [SerializeField] GameGridCell currentCell;
     public List<Cover> currentCovers;
 
+    [SerializeField] bool isShielded = false;
+
     public int currentHp;
     public CurrentActionState moveState = CurrentActionState.notStarted;
     public CurrentActionState attackState = CurrentActionState.notStarted;
@@ -62,22 +64,30 @@ public class Unit : GameGridElement
                 break;
             }
         }
-        currentHp = (isCoverInTheWay) ? currentHp - (baseDamage - 1) : currentHp - baseDamage;
-        if (currentHp <= 0)
+        if (isShielded)
         {
-            Destroy(hpBar.gameObject);
-            soundManager.Play(sounds.GetSoundClip("death"));
-            anim.Play("death");
-            owner.RemoveUnit(this);
-            owner.StartCoroutine(DestroyBody(model));
-            Destroy(this);
+            isShielded = false;
+            // Hit shield sound here
         }
         else
         {
-            model.transform.forward = (attackingUnit.transform.position - transform.position).normalized;
-            anim.Play("hit");
-            soundManager.Play(sounds.GetSoundClip("hit"));
-            UpdateHpBar();
+            currentHp = (isCoverInTheWay) ? currentHp - (baseDamage - 1) : currentHp - baseDamage;
+            if (currentHp <= 0)
+            {
+                Destroy(hpBar.gameObject);
+                soundManager.Play(sounds.GetSoundClip("death"));
+                anim.Play("death");
+                owner.RemoveUnit(this);
+                owner.StartCoroutine(DestroyBody(model));
+                Destroy(this);
+            }
+            else
+            {
+                model.transform.forward = (attackingUnit.transform.position - transform.position).normalized;
+                anim.Play("hit");
+                soundManager.Play(sounds.GetSoundClip("hit"));
+                UpdateHpBar();
+            }
         }
     }
 
@@ -101,6 +111,19 @@ public class Unit : GameGridElement
         InitModel();
         SetupInitialPosition();
         UpdateHpBar();
+    }
+
+    public void HealCompletely()
+    {
+        currentHp = unitAttributes.maxHp;
+        UpdateHpBar();
+        // Do more visual stuff here
+    }
+
+    public void Shield()
+    {
+        isShielded = true;
+        // Do visual stuff here
     }
 
     void SetupInitialPosition()

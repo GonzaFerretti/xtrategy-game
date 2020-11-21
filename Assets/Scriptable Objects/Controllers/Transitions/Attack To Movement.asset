@@ -16,6 +16,6 @@ MonoBehaviour:
   hudElementsToEnable:
   - YourTurn
   - MenuButton
-  - SwitchToAttack
+  - 
   - NextUnit
   - PreviousUnit

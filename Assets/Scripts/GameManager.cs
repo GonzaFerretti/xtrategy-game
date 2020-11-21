@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,7 +11,7 @@ public class GameManager : MonoBehaviour
     public HUDManager hud;
     SaveManager saveManager;
     SoundManager soundManager;
-    bool hasUsedPower = false;
+    public bool hasUsedPower = false;
 
     public BaseController currentPlayer;
     [SerializeField] GameGridManager grid;
@@ -23,7 +21,7 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        ExecuteReferenceFillingMethods();
+        ExecutePreLoadMethods();
         grid.Init();
         if (saveManager.isLoadingFromSave)
         {
@@ -33,11 +31,45 @@ public class GameManager : MonoBehaviour
         {
             PrepareAlreadyExistingUnits();
         }
-        ExecuteInitMethods();
+        ExecutePostLoadMethods();
         if (saveManager.isLoadingFromSave)
         {
             saveManager.ResetStagedData();
         }
+    }
+
+    public void UsePower(string type)
+    {
+        if (type == "video")
+        {
+            HealAllUnits();
+        }
+        else
+        {
+            ShieldRandomUnit();
+        }
+
+        SetPowerUsageStatus(true);
+    }
+
+    private void ShieldRandomUnit()
+    {
+        List<Unit> playerUnits = GetHumanPlayerUnits();
+
+        playerUnits[UnityEngine.Random.Range(0, playerUnits.Count - 1)].Shield();
+    }
+
+    private void HealAllUnits()
+    {
+        foreach (var unit in GetHumanPlayerUnits())
+        {
+            unit.HealCompletely(); 
+        }
+    }
+
+    List<Unit> GetHumanPlayerUnits()
+    {
+        return FindObjectOfType<PlayerController>().unitsControlled;
     }
 
     void SanitizeControllerUnitList()
@@ -72,15 +104,19 @@ public class GameManager : MonoBehaviour
         {
             CleanExistingUnits();
             LoadUnits(saveData);
-            UpdatePowerStatus(saveData.hasUsedPower);
+            SetPowerUsageStatus(saveData.hasUsedPower);
             SetTurn(saveData.isEnemyTurn);
             SanitizeControllerUnitList();
         }
     }
 
-    void UpdatePowerStatus(bool hasUsedPower)
+    void SetPowerUsageStatus(bool hasUsedPower = false)
     {
-        // TO DO
+        this.hasUsedPower = hasUsedPower;
+        if (hasUsedPower)
+        {
+            hud.DisableAdButton();
+        }
     }
 
     void SetTurn(bool isEnemyTurn)
@@ -98,21 +134,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ExecuteReferenceFillingMethods()
+    public void ExecutePreLoadMethods()
     {
         CheckGridManagerReferences();
         GetHudReference();
+        hud.Init();
         saveManager = FindObjectOfType<SaveManager>();
         soundManager = FindObjectOfType<SoundManager>();
         InitUnitAndPlayerList();
     }
 
-    public void ExecuteInitMethods()
+    public void ExecutePostLoadMethods()
     {
         CheckUnitOwnerReferences();
         CompleteRemaingPlayerList();
         SetUnitMaterials();
-        hud.Init();
         ExecuteControllerStarts();
         CheckLoser();
         StartPlayerTurn(saveManager.isLoadingFromSave);

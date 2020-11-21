@@ -10,7 +10,9 @@ public class HUDManager : MonoBehaviour
     [SerializeField] GameObject menu;
     [SerializeField] Transform switchableItemsPivot;
     [SerializeField] List<NamedButtonTrigger> namedButtonTriggers;
-    GameManager gm;
+    [SerializeField] AdManager adManager;
+    [SerializeField] GameObject adButton;
+    public GameManager gm;
 
     public void Init()
     {
@@ -21,6 +23,12 @@ public class HUDManager : MonoBehaviour
     public void Awake()
     {
         InitNamedTriggers();
+    }
+
+    public void DisableAdButton()
+    {
+        HUDElements.Remove(adButton.name);
+        GameObject.Destroy(adButton);
     }
 
     public void InitNamedTriggers()
@@ -46,6 +54,11 @@ public class HUDManager : MonoBehaviour
     public void SwitchMenu()
     {
         menu.SetActive(!menu.activeSelf);
+    }
+
+    public void SwitchAdMenu()
+    {
+        adManager.ToggleVisibility();
     }
 
     public void Save()

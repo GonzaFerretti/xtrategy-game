@@ -18,6 +18,7 @@ MonoBehaviour:
   - LeftClick
   - YourTurn
   - MenuButton
-  - SwitchToAttack
+  - 
   - NextUnit
   - PreviousUnit
+  - SkipTurn
