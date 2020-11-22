@@ -123,6 +123,7 @@ Transform:
   - {fileID: 1969876207}
   - {fileID: 1567534016}
   - {fileID: 3382640925051958261}
+  - {fileID: 1138914214598688520}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -154,6 +155,9 @@ MonoBehaviour:
   cellsRootTransform: {fileID: 1567534016}
   coversRootTransform: {fileID: 1969876207}
   cellIndicatorsRootTransform: {fileID: 3382640925051958261}
+  minesRootTransform: {fileID: 1138914214598688520}
+  minePrefab: {fileID: 1535131346226869161, guid: bffb7a4e258c7c84b88db0cf9e343ebd,
+    type: 3}
   gridCoordinates:
     reorderableList:
       canAdd: 1
@@ -290,3 +294,33 @@ MonoBehaviour:
     type: 3}
   indicatorCover: {fileID: 0}
   gameGridSize: {x: 10, y: 10}
+--- !u!1 &8484184444875438673
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1138914214598688520}
+  m_Layer: 0
+  m_Name: mines
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1138914214598688520
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8484184444875438673}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6409168009872196253}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

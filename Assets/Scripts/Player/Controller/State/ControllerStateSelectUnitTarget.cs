@@ -8,7 +8,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
     public override void OnUpdate()
     {
         base.OnUpdate();
-        if (Input.GetMouseButtonDown(0) && !CheckPossibleAttackTarget()) (controller as PlayerController).CheckUnitDeselect();
+        if (Input.GetMouseButtonDown(0) && !CheckAttackAction()) (controller as PlayerController).CheckUnitDeselect();
         if (controller.currentlySelectedUnit) (controller as PlayerController).OnHoverGrid(GridIndicatorMode.possibleAttack, GridIndicatorMode.selectedAttack, controller.currentlySelectedUnit.possibleAttacks);
     }
 
@@ -17,6 +17,11 @@ public class ControllerStateSelectUnitTarget : ControllerState
         base.OnTransitionIn();
         controller.StartCoroutine(WaitForAttackListReady());
         controller.GetGridReference().EnableCellIndicator(controller.currentlySelectedUnit.GetCoordinates(), GridIndicatorMode.selectedUnit);
+    }
+
+    bool CheckAttackAction()
+    {
+        return controller.currentlySelectedUnit.unitAttributes.attackType.CheckPossibleTarget(controller as PlayerController);
     }
 
     IEnumerator WaitForAttackListReady()
@@ -35,38 +40,9 @@ public class ControllerStateSelectUnitTarget : ControllerState
         gm.SetCoverIndicators(controller.currentlySelectedUnit.possibleAttacks, true);
     }
 
-    bool CheckPossibleAttackTarget()
-    {
-        (controller as PlayerController).CheckUnitUISwitch();
-        if ((controller as PlayerController).GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("Unit")))
-        {
-            Unit unitSelected = objectSelected.GetComponent<Unit>();
-            if (unitSelected == controller.currentlySelectedUnit) return false;
-            Vector3Int unitPosition = unitSelected.GetCoordinates();
-            if (controller.currentlySelectedUnit.possibleAttacks.Contains(unitPosition))
-            { 
-                controller.currentlySelectedUnit.attackState = CurrentActionState.inProgress;
-                controller.StartCoroutine(AttackEnemy(unitSelected));
-                return true;
-            }
-        }
-        return false;
-    }
-
     public override void OnTransitionOut()
     {
         controller.GetGridReference().SetAllCoverIndicators(false);
         controller.GetGridReference().DisableAllCellIndicators();
-    }
-
-    IEnumerator AttackEnemy(Unit enemyToAttack)
-    {
-        controller.currentlySelectedUnit.anim.Play("attack");
-        controller.currentlySelectedUnit.PlaySound(controller.currentlySelectedUnit.unitAttributes.attackSound);
-        controller.currentlySelectedUnit.model.transform.forward = (enemyToAttack.transform.position - controller.currentlySelectedUnit.transform.position).normalized;
-        yield return new WaitForSeconds(1);
-        controller.currentlySelectedUnit.anim.SetTrigger("endCurrentAnim");
-        enemyToAttack.TakeDamage(controller.currentlySelectedUnit.damage, controller.currentlySelectedUnit);
-        controller.currentlySelectedUnit.attackState = CurrentActionState.ended;
     }
 }

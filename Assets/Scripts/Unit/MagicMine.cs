@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class MagicMine : MonoBehaviour
 {
-    BaseController owner;
+    public BaseController owner;
+    [HideInInspector] public Vector3Int coordinates;
 
-    public void SetOwner(BaseController controller)
-    {
-        owner = controller;
-    }
+    public int centerDamage;
+    public int sideDamage;
+
+    public int centerDetonateDamage;
+    public int sideDetonateDamage;
+
+    public List<Vector3Int> affectedCoordinates = new List<Vector3Int>();
 }

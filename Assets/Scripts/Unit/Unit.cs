@@ -52,16 +52,19 @@ public class Unit : GameGridElement
         return currentCell.GetCoordinates();
     }
 
-    public void TakeDamage(int baseDamage, Unit attackingUnit)
+    public void TakeDamage(int baseDamage, Unit attackingUnit = null)
     {
         bool isCoverInTheWay = false;
-        foreach (Cover cover in currentCovers)
+        if (attackingUnit != null)
         {
-            if (cover is HighCover) continue;
-            if (grid.IsCoverInTheWayOfAttack(attackingUnit.GetCoordinates(), GetCoordinates(), cover))
+            foreach (Cover cover in currentCovers)
             {
-                isCoverInTheWay = true;
-                break;
+                if (cover is HighCover) continue;
+                if (grid.IsCoverInTheWayOfAttack(attackingUnit.GetCoordinates(), GetCoordinates(), cover))
+                {
+                    isCoverInTheWay = true;
+                    break;
+                }
             }
         }
         if (isShielded)
@@ -83,7 +86,8 @@ public class Unit : GameGridElement
             }
             else
             {
-                model.transform.forward = (attackingUnit.transform.position - transform.position).normalized;
+                if (attackingUnit != null)
+                    model.transform.forward = (attackingUnit.transform.position - transform.position).normalized;
                 anim.Play("hit");
                 soundManager.Play(sounds.GetSoundClip("hit"));
                 UpdateHpBar();
@@ -254,16 +258,23 @@ public class Unit : GameGridElement
         query.End();
 
         Vector3 lastPosition = transform.position;
+        Vector3Int currentCoordinates = GetCoordinates();
         for (int i = 0; i < path.Length; i++)
         {
             model.transform.forward = (grid.GetWorldPositionFromCoords(path[i]) - lastPosition).normalized;
             transform.position = grid.GetWorldPositionFromCoords(path[i]);
+            currentCoordinates = path[i];
+            if (grid.CheckMineProximity(out int damage, currentCoordinates, owner))
+            {
+                TakeDamage(damage);
+                break;
+            }
             lastPosition = transform.position;
             Camera.main.GetComponent<CameraController>().SetFollowTarget(transform);
             yield return new WaitForSeconds(0.25f);
         }
         possibleMovements = new List<Vector3Int>();
-        currentCell = grid.GetCellAtCoordinate(path[path.Length - 1]);
+        currentCell = grid.GetCellAtCoordinate(currentCoordinates);
         currentCovers = grid.GetCoversFromCoord(GetCoordinates());
         moveState = CurrentActionState.ended;
         anim.SetTrigger("endCurrentAnim");
@@ -276,10 +287,18 @@ public class Unit : GameGridElement
         currentCovers = new List<Cover>();
         anim.Play("move");
         Vector3 lastPosition = transform.position;
+        Vector3Int currentCoordinates = GetCoordinates();
         for (int i = 0; i < givenPath.Length; i++)
         {
             model.transform.forward = (grid.GetWorldPositionFromCoords(givenPath[i]) - lastPosition).normalized;
             transform.position = grid.GetWorldPositionFromCoords(givenPath[i]);
+            currentCoordinates = givenPath[i];
+            if (grid.CheckMineProximity(out int damage, currentCoordinates, owner))
+            {
+                TakeDamage(damage);
+                break;
+            }
+            lastPosition = transform.position;
             Camera.main.GetComponent<CameraController>().SetFollowTarget(transform);
             yield return new WaitForSeconds(0.25f);
         }

@@ -9,9 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0a36f5f7abc9e74989121752217073b, type: 3}
-  m_Name: shieldhit
+  m_Script: {fileID: 11500000, guid: c52422894d0c80543a0dc60c24f73059, type: 3}
+  m_Name: PlantBomb
   m_EditorClassIdentifier: 
-  file: {fileID: 8300000, guid: 9721f33ececc04f4d84855709c3474af, type: 3}
-  volume: 1
-  shouldLoop: 0

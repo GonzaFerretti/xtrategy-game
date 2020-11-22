@@ -11,6 +11,7 @@ public class UnitAttributes : ScriptableObject
     public int maxAttackRange;
     public int damage;
     public AIBehaviour aiBehaviour;
+    public AttackType attackType;
 
     public SoundClip attackSound;
     public GameObject defaultPrefab;

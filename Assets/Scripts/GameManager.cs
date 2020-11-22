@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     {
         ExecutePreLoadMethods();
         grid.Init();
-        if (saveManager.isLoadingFromSave)
+        if (saveManager && saveManager.isLoadingFromSave)
         {
             SetupGameFromLoad();
         }
@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
             PrepareAlreadyExistingUnits();
         }
         ExecutePostLoadMethods();
-        if (saveManager.isLoadingFromSave)
+        if (saveManager && saveManager.isLoadingFromSave)
         {
             saveManager.ResetStagedData();
         }
@@ -151,7 +151,7 @@ public class GameManager : MonoBehaviour
         SetUnitMaterials();
         ExecuteControllerStarts();
         CheckLoser();
-        StartPlayerTurn(saveManager.isLoadingFromSave);
+        StartPlayerTurn(saveManager ? saveManager.isLoadingFromSave : false);
     }
 
     private void ExecuteControllerStarts()

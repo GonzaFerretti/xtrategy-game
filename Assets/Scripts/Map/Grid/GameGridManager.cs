@@ -14,8 +14,12 @@ public class GameGridManager : MonoBehaviour
     public Transform cellsRootTransform;
     public Transform coversRootTransform;
     public Transform cellIndicatorsRootTransform;
+    public Transform minesRootTransform;
     public Dictionary<Vector3Int, List<Vector3Int>> neighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
+    public Dictionary<Vector3Int, List<Vector3Int>> mineNeighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
 
+    public Dictionary<Vector3Int, MagicMine> minedPositionList = new Dictionary<Vector3Int, MagicMine>();
+    [SerializeField] MagicMine minePrefab;
 
     public GridCoordinates gridCoordinates;
     public CoverInformation covers;
@@ -44,6 +48,7 @@ public class GameGridManager : MonoBehaviour
         InitializeGridIndicators();
         CopyListOfCellsToUnusedList();
         GenerateAllPossibleNeighbours();
+        GenerateAllPossibleMineNeighbours();
     }
 
     public void InitCoverIndicator(Vector3 coverPosition, Cover cover)
@@ -60,6 +65,25 @@ public class GameGridManager : MonoBehaviour
         coverIndicators.Add((cover.coverData.side1, coverIndicator));
         coverIndicators.Add((cover.coverData.side2, coverIndicator));
         coverIndicator.gameObject.SetActive(false);
+    }
+
+    public void CreateMine(BaseController owner, Vector3Int position)
+    {
+        MagicMine newMine = Instantiate(minePrefab, minesRootTransform);
+        newMine.owner = owner;
+        newMine.coordinates = position;
+
+        newMine.transform.position = GetWorldPositionFromCoords(position);
+        newMine.affectedCoordinates.Add(position);
+
+        foreach (var minedPosition in mineNeighbourDict[position])
+        {
+            if (!minedPositionList.ContainsKey(minedPosition))
+            {
+                minedPositionList.Add(minedPosition, newMine);
+                newMine.affectedCoordinates.Add(minedPosition);
+            }
+        }
     }
 
     public void SetCoverIndicator(Vector3Int coords, bool state)
@@ -267,6 +291,38 @@ public class GameGridManager : MonoBehaviour
         }
     }
 
+    public bool CheckMineProximity(out int damage, Vector3Int unitPosition, BaseController owner = null)
+    {
+        damage = 0;
+
+        if (!minedPositionList.ContainsKey(unitPosition)) return false;
+        if (owner == null) return false;
+        MagicMine currentlySteppedOnMine = minedPositionList[unitPosition];
+
+        if (owner == currentlySteppedOnMine.owner) return false;
+
+        if (minedPositionList[unitPosition].coordinates == unitPosition)
+        {
+            damage = currentlySteppedOnMine.centerDamage;
+        }
+        else
+        {
+            damage = currentlySteppedOnMine.sideDamage;
+        }
+        DestroyMine(currentlySteppedOnMine);
+        return true;
+    }
+
+    public void DestroyMine(MagicMine mine)
+    {
+        foreach (var coordinates in mine.affectedCoordinates)
+        {
+            minedPositionList.Remove(coordinates);
+        }
+
+        Destroy(mine.gameObject);
+    }
+
     public void EnableCellIndicators(IEnumerable<Vector3Int> indicatorsToEnable, GridIndicatorMode gridIndicatorMode)
     {
         foreach (Vector3Int indicator in indicatorsToEnable)
@@ -320,11 +376,36 @@ public class GameGridManager : MonoBehaviour
         return possibleNeighbourCoordinates;
     }
 
+    public List<Vector3Int> GetViableNeighbourCellsForMine(Vector3Int currentCellCoords)
+    {
+        List<Vector3Int> possibleNeighbourCoordinates = new List<Vector3Int>();
+
+        CheckNeighbourViabilityAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(1, 0, 0));
+        CheckNeighbourViabilityAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(-1, 0, 0));
+        CheckNeighbourViabilityAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(0, 1, 0));
+        CheckNeighbourViabilityAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(0, -1, 0));
+        // Mine also attacks diagonal tiles
+        CheckNeighbourViabilityAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(1, -1, 0));
+        CheckNeighbourViabilityAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(-1, -1, 0));
+        CheckNeighbourViabilityAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(-1, 1, 0));
+        CheckNeighbourViabilityAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(1, 1, 0));
+
+        return possibleNeighbourCoordinates;
+    }
+
     public void GenerateAllPossibleNeighbours()
     {
         foreach (var node in gridCoordinates)
         {
             neighbourDict.Add(node.Key, GetViableNeighbourCellsForMovement(node.Key));
+        }
+    }
+
+    public void GenerateAllPossibleMineNeighbours()
+    {
+        foreach (var node in gridCoordinates)
+        {
+            mineNeighbourDict.Add(node.Key, GetViableNeighbourCellsForMine(node.Key));
         }
     }
 
@@ -473,6 +554,15 @@ public class GameGridManager : MonoBehaviour
     public void EndQuery(AsyncQuery query)
     {
         currentQueries.Remove(query.id);
+    }
+
+    public Unit GetUnitAtCoordinates(Vector3Int coordinates)
+    {
+        foreach (var unit in gameManager.allUnits)
+        {
+            if (unit.GetCoordinates() == coordinates) return unit;
+        }
+        return null;
     }
 
     public IEnumerator ProcessAttackRangeQuery(int minRange, int maxRange, Vector3Int currentCell, int queryId)
