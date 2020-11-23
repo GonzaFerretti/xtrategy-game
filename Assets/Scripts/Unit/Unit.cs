@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Unit : GameGridElement
 {
+    [SerializeField] Vector2Int desiredStartingPos = new Vector2Int(-1, -1);
+
     [SerializeField] GameGridCell currentCell;
     public List<Cover> currentCovers;
 
@@ -113,7 +115,7 @@ public class Unit : GameGridElement
         grid = gridReference;
         SetupAfterLoad(savedInfo);
         InitModel();
-        SetupInitialPosition();
+        SetupInitialPosition(savedInfo != null);
         UpdateHpBar();
     }
 
@@ -130,8 +132,9 @@ public class Unit : GameGridElement
         // Do visual stuff here
     }
 
-    void SetupInitialPosition()
+    void SetupInitialPosition(bool isLoading)
     {
+        if (desiredStartingPos != new Vector2Int(-1, -1) && !isLoading) currentCell = grid.GetCellAtCoordinate(new Vector3Int(desiredStartingPos.x,desiredStartingPos.y,0));
         if (!currentCell) currentCell = grid.GetRandomUnusedCell();
         transform.position = currentCell.transform.position;
         currentCovers = grid.GetCoversFromCoord(GetCoordinates());
