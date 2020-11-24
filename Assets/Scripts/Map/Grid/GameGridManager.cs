@@ -72,6 +72,7 @@ public class GameGridManager : MonoBehaviour
         MagicMine newMine = Instantiate(minePrefab, minesRootTransform);
         newMine.owner = owner;
         newMine.coordinates = position;
+        newMine.SetTeamColor();
 
         newMine.transform.position = GetWorldPositionFromCoords(position);
         newMine.affectedCoordinates.Add(position);

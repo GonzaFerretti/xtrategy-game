@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 1425918140625932230}
   - component: {fileID: 781880995333487562}
   - component: {fileID: 4281209981496996895}
-  - component: {fileID: 6883099796192521114}
-  - component: {fileID: 1535131346226869161}
+  - component: {fileID: 3211451036490268790}
   m_Layer: 0
   m_Name: mine
   m_TagString: Untagged
@@ -27,9 +26,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6671413169564844343}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.1800003, z: -0.00031864643}
+  m_LocalScale: {x: 0.04, y: 0.040000014, z: 0.040000014}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -41,7 +40,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6671413169564844343}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -951608786083511892, guid: c65cc6e882ea936498499f42d9f47fe4, type: 3}
 --- !u!23 &4281209981496996895
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -59,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6bb86caa4becfff4c87bbdc30b6f8ca0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -80,20 +79,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &6883099796192521114
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6671413169564844343}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1535131346226869161
+--- !u!114 &3211451036490268790
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,8 +93,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
   coordinates: {x: 0, y: 0, z: 0}
-  centerDamage: 5
-  sideDamage: 2
-  centerDetonateDamage: 8
-  sideDetonateDamage: 10
+  centerDamage: 0
+  sideDamage: 0
+  centerDetonateDamage: 0
+  sideDetonateDamage: 0
   affectedCoordinates: []

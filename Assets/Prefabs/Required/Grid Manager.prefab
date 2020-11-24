@@ -156,7 +156,7 @@ MonoBehaviour:
   coversRootTransform: {fileID: 1969876207}
   cellIndicatorsRootTransform: {fileID: 3382640925051958261}
   minesRootTransform: {fileID: 1138914214598688520}
-  minePrefab: {fileID: 1535131346226869161, guid: bffb7a4e258c7c84b88db0cf9e343ebd,
+  minePrefab: {fileID: 3211451036490268790, guid: bffb7a4e258c7c84b88db0cf9e343ebd,
     type: 3}
   gridCoordinates:
     reorderableList:

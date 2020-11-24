@@ -53,13 +53,12 @@ public class CameraController : MonoBehaviour
         if (currentFollowEvent != null) InterruptTargetFollow();
         float currentZoomPercentage = Mathf.InverseLerp(minZoom,maxZoom, cam.orthographicSize);
         float zoomMultiplier = Mathf.Lerp(minZoomMovementMultiplier, maxZoomMovementMultiplier, currentZoomPercentage);
-        transform.position += LimitVectorToBoundaries(new Vector3(movementVector.x,0, movementVector.y) * Time.deltaTime * moveSpeed * zoomMultiplier);
+        transform.position = LimitVectorToBoundaries(transform.position + new Vector3(movementVector.x,0, movementVector.y) * Time.deltaTime * moveSpeed * zoomMultiplier);
     }
 
     Vector3 LimitVectorToBoundaries(Vector3 baseVector)
     {
-        return baseVector;
-        //return new Vector3(Mathf.Clamp(baseVector.x, minX, maxX), baseVector.y, Mathf.Clamp(baseVector.z, minZ, maxZ));
+        return new Vector3(Mathf.Clamp(baseVector.x, minX, maxX), baseVector.y, Mathf.Clamp(baseVector.z, minZ, maxZ));
     }
 
     IEnumerator FollowTarget(Vector3 groundPos)
