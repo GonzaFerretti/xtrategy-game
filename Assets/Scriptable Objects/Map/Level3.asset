@@ -13,103 +13,85 @@ MonoBehaviour:
   m_Name: Level3
   m_EditorClassIdentifier: 
   coversData:
-  - side1: {x: 7, y: 4, z: 0}
-    side2: {x: 7, y: 3, z: 0}
-  - side1: {x: 6, y: 4, z: 0}
-    side2: {x: 6, y: 3, z: 0}
-  - side1: {x: 5, y: 4, z: 0}
-    side2: {x: 5, y: 3, z: 0}
+  - side1: {x: 7, y: 5, z: 0}
+    side2: {x: 7, y: 4, z: 0}
   - side1: {x: 4, y: 4, z: 0}
-    side2: {x: 4, y: 3, z: 0}
-  - side1: {x: 4, y: 3, z: 0}
-    side2: {x: 3, y: 3, z: 0}
-  - side1: {x: 8, y: 3, z: 0}
-    side2: {x: 7, y: 3, z: 0}
-  - side1: {x: 9, y: 6, z: 0}
-    side2: {x: 9, y: 7, z: 0}
-  - side1: {x: 8, y: 7, z: 0}
-    side2: {x: 8, y: 6, z: 0}
-  - side1: {x: 7, y: 6, z: 0}
-    side2: {x: 7, y: 7, z: 0}
-  - side1: {x: 4, y: 7, z: 0}
-    side2: {x: 4, y: 6, z: 0}
-  - side1: {x: 3, y: 6, z: 0}
-    side2: {x: 3, y: 7, z: 0}
-  - side1: {x: 2, y: 7, z: 0}
-    side2: {x: 2, y: 6, z: 0}
-  - side1: {x: 8, y: 11, z: 0}
-    side2: {x: 8, y: 10, z: 0}
-  - side1: {x: 9, y: 11, z: 0}
-    side2: {x: 9, y: 10, z: 0}
-  - side1: {x: 9, y: 10, z: 0}
-    side2: {x: 10, y: 10, z: 0}
-  - side1: {x: 3, y: 11, z: 0}
-    side2: {x: 3, y: 10, z: 0}
-  - side1: {x: 2, y: 10, z: 0}
-    side2: {x: 2, y: 11, z: 0}
-  - side1: {x: 2, y: 10, z: 0}
-    side2: {x: 1, y: 10, z: 0}
-  - side1: {x: 7, y: 15, z: 0}
-    side2: {x: 7, y: 14, z: 0}
-  - side1: {x: 6, y: 14, z: 0}
-    side2: {x: 6, y: 15, z: 0}
-  - side1: {x: 5, y: 14, z: 0}
-    side2: {x: 5, y: 15, z: 0}
-  - side1: {x: 4, y: 14, z: 0}
+    side2: {x: 4, y: 5, z: 0}
+  - side1: {x: 4, y: 16, z: 0}
     side2: {x: 4, y: 15, z: 0}
-  - side1: {x: 8, y: 18, z: 0}
-    side2: {x: 8, y: 17, z: 0}
-  - side1: {x: 7, y: 18, z: 0}
-    side2: {x: 7, y: 17, z: 0}
+  - side1: {x: 5, y: 16, z: 0}
+    side2: {x: 5, y: 15, z: 0}
+  - side1: {x: 2, y: 12, z: 0}
+    side2: {x: 2, y: 13, z: 0}
+  - side1: {x: 7, y: 15, z: 0}
+    side2: {x: 7, y: 16, z: 0}
+  - side1: {x: 6, y: 15, z: 0}
+    side2: {x: 6, y: 16, z: 0}
+  - side1: {x: 3, y: 12, z: 0}
+    side2: {x: 3, y: 13, z: 0}
+  - side1: {x: 8, y: 12, z: 0}
+    side2: {x: 8, y: 13, z: 0}
+  - side1: {x: 2, y: 10, z: 0}
+    side2: {x: 2, y: 9, z: 0}
+  - side1: {x: 9, y: 13, z: 0}
+    side2: {x: 9, y: 12, z: 0}
+  - side1: {x: 1, y: 9, z: 0}
+    side2: {x: 1, y: 10, z: 0}
+  - side1: {x: 9, y: 10, z: 0}
+    side2: {x: 9, y: 9, z: 0}
+  - side1: {x: 10, y: 9, z: 0}
+    side2: {x: 10, y: 10, z: 0}
+  - side1: {x: 4, y: 8, z: 0}
+    side2: {x: 5, y: 8, z: 0}
+  - side1: {x: 5, y: 8, z: 0}
+    side2: {x: 5, y: 9, z: 0}
+  - side1: {x: 6, y: 8, z: 0}
+    side2: {x: 6, y: 9, z: 0}
+  - side1: {x: 6, y: 8, z: 0}
+    side2: {x: 7, y: 8, z: 0}
+  - side1: {x: 2, y: 18, z: 0}
+    side2: {x: 1, y: 18, z: 0}
+  - side1: {x: 2, y: 17, z: 0}
+    side2: {x: 2, y: 18, z: 0}
   - side1: {x: 3, y: 17, z: 0}
     side2: {x: 3, y: 18, z: 0}
-  - side1: {x: 4, y: 17, z: 0}
-    side2: {x: 4, y: 18, z: 0}
-  - side1: {x: 7, y: 22, z: 0}
-    side2: {x: 7, y: 21, z: 0}
-  - side1: {x: 4, y: 22, z: 0}
-    side2: {x: 4, y: 21, z: 0}
-  - side1: {x: 2, y: 22, z: 0}
-    side2: {x: 2, y: 23, z: 0}
-  - side1: {x: 9, y: 23, z: 0}
-    side2: {x: 9, y: 22, z: 0}
-  - side1: {x: 1, y: 3, z: 0}
-    side2: {x: 1, y: 4, z: 0}
-  - side1: {x: 10, y: 3, z: 0}
-    side2: {x: 10, y: 4, z: 0}
+  - side1: {x: 4, y: 18, z: 0}
+    side2: {x: 3, y: 18, z: 0}
+  - side1: {x: 8, y: 18, z: 0}
+    side2: {x: 7, y: 18, z: 0}
+  - side1: {x: 8, y: 18, z: 0}
+    side2: {x: 8, y: 17, z: 0}
+  - side1: {x: 9, y: 17, z: 0}
+    side2: {x: 9, y: 18, z: 0}
+  - side1: {x: 9, y: 18, z: 0}
+    side2: {x: 10, y: 18, z: 0}
   coversPrefabNames:
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - HighCover
-  - LowCover
-  - LowCover
-  - HighCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - HighCover
-  - HighCover
-  - HighCover
-  - HighCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - LowCover
-  - HighCover
-  - HighCover
+  - LowCoverBloc
+  - LowCoverBloc
+  - WoodFenceLCover
+  - WoodFenceLCover
+  - LowCoverBloc
+  - WoodFenceLCover
+  - WoodFenceLCover
+  - LowCoverBloc
+  - LowCoverBloc
+  - HighCoverBloc
+  - LowCoverBloc
+  - HighCoverBloc
+  - HighCoverBloc
+  - HighCoverBloc
+  - LowCoverBloc
+  - WoodFenceLCover
+  - WoodFenceLCover
+  - LowCoverBloc
+  - LowCoverBloc
+  - WoodFenceLCover
+  - WoodFenceLCover
+  - LowCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
+  - LowCoverBloc
   cellsCoordinates:
   - {x: 1, y: 1, z: 0}
   - {x: 1, y: 2, z: 0}
@@ -131,11 +113,6 @@ MonoBehaviour:
   - {x: 1, y: 18, z: 0}
   - {x: 1, y: 19, z: 0}
   - {x: 1, y: 20, z: 0}
-  - {x: 1, y: 21, z: 0}
-  - {x: 1, y: 22, z: 0}
-  - {x: 1, y: 23, z: 0}
-  - {x: 1, y: 24, z: 0}
-  - {x: 1, y: 25, z: 0}
   - {x: 2, y: 1, z: 0}
   - {x: 2, y: 2, z: 0}
   - {x: 2, y: 3, z: 0}
@@ -156,11 +133,6 @@ MonoBehaviour:
   - {x: 2, y: 18, z: 0}
   - {x: 2, y: 19, z: 0}
   - {x: 2, y: 20, z: 0}
-  - {x: 2, y: 21, z: 0}
-  - {x: 2, y: 22, z: 0}
-  - {x: 2, y: 23, z: 0}
-  - {x: 2, y: 24, z: 0}
-  - {x: 2, y: 25, z: 0}
   - {x: 3, y: 1, z: 0}
   - {x: 3, y: 2, z: 0}
   - {x: 3, y: 3, z: 0}
@@ -181,11 +153,6 @@ MonoBehaviour:
   - {x: 3, y: 18, z: 0}
   - {x: 3, y: 19, z: 0}
   - {x: 3, y: 20, z: 0}
-  - {x: 3, y: 21, z: 0}
-  - {x: 3, y: 22, z: 0}
-  - {x: 3, y: 23, z: 0}
-  - {x: 3, y: 24, z: 0}
-  - {x: 3, y: 25, z: 0}
   - {x: 4, y: 1, z: 0}
   - {x: 4, y: 2, z: 0}
   - {x: 4, y: 3, z: 0}
@@ -206,11 +173,6 @@ MonoBehaviour:
   - {x: 4, y: 18, z: 0}
   - {x: 4, y: 19, z: 0}
   - {x: 4, y: 20, z: 0}
-  - {x: 4, y: 21, z: 0}
-  - {x: 4, y: 22, z: 0}
-  - {x: 4, y: 23, z: 0}
-  - {x: 4, y: 24, z: 0}
-  - {x: 4, y: 25, z: 0}
   - {x: 5, y: 1, z: 0}
   - {x: 5, y: 2, z: 0}
   - {x: 5, y: 3, z: 0}
@@ -231,11 +193,6 @@ MonoBehaviour:
   - {x: 5, y: 18, z: 0}
   - {x: 5, y: 19, z: 0}
   - {x: 5, y: 20, z: 0}
-  - {x: 5, y: 21, z: 0}
-  - {x: 5, y: 22, z: 0}
-  - {x: 5, y: 23, z: 0}
-  - {x: 5, y: 24, z: 0}
-  - {x: 5, y: 25, z: 0}
   - {x: 6, y: 1, z: 0}
   - {x: 6, y: 2, z: 0}
   - {x: 6, y: 3, z: 0}
@@ -256,11 +213,6 @@ MonoBehaviour:
   - {x: 6, y: 18, z: 0}
   - {x: 6, y: 19, z: 0}
   - {x: 6, y: 20, z: 0}
-  - {x: 6, y: 21, z: 0}
-  - {x: 6, y: 22, z: 0}
-  - {x: 6, y: 23, z: 0}
-  - {x: 6, y: 24, z: 0}
-  - {x: 6, y: 25, z: 0}
   - {x: 7, y: 1, z: 0}
   - {x: 7, y: 2, z: 0}
   - {x: 7, y: 3, z: 0}
@@ -281,11 +233,6 @@ MonoBehaviour:
   - {x: 7, y: 18, z: 0}
   - {x: 7, y: 19, z: 0}
   - {x: 7, y: 20, z: 0}
-  - {x: 7, y: 21, z: 0}
-  - {x: 7, y: 22, z: 0}
-  - {x: 7, y: 23, z: 0}
-  - {x: 7, y: 24, z: 0}
-  - {x: 7, y: 25, z: 0}
   - {x: 8, y: 1, z: 0}
   - {x: 8, y: 2, z: 0}
   - {x: 8, y: 3, z: 0}
@@ -306,11 +253,6 @@ MonoBehaviour:
   - {x: 8, y: 18, z: 0}
   - {x: 8, y: 19, z: 0}
   - {x: 8, y: 20, z: 0}
-  - {x: 8, y: 21, z: 0}
-  - {x: 8, y: 22, z: 0}
-  - {x: 8, y: 23, z: 0}
-  - {x: 8, y: 24, z: 0}
-  - {x: 8, y: 25, z: 0}
   - {x: 9, y: 1, z: 0}
   - {x: 9, y: 2, z: 0}
   - {x: 9, y: 3, z: 0}
@@ -331,11 +273,6 @@ MonoBehaviour:
   - {x: 9, y: 18, z: 0}
   - {x: 9, y: 19, z: 0}
   - {x: 9, y: 20, z: 0}
-  - {x: 9, y: 21, z: 0}
-  - {x: 9, y: 22, z: 0}
-  - {x: 9, y: 23, z: 0}
-  - {x: 9, y: 24, z: 0}
-  - {x: 9, y: 25, z: 0}
   - {x: 10, y: 1, z: 0}
   - {x: 10, y: 2, z: 0}
   - {x: 10, y: 3, z: 0}
@@ -356,259 +293,204 @@ MonoBehaviour:
   - {x: 10, y: 18, z: 0}
   - {x: 10, y: 19, z: 0}
   - {x: 10, y: 20, z: 0}
-  - {x: 10, y: 21, z: 0}
-  - {x: 10, y: 22, z: 0}
-  - {x: 10, y: 23, z: 0}
-  - {x: 10, y: 24, z: 0}
-  - {x: 10, y: 25, z: 0}
   cellsPrefabNames:
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
-  - BaseCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
+  - GrassFloorCell
