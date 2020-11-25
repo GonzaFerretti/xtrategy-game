@@ -158,6 +158,8 @@ MonoBehaviour:
   minesRootTransform: {fileID: 1138914214598688520}
   minePrefab: {fileID: 3211451036490268790, guid: bffb7a4e258c7c84b88db0cf9e343ebd,
     type: 3}
+  explosionPrefab: {fileID: 6336729613740813091, guid: 27cf3bee1052ea04caea490871df9c85,
+    type: 3}
   gridCoordinates:
     reorderableList:
       canAdd: 1

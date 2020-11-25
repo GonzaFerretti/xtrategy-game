@@ -23,6 +23,8 @@ public class GameGridManager : MonoBehaviour
 
     [SerializeField] MagicMine minePrefab;
 
+    [SerializeField] ExplosionEffect explosionPrefab;
+
     public GridCoordinates gridCoordinates;
     public CoverInformation covers;
 
@@ -356,6 +358,11 @@ public class GameGridManager : MonoBehaviour
             MagicMine mine = mineTriggerTiles[mineCoords];
             foreach (var triggerTile in mine.triggerTiles)
             {
+                ExplosionEffect explosion = Instantiate(explosionPrefab);
+                explosion.Setup(true);
+                explosion.transform.position = GetWorldPositionFromCoords(triggerTile) + Vector3.up * indicatorHeight * 2;
+                explosion.transform.parent = cellIndicatorsRootTransform;
+                explosion.transform.localRotation = Quaternion.identity;
                 Unit unit = GetUnitAtCoordinates(triggerTile);
                 if (unit)
                 {
@@ -369,6 +376,12 @@ public class GameGridManager : MonoBehaviour
             foreach (var explosionTile in mine.detonationTiles)
             {
                 Unit unit = GetUnitAtCoordinates(explosionTile);
+                ExplosionEffect explosion = Instantiate(explosionPrefab);
+                explosion.transform.position = GetWorldPositionFromCoords(explosionTile) + Vector3.up * indicatorHeight * 2;
+                explosion.Setup(false);
+                explosion.transform.parent = cellIndicatorsRootTransform;
+                explosion.transform.localRotation = Quaternion.identity;
+
                 if (unit)
                 {
                     if (!unit.unitAttributes.isImmuneToExplosions && unit.owner != owner)

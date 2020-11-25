@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Alchemist
   m_EditorClassIdentifier: 
   maxHp: 5
-  movementRange: 1
+  movementRange: 2
   minAttackRange: 2
   maxAttackRange: 4
   damage: 4
+  isImmuneToExplosions: 0
   aiBehaviour: {fileID: 11400000, guid: 12b1cb45640a73f45aaaad86e0f2dcd4, type: 2}
   attackType: {fileID: 11400000, guid: 06703122216fd824689f7347a176ebae, type: 2}
   attackSound: {fileID: 11400000, guid: 5a074d92974e3fe459d96f55d559187d, type: 2}
