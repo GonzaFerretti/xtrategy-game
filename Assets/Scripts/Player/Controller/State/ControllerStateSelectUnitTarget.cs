@@ -21,6 +21,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
 
     bool CheckAttackAction()
     {
+        if (controller.currentlySelectedUnit == null) return false;
         return controller.currentlySelectedUnit.unitAttributes.attackType.CheckPossibleTarget(controller as PlayerController);
     }
 

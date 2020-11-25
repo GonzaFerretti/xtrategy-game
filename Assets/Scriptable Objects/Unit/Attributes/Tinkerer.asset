@@ -15,9 +15,9 @@ MonoBehaviour:
   maxHp: 40
   movementRange: 15
   minAttackRange: 0
-  maxAttackRange: 20
+  maxAttackRange: 5
   damage: 0
-  aiBehaviour: {fileID: 0}
+  aiBehaviour: {fileID: 11400000, guid: 955396790cf66be40ab8c5aff1fb1df7, type: 2}
   attackType: {fileID: 11400000, guid: dcaa85f6ab102af43b4f9f25406e808d, type: 2}
   attackSound: {fileID: 11400000, guid: b9cbad414f78f0d41acfb51023668577, type: 2}
   defaultPrefab: {fileID: 4460135487434194344, guid: 9ea62f407651add4dbf2a33b7826c029,

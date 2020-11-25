@@ -67,6 +67,14 @@ public class GameGridManager : MonoBehaviour
         coverIndicator.gameObject.SetActive(false);
     }
 
+    public int GetAttackRangeDistance(Vector3Int pos1, Vector3Int pos2)
+    {
+        int distX = Mathf.Abs(pos1.x - pos2.x);
+        int distY = Mathf.Abs(pos1.y - pos2.y);
+
+        return Mathf.Max(distX, distY);
+    }
+
     public void CreateMine(BaseController owner, Vector3Int position)
     {
         MagicMine newMine = Instantiate(minePrefab, minesRootTransform);
@@ -76,6 +84,7 @@ public class GameGridManager : MonoBehaviour
 
         newMine.transform.position = GetWorldPositionFromCoords(position);
         newMine.affectedCoordinates.Add(position);
+        minedPositionList.Add(position, newMine);
 
         foreach (var minedPosition in mineNeighbourDict[position])
         {
@@ -241,16 +250,6 @@ public class GameGridManager : MonoBehaviour
                         node = possibleNode;
                 }
             }
-
-            /*
-            for (int i = 1; i < openSet.Count; i++)
-            {
-                if (openSet.Values.ElementAt(i).GetFCost() < node.GetFCost() || openSet.Values.ElementAt(i).GetFCost() == node.GetFCost())
-                {
-                    if (openSet.Values.ElementAt(i).hCost < node.hCost)
-                        node = openSet.Values.ElementAt(i);
-                }
-            }*/
 
             openSet.Remove(node.coordinates);
             closedSet.Add(node.coordinates, node);

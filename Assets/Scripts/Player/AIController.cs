@@ -5,6 +5,8 @@ using UnityEngine;
 public class AIController : BaseController
 {
     public Dictionary<int, AsyncAIActionResult> currentActions = new Dictionary<int, AsyncAIActionResult>();
+    public Dictionary<Unit, AISavedData> AIUnitsSavedData = new Dictionary<Unit, AISavedData>();
+
     public override void StartTurn(bool shouldRestart = false)
     {
         base.StartTurn(shouldRestart);
@@ -122,8 +124,6 @@ public class AIController : BaseController
         return actionResult;
     }
 
-
-
     public IEnumerator AttemptAttack(Unit actingUnit, int id)
     {
         AsyncRangeQuery attackQuery = actingUnit.StartAttackRangeQuery();
@@ -232,4 +232,9 @@ public class AIController : BaseController
             currentActions[id].endedSuccesfully = false;
         }
     }
+}
+
+public struct AISavedData 
+{
+    public int lastAttackTurn;
 }
