@@ -44,7 +44,7 @@ public class HUDManager : MonoBehaviour
 
     public void RestartLevel()
     {
-        SceneManager.LoadScene("Level 1");
+        SceneManager.LoadScene("Level" + SceneManager.GetActiveScene().buildIndex);
     }
 
     public void GoToMenu()
