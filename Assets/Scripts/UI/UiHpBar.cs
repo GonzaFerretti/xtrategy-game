@@ -15,6 +15,6 @@ public class UiHpBar : MonoBehaviour
 
     public void Update()
     {
-        transform.forward = -Camera.main.transform.forward;
+        transform.forward = Camera.main.transform.forward;
     }
 }

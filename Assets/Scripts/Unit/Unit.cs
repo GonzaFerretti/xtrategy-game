@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Unit : GameGridElement
 {
@@ -31,6 +32,7 @@ public class Unit : GameGridElement
 
     [SerializeField] private UiHpBar hpBar;
     [SerializeField] FloatingHeal healIcon;
+    [SerializeField] TextMeshProUGUI typeText;
     [SerializeField] Image shieldIcon;
 
     public Renderer[] rens;
@@ -118,6 +120,7 @@ public class Unit : GameGridElement
         SetupAfterLoad(savedInfo);
         InitModel();
         SetupInitialPosition(savedInfo != null);
+        typeText.text = unitAttributes.name;
         UpdateHpBar();
     }
 
