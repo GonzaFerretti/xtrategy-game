@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AdTrigger : MonoBehaviour
 {
-    [SerializeField] AdType adType;
+    [SerializeField] string adType;
     [SerializeField] AdManager admgr;
 
     public void ActivateAdTrigger()

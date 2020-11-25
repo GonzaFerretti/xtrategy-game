@@ -40,7 +40,7 @@ public class AdManager : MonoBehaviour
         if (Advertisement.IsReady())
         {
             lastType = adtype;
-            Advertisement.Show(adtype, new ShowOptions() { resultCallback = HandleResult});
+            Advertisement.Show("video", new ShowOptions() { resultCallback = HandleResult});
         }
     }
 
@@ -87,9 +87,4 @@ public class AdManager : MonoBehaviour
             soundManager.Play(shieldSound);
         }
     }
-}
-public enum AdType
-{
-    video,
-    staticBanner,
 }

@@ -34,7 +34,7 @@ public class SaveManager : MonoBehaviour
             }
         }
         DontDestroyOnLoad(gameObject);
-        basePath = Application.streamingAssetsPath;
+        basePath = Application.persistentDataPath;
     }
 
     public void ProcessDataAndSave(string levelName, List<Unit> units, bool hasUsedPower, bool isEnemyTurn, List<MagicMine> mines)

@@ -2945,7 +2945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa90c4828770f2e44b73294d346ef921, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  adType: 1
+  adType: StaticBanner
   admgr: {fileID: 8500770050251773193}
 --- !u!1 &8500770048851210668
 GameObject:
@@ -3573,7 +3573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa90c4828770f2e44b73294d346ef921, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  adType: 0
+  adType: video
   admgr: {fileID: 8500770050251773193}
 --- !u!1 &8500770050199232603
 GameObject:
