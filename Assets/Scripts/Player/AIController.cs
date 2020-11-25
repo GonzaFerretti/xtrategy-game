@@ -39,7 +39,7 @@ public class AIController : BaseController
         attackingUnit.model.transform.forward = (attackedUnit.transform.position - attackingUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
-        attackedUnit.TakeDamage(attackingUnit.damage, attackedUnit);
+        attackedUnit.TakeDamage(attackingUnit.damage, attackingUnit.GetCoordinates());
         attackingUnit.attackState = CurrentActionState.ended;
     }
 
@@ -161,6 +161,43 @@ public class AIController : BaseController
         attackQuery.End();
     }
 
+    public IEnumerator AttemptToDetonateMine(Unit actingUnit, int id)
+    {
+        AsyncRangeQuery attackQuery = actingUnit.StartAttackRangeQuery();
+
+        if (currentlySelectedUnit.attackState == CurrentActionState.ended)
+        {
+            currentActions[id].endedSuccesfully = false;
+            yield break;
+        }
+
+        currentlySelectedUnit.attackState = CurrentActionState.inProgress;
+
+        while (!attackQuery.hasFinished)
+        {
+            yield return null;
+        }
+        if (attackQuery.cellsInRange.Count > 0)
+        {
+            MagicMine unitInRangeOfMine = gridManager.GetMineWithEnemyNearby(attackQuery.cellsInRange, actingUnit.owner);
+            if (unitInRangeOfMine)
+            {
+                gridManager.DetonateMine(unitInRangeOfMine.coordinates,this);
+                currentActions[id].endedSuccesfully = true;
+            }
+            else
+            {
+                currentActions[id].endedSuccesfully = false;
+            }
+        }
+        else
+        {
+            currentActions[id].endedSuccesfully = false;
+        }
+
+        attackQuery.End();
+    }
+
     public IEnumerator MoveTowardsClosestEnemy(Unit actingUnit)
     {
         if (currentlySelectedUnit.moveState == CurrentActionState.ended)
@@ -169,7 +206,6 @@ public class AIController : BaseController
         }
 
         GameGridManager grid = GetGridReference();
-        Debug.Log("Start Closest To Enemy Move");
         AsyncPathQuery query = grid.StartBestPathToClosestUnitQuery(actingUnit, GetUnitsFromOthers());
         currentlySelectedUnit.moveState = CurrentActionState.inProgress;
         while (!query.hasFinished)
@@ -190,6 +226,37 @@ public class AIController : BaseController
                 pathToClosestEnemy = longestPossiblePath;
             }
             yield return StartCoroutine(actingUnit.MoveAlongPath(pathToClosestEnemy));
+        }
+    }
+
+    public IEnumerator MoveTowardsClosestMine(Unit actingUnit)
+    {
+        if (currentlySelectedUnit.moveState == CurrentActionState.ended)
+        {
+            yield break;
+        }
+
+        GameGridManager grid = GetGridReference();
+        AsyncPathQuery query = grid.StartBestPathToClosestMineQuery(actingUnit);
+        currentlySelectedUnit.moveState = CurrentActionState.inProgress;
+        while (!query.hasFinished)
+        {
+            yield return null;
+        }
+        Vector3Int[] pathToClosestMine = query.GetPathArray();
+        if (pathToClosestMine.Length > 0)
+        {
+            int movementRange = actingUnit.movementRange;
+            if (pathToClosestMine.Length > movementRange)
+            {
+                Vector3Int[] longestPossiblePath = new Vector3Int[movementRange];
+                for (int i = 0; i < movementRange; i++)
+                {
+                    longestPossiblePath[i] = pathToClosestMine[i];
+                }
+                pathToClosestMine = longestPossiblePath;
+            }
+            yield return StartCoroutine(actingUnit.MoveAlongPath(pathToClosestMine));
         }
     }
 

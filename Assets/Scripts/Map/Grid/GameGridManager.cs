@@ -18,7 +18,9 @@ public class GameGridManager : MonoBehaviour
     public Dictionary<Vector3Int, List<Vector3Int>> neighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
     public Dictionary<Vector3Int, List<Vector3Int>> mineNeighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
 
-    public Dictionary<Vector3Int, MagicMine> minedPositionList = new Dictionary<Vector3Int, MagicMine>();
+    public Dictionary<Vector3Int, MagicMine> mineTriggerTiles = new Dictionary<Vector3Int, MagicMine>();
+    public Dictionary<Vector3Int, MagicMine> mineDetonationTiles = new Dictionary<Vector3Int, MagicMine>();
+
     [SerializeField] MagicMine minePrefab;
 
     public GridCoordinates gridCoordinates;
@@ -67,6 +69,35 @@ public class GameGridManager : MonoBehaviour
         coverIndicator.gameObject.SetActive(false);
     }
 
+    public void InitLoadedMine(MineSaveInfo mineSaveInfo)
+    {
+        MagicMine newMine = InstantiateMine(GameObject.Find(mineSaveInfo.owner).GetComponent<BaseController>(), mineSaveInfo.position);
+
+        foreach (var triggerCoord in mineSaveInfo.triggerTiles)
+        {
+            newMine.triggerTiles.Add(triggerCoord);
+            mineTriggerTiles.Add(triggerCoord, newMine);
+        }
+
+        foreach (var detonationCoord in mineSaveInfo.detonationTiles)
+        {
+            newMine.triggerTiles.Add(detonationCoord);
+            mineDetonationTiles.Add(detonationCoord, newMine);
+        }
+    }
+
+    public MagicMine InstantiateMine(BaseController owner, Vector3Int pos)
+    {
+        MagicMine newMine = Instantiate(minePrefab, minesRootTransform);
+        newMine.owner = owner;
+        newMine.coordinates = pos;
+        newMine.SetTeamColor();
+
+        newMine.transform.position = GetWorldPositionFromCoords(pos);
+
+        return newMine;
+    }
+
     public int GetAttackRangeDistance(Vector3Int pos1, Vector3Int pos2)
     {
         int distX = Mathf.Abs(pos1.x - pos2.x);
@@ -75,23 +106,34 @@ public class GameGridManager : MonoBehaviour
         return Mathf.Max(distX, distY);
     }
 
-    public void CreateMine(BaseController owner, Vector3Int position)
+    public IEnumerator CreateMine(BaseController owner, Vector3Int position)
     {
-        MagicMine newMine = Instantiate(minePrefab, minesRootTransform);
-        newMine.owner = owner;
-        newMine.coordinates = position;
-        newMine.SetTeamColor();
-
-        newMine.transform.position = GetWorldPositionFromCoords(position);
-        newMine.affectedCoordinates.Add(position);
-        minedPositionList.Add(position, newMine);
+        MagicMine newMine = InstantiateMine(owner, position);
+        newMine.triggerTiles.Add(position);
+        mineTriggerTiles.Add(position, newMine);
 
         foreach (var minedPosition in mineNeighbourDict[position])
         {
-            if (!minedPositionList.ContainsKey(minedPosition))
+            if (!mineTriggerTiles.ContainsKey(minedPosition))
             {
-                minedPositionList.Add(minedPosition, newMine);
-                newMine.affectedCoordinates.Add(minedPosition);
+                mineTriggerTiles.Add(minedPosition, newMine);
+                newMine.triggerTiles.Add(minedPosition);
+            }
+        }
+
+        AsyncRangeQuery attackQuery = QueryUnitAttackRange(0, 3, position);
+
+        while (!attackQuery.hasFinished)
+        {
+            yield return null;
+        }
+
+        foreach (var cell in attackQuery.cellsInRange)
+        {
+            if (!newMine.triggerTiles.Contains(cell) && !mineDetonationTiles.ContainsKey(cell))
+            {
+                mineDetonationTiles.Add(cell, newMine);
+                newMine.detonationTiles.Add(cell);
             }
         }
     }
@@ -295,29 +337,69 @@ public class GameGridManager : MonoBehaviour
     {
         damage = 0;
 
-        if (!minedPositionList.ContainsKey(unitPosition)) return false;
+        if (!mineTriggerTiles.ContainsKey(unitPosition)) return false;
         if (owner == null) return false;
-        MagicMine currentlySteppedOnMine = minedPositionList[unitPosition];
+        MagicMine currentlySteppedOnMine = mineTriggerTiles[unitPosition];
 
         if (owner == currentlySteppedOnMine.owner) return false;
 
-        if (minedPositionList[unitPosition].coordinates == unitPosition)
-        {
-            damage = currentlySteppedOnMine.centerDamage;
-        }
-        else
-        {
-            damage = currentlySteppedOnMine.sideDamage;
-        }
+        damage = currentlySteppedOnMine.stepDamage;
+
         DestroyMine(currentlySteppedOnMine);
         return true;
     }
 
+    public void DetonateMine(Vector3Int mineCoords, BaseController owner)
+    {
+        if (mineTriggerTiles.ContainsKey(mineCoords))
+        {
+            MagicMine mine = mineTriggerTiles[mineCoords];
+            foreach (var triggerTile in mine.triggerTiles)
+            {
+                Unit unit = GetUnitAtCoordinates(triggerTile);
+                if (unit)
+                {
+                    if (!unit.unitAttributes.isImmuneToExplosions && unit.owner != owner)
+                    {
+                        unit.TakeDamage(mine.centerDetonateDamage, mineCoords);
+                    }
+                }
+            }
+
+            foreach (var explosionTile in mine.detonationTiles)
+            {
+                Unit unit = GetUnitAtCoordinates(explosionTile);
+                if (unit)
+                {
+                    if (!unit.unitAttributes.isImmuneToExplosions && unit.owner != owner)
+                    {
+                        unit.TakeDamage(mine.sideDetonateDamage, mineCoords);
+                    }
+                }
+            }
+
+            DestroyMine(mine);
+        }
+    }
+
+    public void DestroyMine(Vector3Int coords)
+    {
+        if (mineTriggerTiles.ContainsKey(coords))
+        {
+            DestroyMine(mineTriggerTiles[coords]);
+        }
+    }
+
     public void DestroyMine(MagicMine mine)
     {
-        foreach (var coordinates in mine.affectedCoordinates)
+        foreach (var coordinates in mine.triggerTiles)
         {
-            minedPositionList.Remove(coordinates);
+            mineTriggerTiles.Remove(coordinates);
+        }
+
+        foreach (var coordinates in mine.detonationTiles)
+        {
+            mineDetonationTiles.Remove(coordinates);
         }
 
         Destroy(mine.gameObject);
@@ -625,6 +707,7 @@ public class GameGridManager : MonoBehaviour
     {
         CoverData cover = coverObject.coverData;
 
+        if (origin == destination) return true;
         bool isOnSide1OfCover = destination == cover.side1;
         bool isOnSide2OfCover = destination == cover.side2;
         if (!isOnSide1OfCover && !isOnSide2OfCover) return false;
@@ -724,6 +807,94 @@ public class GameGridManager : MonoBehaviour
     public Vector3 GetWorldPositionFromCoords(Vector3Int cellCoords)
     {
         return grid.CellToWorld(cellCoords);
+    }
+
+    public List<MagicMine> GetEnemyMines(BaseController owner)
+    {
+        List<MagicMine> enemyMines = new List<MagicMine>();
+
+        foreach (var mine in mineTriggerTiles.Values)
+        {
+            if (mine.owner != owner) enemyMines.Add(mine);
+        }
+
+        return enemyMines;
+    }
+
+    public MagicMine GetMineWithEnemyNearby(List<Vector3Int> scanArea, BaseController attackingOwner)
+    {
+        MagicMine mine = null;
+        foreach (var coordinates in scanArea)
+        {
+            if (mineTriggerTiles.ContainsKey(coordinates))
+            {
+                foreach (Unit unit in gameManager.allUnits)
+                {
+                    if (unit.owner != attackingOwner)
+                    {
+                        if (unit.GetCoordinates() == coordinates)
+                        {
+                            mine = mineTriggerTiles[coordinates];
+                            break;
+                        }
+                    }
+                }
+                if (mine) break;
+            }
+            else if (mineDetonationTiles.ContainsKey(coordinates))
+            {
+                foreach (Unit unit in gameManager.allUnits)
+                {
+                    if (unit.owner != attackingOwner)
+                    {
+                        if (unit.GetCoordinates() == coordinates)
+                        {
+                            mine = mineDetonationTiles[coordinates];
+                            break;
+                        }
+                    }
+                }
+                if (mine) break;
+            }
+        }
+        return mine;
+    }
+
+    public AsyncPathQuery StartBestPathToClosestMineQuery(Unit thisUnit)
+    {
+        int queryId = GetAvailableQueryId();
+        AsyncPathQuery currentQuery = new AsyncPathQuery(queryId, this);
+        currentQueries.Add(queryId, currentQuery);
+        StartCoroutine(GetBestPathToGetToClosestMine(thisUnit, GetEnemyMines(thisUnit.owner), queryId));
+        return currentQuery;
+    }
+
+    public IEnumerator GetBestPathToGetToClosestMine(Unit thisUnit, List<MagicMine> otherMines, int queryId)
+    {
+        List<Vector3Int[]> possiblePaths = new List<Vector3Int[]>();
+
+        float currentStartTime = Time.realtimeSinceStartup;
+
+        foreach (MagicMine possibleMine in otherMines)
+        {
+            List<Vector3Int> possibleDirections = neighbourDict[possibleMine.coordinates];
+            foreach (Vector3Int possibleDirection in possibleDirections)
+            {
+                int possiblePathQueryId = GetAvailableQueryId();
+                AsyncPathQuery possiblePathQuery = new AsyncPathQuery(possiblePathQueryId, this);
+                currentQueries.Add(possiblePathQueryId, possiblePathQuery);
+                StartCoroutine(ProcessShortestPathQuery(thisUnit.GetCoordinates(), possibleDirection, possiblePathQueryId));
+                while (!possiblePathQuery.hasFinished)
+                {
+                    yield return null;
+                }
+                possiblePaths.Add(possiblePathQuery.GetPathArray());
+                possiblePathQuery.End();
+            }
+        }
+
+        (currentQueries[queryId] as AsyncPathQuery).finalPathArray = GetShortestPathFromPossiblePaths(possiblePaths);
+        (currentQueries[queryId] as AsyncPathQuery).hasFinished = true;
     }
 
     public AsyncPathQuery StartBestPathToClosestUnitQuery(Unit thisUnit, List<Unit> otherUnits)

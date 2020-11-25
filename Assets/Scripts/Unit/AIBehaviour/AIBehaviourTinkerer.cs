@@ -15,11 +15,6 @@ public class AIBehaviourTinkerer : AIBehaviour
         {
             AsyncAIActionResult moveToCloserCover = controller.GenerateNewAIActionResult();
             yield return controller.StartCoroutine(controller.MoveTowardsCoverCloseToEnemy(actingUnit, moveToCloserCover.id));
-            if (moveToCloserCover.endedSuccesfully)
-            {
-                AsyncAIActionResult SecondAttackAttempt = controller.GenerateNewAIActionResult();
-                yield return controller.StartCoroutine(controller.AttemptAttack(actingUnit, SecondAttackAttempt.id));
-            }
         }
 
         GameGridManager grid = controller.GetGridReference();
@@ -49,9 +44,9 @@ public class AIBehaviourTinkerer : AIBehaviour
 
             foreach (var possibleAttack in attackRangeQuery.cellsInRange)
             {
-                if (!grid.minedPositionList.ContainsKey(possibleAttack))
+                if (!grid.mineTriggerTiles.ContainsKey(possibleAttack))
                 {
-                    grid.CreateMine(actingUnit.owner, possibleAttack);
+                    yield return controller.StartCoroutine(grid.CreateMine(actingUnit.owner, possibleAttack));
                     actingUnit.attackState = CurrentActionState.ended;
                     if (controller.AIUnitsSavedData.ContainsKey(actingUnit))
                     {

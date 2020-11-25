@@ -37,17 +37,36 @@ public class SaveManager : MonoBehaviour
         basePath = Application.streamingAssetsPath;
     }
 
-    public void ProcessDataAndSave(string levelName, List<Unit> units, bool hasUsedPower, bool isEnemyTurn)
+    public void ProcessDataAndSave(string levelName, List<Unit> units, bool hasUsedPower, bool isEnemyTurn, List<MagicMine> mines)
     {
         var saveData = new SaveData
         {
             levelName = levelName,
             units = GetSaveInfoFromUnits(units),
+            mines = GetMineSaveInfo(mines),
             hasUsedPower = hasUsedPower,
             isEnemyTurn = isEnemyTurn
         };
 
         Save(saveData);
+    }
+
+    public MineSaveInfo[] GetMineSaveInfo(List<MagicMine> mines)
+    {
+        MineSaveInfo[] saveInfo = new MineSaveInfo[mines.Count];
+        for (int i = 0; i < mines.Count; i++)
+        {
+            MagicMine mine = mines[i];
+            if (!mine) continue;
+            saveInfo[i] = new MineSaveInfo
+            {
+                owner = mine.owner.name,
+                position = mine.coordinates,
+                detonationTiles = mine.detonationTiles,
+                triggerTiles = mine.triggerTiles
+            };
+        }
+        return saveInfo;
     }
 
     public UnitSaveInfo[] GetSaveInfoFromUnits(List<Unit> units)
@@ -64,7 +83,8 @@ public class SaveManager : MonoBehaviour
                 hpLeft = unit.currentHp,
                 owner = unit.owner.name,
                 unitType = unit.unitAttributes,
-                position = unit.GetCoordinates()
+                position = unit.GetCoordinates(),
+                isShielded = unit.isShielded
             };
         }
         return saveInfo;

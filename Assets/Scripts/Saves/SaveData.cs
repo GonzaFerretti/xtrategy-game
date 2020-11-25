@@ -8,6 +8,7 @@ public class SaveData
 
     public string levelName;
     public UnitSaveInfo[] units;
+    public MineSaveInfo[] mines;
     public bool hasUsedPower;
     public bool isEnemyTurn;
 }
@@ -20,5 +21,15 @@ public class UnitSaveInfo
     public UnitAttributes unitType;
     public bool hasMoved;
     public bool hasAttacked;
+    public bool isShielded;
     public Vector3Int position;
+}
+
+[System.Serializable]
+public class MineSaveInfo
+{
+    public string owner;
+    public Vector3Int position;
+    public List<Vector3Int> triggerTiles;
+    public List<Vector3Int> detonationTiles;
 }

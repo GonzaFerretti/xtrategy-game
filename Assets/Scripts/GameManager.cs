@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (var unit in GetHumanPlayerUnits())
         {
-            unit.HealCompletely(); 
+            unit.HealCompletely();
         }
     }
 
@@ -111,6 +111,15 @@ public class GameManager : MonoBehaviour
             SetPowerUsageStatus(saveData.hasUsedPower);
             SetTurn(saveData.isEnemyTurn);
             SanitizeControllerUnitList();
+            LoadMines(saveData.mines);
+        }
+    }
+
+    void LoadMines(MineSaveInfo[] mineSaveInfos)
+    {
+        foreach (var mineSaveInfo in mineSaveInfos)
+        {
+            grid.InitLoadedMine(mineSaveInfo);
         }
     }
 
@@ -168,7 +177,7 @@ public class GameManager : MonoBehaviour
 
     public void SaveMatch()
     {
-        saveManager.ProcessDataAndSave(SceneManager.GetActiveScene().name, allUnits, hasUsedPower, currentPlayer is AIController);
+        saveManager.ProcessDataAndSave(SceneManager.GetActiveScene().name, allUnits, hasUsedPower, currentPlayer is AIController, FindObjectsOfType<MagicMine>().ToList());
     }
 
     void GetHudReference()

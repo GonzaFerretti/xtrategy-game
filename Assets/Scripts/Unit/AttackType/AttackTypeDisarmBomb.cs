@@ -12,7 +12,7 @@ public class AttackTypeDisarmBomb : AttackType
 
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
-        attackingUnit.grid.CreateMine(attackingUnit.owner, coordinatesToAttack);
+        attackingUnit.grid.DetonateMine(coordinatesToAttack,attackingUnit.owner);
         attackingUnit.attackState = CurrentActionState.ended;
     }
 
@@ -20,15 +20,9 @@ public class AttackTypeDisarmBomb : AttackType
     {
         controller.CheckUnitUISwitch();
 
-        if (controller.GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("GroundBase")))
+        if (controller.GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("Mine")))
         {
-            Vector3Int target = objectSelected.transform.parent.GetComponent<GameGridCell>().GetCoordinates();
-
-            if (!controller.currentlySelectedUnit.possibleAttacks.Contains(target)) return false;
-
-            if (controller.GetGridReference().GetUnitAtCoordinates(target) != null) return false;
-
-            if (controller.GetGridReference().CheckMineProximity(out int dmg, target)) return false;
+            Vector3Int target = objectSelected.GetComponent<MagicMine>().coordinates;
 
             controller.currentlySelectedUnit.attackState = CurrentActionState.inProgress;
             controller.StartCoroutine(ExecuteAttack(target, controller.currentlySelectedUnit));

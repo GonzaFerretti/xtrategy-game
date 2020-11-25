@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 781880995333487562}
   - component: {fileID: 4281209981496996895}
   - component: {fileID: 3211451036490268790}
-  m_Layer: 0
+  - component: {fileID: 2904608348456743733}
+  m_Layer: 13
   m_Name: mine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,8 +94,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
   coordinates: {x: 0, y: 0, z: 0}
-  centerDamage: 0
-  sideDamage: 0
-  centerDetonateDamage: 0
-  sideDetonateDamage: 0
-  affectedCoordinates: []
+  stepDamage: 3
+  centerDetonateDamage: 8
+  sideDetonateDamage: 5
+  triggerTiles: []
+  detonationTiles: []
+--- !u!65 &2904608348456743733
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6671413169564844343}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 20.137732, y: 19.836681, z: 16.34}
+  m_Center: {x: 0, y: -0.0024409299, z: 7.72}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Unit : GameGridElement
 {
@@ -11,7 +12,7 @@ public class Unit : GameGridElement
     [SerializeField] GameGridCell currentCell;
     public List<Cover> currentCovers;
 
-    [SerializeField] bool isShielded = false;
+    public bool isShielded = false;
 
     public int currentHp;
     public CurrentActionState moveState = CurrentActionState.notStarted;
@@ -29,6 +30,8 @@ public class Unit : GameGridElement
     [SerializeField] SoundRepository sounds;
 
     [SerializeField] private UiHpBar hpBar;
+    [SerializeField] FloatingHeal healIcon;
+    [SerializeField] Image shieldIcon;
 
     public Renderer[] rens;
     public Material seethroughBaseMaterial;
@@ -54,24 +57,22 @@ public class Unit : GameGridElement
         return currentCell.GetCoordinates();
     }
 
-    public void TakeDamage(int baseDamage, Unit attackingUnit = null)
+    public void TakeDamage(int baseDamage, Vector3Int damageSourcePosition)
     {
         bool isCoverInTheWay = false;
-        if (attackingUnit != null)
+        foreach (Cover cover in currentCovers)
         {
-            foreach (Cover cover in currentCovers)
+            if (cover is HighCover) continue;
+            if (grid.IsCoverInTheWayOfAttack(damageSourcePosition, GetCoordinates(), cover))
             {
-                if (cover is HighCover) continue;
-                if (grid.IsCoverInTheWayOfAttack(attackingUnit.GetCoordinates(), GetCoordinates(), cover))
-                {
-                    isCoverInTheWay = true;
-                    break;
-                }
+                isCoverInTheWay = true;
+                break;
             }
         }
         if (isShielded)
         {
             isShielded = false;
+            shieldIcon.enabled = false;
             PlaySound("shieldhit");
         }
         else
@@ -88,6 +89,7 @@ public class Unit : GameGridElement
             }
             else
             {
+                Unit attackingUnit = grid.GetUnitAtCoordinates(damageSourcePosition);
                 if (attackingUnit != null)
                     model.transform.forward = (attackingUnit.transform.position - transform.position).normalized;
                 anim.Play("hit");
@@ -123,18 +125,18 @@ public class Unit : GameGridElement
     {
         currentHp = unitAttributes.maxHp;
         UpdateHpBar();
-        // Do more visual stuff here
+        StartCoroutine(healIcon.ShowIcon());
     }
 
     public void Shield()
     {
         isShielded = true;
-        // Do visual stuff here
+        shieldIcon.enabled = true;
     }
 
     void SetupInitialPosition(bool isLoading)
     {
-        if (desiredStartingPos != new Vector2Int(-1, -1) && !isLoading) currentCell = grid.GetCellAtCoordinate(new Vector3Int(desiredStartingPos.x,desiredStartingPos.y,0));
+        if (desiredStartingPos != new Vector2Int(-1, -1) && !isLoading) currentCell = grid.GetCellAtCoordinate(new Vector3Int(desiredStartingPos.x, desiredStartingPos.y, 0));
         if (!currentCell) currentCell = grid.GetRandomUnusedCell();
         transform.position = currentCell.transform.position;
         currentCovers = grid.GetCoversFromCoord(GetCoordinates());
@@ -145,6 +147,7 @@ public class Unit : GameGridElement
         if (savedInfo == null) return;
         currentHp = savedInfo.hpLeft;
         owner = GameObject.Find(savedInfo.owner).GetComponent<BaseController>();
+        if (savedInfo.isShielded) Shield();
         currentCell = grid.GetCellAtCoordinate(savedInfo.position);
         attackState = (savedInfo.hasAttacked) ? CurrentActionState.ended : CurrentActionState.notStarted;
         moveState = (savedInfo.hasMoved) ? CurrentActionState.ended : CurrentActionState.notStarted;
@@ -267,10 +270,13 @@ public class Unit : GameGridElement
             model.transform.forward = (grid.GetWorldPositionFromCoords(path[i]) - lastPosition).normalized;
             transform.position = grid.GetWorldPositionFromCoords(path[i]);
             currentCoordinates = path[i];
-            if (grid.CheckMineProximity(out int damage, currentCoordinates, owner))
+            if (!unitAttributes.isImmuneToExplosions)
             {
-                TakeDamage(damage);
-                break;
+                if (grid.CheckMineProximity(out int damage, currentCoordinates, owner))
+                {
+                    TakeDamage(damage, currentCoordinates);
+                    break;
+                }
             }
             lastPosition = transform.position;
             Camera.main.GetComponent<CameraController>().SetFollowTarget(transform);
@@ -296,17 +302,20 @@ public class Unit : GameGridElement
             model.transform.forward = (grid.GetWorldPositionFromCoords(givenPath[i]) - lastPosition).normalized;
             transform.position = grid.GetWorldPositionFromCoords(givenPath[i]);
             currentCoordinates = givenPath[i];
-            if (grid.CheckMineProximity(out int damage, currentCoordinates, owner))
+            if (!unitAttributes.isImmuneToExplosions)
             {
-                TakeDamage(damage);
-                break;
+                if (grid.CheckMineProximity(out int damage, currentCoordinates, owner))
+                {
+                    TakeDamage(damage, currentCoordinates);
+                    break;
+                }
             }
             lastPosition = transform.position;
             Camera.main.GetComponent<CameraController>().SetFollowTarget(transform);
             yield return new WaitForSeconds(0.25f);
         }
         possibleMovements = new List<Vector3Int>();
-        currentCell = grid.GetCellAtCoordinate(givenPath[givenPath.Length - 1]);
+        currentCell = grid.GetCellAtCoordinate(currentCoordinates);
         currentCovers = grid.GetCoversFromCoord(GetCoordinates());
 
         anim.SetTrigger("endCurrentAnim");
