@@ -37,6 +37,10 @@ public class GameManager : MonoBehaviour
             saveManager.ResetStagedData();
         }
     }
+    public int GetTurnNumber()
+    {
+        return currentTurn;
+    }
 
     public void UsePower(string type)
     {
