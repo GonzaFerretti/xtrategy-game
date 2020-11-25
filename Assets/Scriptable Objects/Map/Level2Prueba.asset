@@ -131,12 +131,10 @@ MonoBehaviour:
     side2: {x: 8, y: 15, z: 0}
   - side1: {x: 7, y: 14, z: 0}
     side2: {x: 8, y: 14, z: 0}
-  - side1: {x: 8, y: 13, z: 0}
-    side2: {x: 7, y: 13, z: 0}
-  - side1: {x: 8, y: 12, z: 0}
-    side2: {x: 7, y: 12, z: 0}
-  - side1: {x: 7, y: 11, z: 0}
-    side2: {x: 8, y: 11, z: 0}
+  - side1: {x: 7, y: 13, z: 0}
+    side2: {x: 8, y: 13, z: 0}
+  - side1: {x: 7, y: 12, z: 0}
+    side2: {x: 8, y: 12, z: 0}
   - side1: {x: 10, y: 14, z: 0}
     side2: {x: 10, y: 13, z: 0}
   - side1: {x: 11, y: 13, z: 0}
@@ -238,10 +236,9 @@ MonoBehaviour:
   - LowCoverBloc
   - LowCoverBloc
   - LowCoverBloc
-  - HighCoverBloc
-  - HighCoverBloc
-  - HighCoverBloc
-  - HighCoverBloc
+  - WoodFenceLCover
+  - WoodFenceLCover
+  - WoodFenceLCover
   - HighCoverBloc
   - WoodFenceLCover
   - LowCoverBloc
@@ -825,7 +822,7 @@ MonoBehaviour:
   - GrassFloorCell
   - GrassFloorCell
   - GrassFloorCell
-  - GrassFloorCell
+  - PlazaCornerCell
   - GrassFloorCell
   - GrassFloorCell
   - GrassFloorCell
