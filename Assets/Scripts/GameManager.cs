@@ -290,7 +290,16 @@ public class GameManager : MonoBehaviour
         if (players.Count > 1) return;
         if (players[0] is PlayerController)
         {
-            SceneManager.LoadScene("Win");
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            try
+            {
+                SceneManager.LoadScene("Level" + (currentSceneIndex + 1));
+            }
+            catch
+            {
+                SceneManager.LoadScene("Win");
+
+            }
         }
         else
         {
@@ -299,49 +308,49 @@ public class GameManager : MonoBehaviour
     }
 
     public void EndPlayerTurn()
+{
+    if (playersRemaining.Count > 1)
     {
-        if (playersRemaining.Count > 1)
+        playersRemaining.Remove(playersRemaining[0]);
+        StartPlayerTurn();
+    }
+    else
+    {
+        if (currentTurn < totalTurns)
         {
-            playersRemaining.Remove(playersRemaining[0]);
+            currentTurn++;
+            currentPlayer = null;
+            CompleteRemaingPlayerList();
             StartPlayerTurn();
         }
-        else
+        else EndMatchNoTurnsLeft();
+    }
+}
+
+void StartPlayerTurn(bool isResumingAfterSave = false)
+{
+    currentPlayer = playersRemaining[0];
+    currentPlayer.StartTurn(!isResumingAfterSave);
+}
+
+public void UpdateUnitList()
+{
+    allUnits = new List<Unit>();
+    foreach (BaseController player in players)
+    {
+        allUnits.AddRange(player.unitsControlled);
+        if (player.unitsControlled.Count == 0)
         {
-            if (currentTurn < totalTurns)
-            {
-                currentTurn++;
-                currentPlayer = null;
-                CompleteRemaingPlayerList();
-                StartPlayerTurn();
-            }
-            else EndMatchNoTurnsLeft();
+            players.Remove(player);
+            break;
         }
     }
+    CheckLoser();
+}
 
-    void StartPlayerTurn(bool isResumingAfterSave = false)
-    {
-        currentPlayer = playersRemaining[0];
-        currentPlayer.StartTurn(!isResumingAfterSave);
-    }
-
-    public void UpdateUnitList()
-    {
-        allUnits = new List<Unit>();
-        foreach (BaseController player in players)
-        {
-            allUnits.AddRange(player.unitsControlled);
-            if (player.unitsControlled.Count == 0)
-            {
-                players.Remove(player);
-                break;
-            }
-        }
-        CheckLoser();
-    }
-
-    void EndMatchNoTurnsLeft()
-    {
-        BaseController loserPlayer = players.OrderBy(player => player.GetAmountOfUnitsLeft()).Last();
-        loserPlayer.DestroyPlayer();
-    }
+void EndMatchNoTurnsLeft()
+{
+    BaseController loserPlayer = players.OrderBy(player => player.GetAmountOfUnitsLeft()).Last();
+    loserPlayer.DestroyPlayer();
+}
 }

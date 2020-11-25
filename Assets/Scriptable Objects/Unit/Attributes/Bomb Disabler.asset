@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b523493f5b01c4088b388fe729cab4, type: 3}
   m_Name: Bomb Disabler
   m_EditorClassIdentifier: 
-  maxHp: 40
-  movementRange: 15
+  maxHp: 6
+  movementRange: 4
   minAttackRange: 0
-  maxAttackRange: 5
+  maxAttackRange: 4
   damage: 0
   isImmuneToExplosions: 1
   aiBehaviour: {fileID: 11400000, guid: 7983b197629db0d40b253525ae042a86, type: 2}
