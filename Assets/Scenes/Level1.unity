@@ -40678,6 +40678,11 @@ PrefabInstance:
       propertyPath: hud
       value: 
       objectReference: {fileID: 1599468313}
+    - target: {fileID: 8695804890880958519, guid: d5445568a9c96d2419b87716b80a15de,
+        type: 3}
+      propertyPath: currentPlayer
+      value: 
+      objectReference: {fileID: 1860347971}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5445568a9c96d2419b87716b80a15de, type: 3}
 --- !u!1001 &1222983920

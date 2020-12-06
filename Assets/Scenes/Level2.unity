@@ -12933,6 +12933,11 @@ PrefabInstance:
       propertyPath: players.Array.data[1]
       value: 
       objectReference: {fileID: 451429187}
+    - target: {fileID: 8695804890880958519, guid: d5445568a9c96d2419b87716b80a15de,
+        type: 3}
+      propertyPath: currentPlayer
+      value: 
+      objectReference: {fileID: 1430870039}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5445568a9c96d2419b87716b80a15de, type: 3}
 --- !u!1 &361096378

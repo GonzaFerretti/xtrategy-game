@@ -552,7 +552,6 @@ public class GameGridManager : MonoBehaviour
         return possibleCover;
     }
 
-
     public IEnumerator ProcessUnitRangeQuery(int maxSteps, Vector3Int currentCell, int queryId)
     {
         Dictionary<Vector3Int, int> currentBorder = new Dictionary<Vector3Int, int>
@@ -980,7 +979,7 @@ public class GameGridManager : MonoBehaviour
 
                     pathToPositionQuery.End();
 
-                    AsyncPathQuery pathFromCoverToEnemyQuery = StartShortestPathQuery(thisUnit.GetCoordinates(), possiblePositionToCover);
+                    AsyncPathQuery pathFromCoverToEnemyQuery = StartShortestPathQuery(possiblePositionToCover, possibleTargetUnit.GetCoordinates());
 
                     while (!pathFromCoverToEnemyQuery.hasFinished)
                     {

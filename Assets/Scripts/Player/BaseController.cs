@@ -140,6 +140,11 @@ public class BaseController : MonoBehaviour
         return unitsControlled.Contains(unit);        
     }
 
+    public bool HasMultipleUnits()
+    {
+        return unitsControlled.Count > 1;
+    }
+
     public void MoveUnit(Vector3Int target)
     {
         StartCoroutine(currentlySelectedUnit.MoveByDestinationCoords(target));

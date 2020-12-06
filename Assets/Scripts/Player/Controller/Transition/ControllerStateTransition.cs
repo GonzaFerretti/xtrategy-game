@@ -6,6 +6,7 @@ public abstract class ControllerStateTransition : ScriptableObject
 {
     public ControllerState destinationState;
     public List<string> hudElementsToEnable;
+    public bool shouldShowUnitCycleHUD;
 
     public virtual void Transition(BaseController controller)
     {
@@ -14,6 +15,18 @@ public abstract class ControllerStateTransition : ScriptableObject
         foreach (string hudElementName in hudElementsToEnable)
         {
             controller.GetGridReference().gameManager.hud.EnableHudElementByName(hudElementName);
+        }
+        
+        if (shouldShowUnitCycleHUD)
+            UpdateUnitCycleHUDVisibility(controller);
+    }
+
+    public void UpdateUnitCycleHUDVisibility(BaseController controller)
+    {
+        if (controller.HasMultipleUnits())
+        {
+            controller.GetGridReference().gameManager.hud.EnableHudElementByName("NextUnit");
+            controller.GetGridReference().gameManager.hud.EnableHudElementByName("PreviousUnit");
         }
     }
 

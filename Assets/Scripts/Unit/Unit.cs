@@ -207,10 +207,10 @@ public class Unit : GameGridElement
 
     public virtual void Select()
     {
+        Camera.main.GetComponent<CameraController>().SetFollowTarget(transform);
         if (moveState == CurrentActionState.ended) return;
         grid.EnableCellIndicator(GetCoordinates(), GridIndicatorMode.selectedUnit);
         grid.SetAllCoverIndicators(true);
-        Camera.main.GetComponent<CameraController>().SetFollowTarget(transform);
         if (possibleMovements.Count == 0)
         {
             currentRangeQuery = StartRangeQuery();
@@ -251,10 +251,6 @@ public class Unit : GameGridElement
     public IEnumerator MoveByDestinationCoords(Vector3Int destinationCoords)
     {
         grid.SetAllCoverIndicators(false);
-        moveState = CurrentActionState.inProgress;
-        anim.Play("move");
-        currentCovers = new List<Cover>();
-
         AsyncPathQuery query = grid.StartShortestPathQuery(currentCell.GetCoordinates(), destinationCoords);
 
         while (!query.hasFinished)
@@ -263,33 +259,9 @@ public class Unit : GameGridElement
         }
 
         Vector3Int[] path = query.GetPathArray();
-
         query.End();
 
-        Vector3 lastPosition = transform.position;
-        Vector3Int currentCoordinates = GetCoordinates();
-        for (int i = 0; i < path.Length; i++)
-        {
-            model.transform.forward = (grid.GetWorldPositionFromCoords(path[i]) - lastPosition).normalized;
-            transform.position = grid.GetWorldPositionFromCoords(path[i]);
-            currentCoordinates = path[i];
-            if (!unitAttributes.isImmuneToExplosions)
-            {
-                if (grid.CheckMineProximity(out int damage, currentCoordinates, owner))
-                {
-                    TakeDamage(damage, currentCoordinates);
-                    break;
-                }
-            }
-            lastPosition = transform.position;
-            Camera.main.GetComponent<CameraController>().SetFollowTarget(transform);
-            yield return new WaitForSeconds(0.25f);
-        }
-        possibleMovements = new List<Vector3Int>();
-        currentCell = grid.GetCellAtCoordinate(currentCoordinates);
-        currentCovers = grid.GetCoversFromCoord(GetCoordinates());
-        moveState = CurrentActionState.ended;
-        anim.SetTrigger("endCurrentAnim");
+        yield return MoveAlongPath(path);
         grid.DisableCellIndicators(possibleMovements);
     }
 

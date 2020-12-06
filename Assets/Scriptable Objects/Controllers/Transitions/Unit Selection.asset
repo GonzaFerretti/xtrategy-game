@@ -19,6 +19,5 @@ MonoBehaviour:
   - YourTurn
   - MenuButton
   - AdButton
-  - NextUnit
-  - PreviousUnit
   - SkipTurn
+  shouldShowUnitCycleHUD: 1
