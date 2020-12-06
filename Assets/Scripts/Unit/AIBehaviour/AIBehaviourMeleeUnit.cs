@@ -16,7 +16,7 @@ public class AIBehaviourMeleeUnit : AIBehaviour
         else
         {
             yield return controller.StartCoroutine(controller.MoveTowardsClosestEnemy(actingUnit));
-            
+            if (!actingUnit) yield break;
             
             AsyncAIActionResult secondAttackAtempt = controller.GenerateNewAIActionResult();
             yield return controller.StartCoroutine(controller.AttemptAttack(actingUnit, secondAttackAtempt.id));

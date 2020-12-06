@@ -16,6 +16,15 @@ public class AIController : BaseController
     IEnumerator ExecuteUnitBehaviours()
     {
         yield return new WaitForSeconds(1.5f);
+        yield return CycleThroughUnitBehaviours();
+        currentlySelectedUnit = null;
+        gridManager.gameManager.EndPlayerTurn();
+
+    }
+
+    IEnumerator CycleThroughUnitBehaviours()
+    {
+        int startingUnitAmount = unitsControlled.Count;
         foreach (Unit unit in unitsControlled)
         {
             currentlySelectedUnit = unit;
@@ -23,12 +32,14 @@ public class AIController : BaseController
             {
                 Camera.main.GetComponent<CameraController>().SetFollowTarget(unit.transform);
                 yield return StartCoroutine(unit.AI.ExecuteBehaviour(this, unit));
+                if (unitsControlled.Count < startingUnitAmount)
+                {
+                    StartCoroutine(CycleThroughUnitBehaviours());
+                    yield break;
+                }
                 yield return new WaitForSeconds(2);
             }
         }
-        currentlySelectedUnit = null;
-        gridManager.gameManager.EndPlayerTurn();
-
     }
 
 
@@ -200,6 +211,7 @@ public class AIController : BaseController
 
     public IEnumerator MoveTowardsClosestEnemy(Unit actingUnit)
     {
+        if (!currentlySelectedUnit) yield break;
         if (currentlySelectedUnit.moveState == CurrentActionState.ended)
         {
             yield break;
@@ -231,6 +243,7 @@ public class AIController : BaseController
 
     public IEnumerator MoveTowardsClosestMine(Unit actingUnit)
     {
+        if (!currentlySelectedUnit) yield break;
         if (currentlySelectedUnit.moveState == CurrentActionState.ended)
         {
             yield break;
@@ -262,6 +275,12 @@ public class AIController : BaseController
 
     public IEnumerator MoveTowardsCoverCloseToEnemy(Unit actingUnit, int id)
     {
+        if (!currentlySelectedUnit)
+        {
+            currentActions[id].endedSuccesfully = false;
+            yield break;
+        }
+
         if (currentlySelectedUnit.moveState == CurrentActionState.ended)
         {
             yield break;

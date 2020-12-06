@@ -15,6 +15,7 @@ public class AIBehaviourTinkerer : AIBehaviour
         {
             AsyncAIActionResult moveToCloserCover = controller.GenerateNewAIActionResult();
             yield return controller.StartCoroutine(controller.MoveTowardsCoverCloseToEnemy(actingUnit, moveToCloserCover.id));
+            if (!actingUnit) yield break;
         }
 
         GameGridManager grid = controller.GetGridReference();

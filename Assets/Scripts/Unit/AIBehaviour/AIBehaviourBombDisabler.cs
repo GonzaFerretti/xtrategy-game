@@ -16,12 +16,13 @@ public class AIBehaviourBombDisabler : AIBehaviour
         else
         {
             yield return controller.StartCoroutine(controller.MoveTowardsClosestMine(actingUnit));
-
+            if (!actingUnit) yield break;
             AsyncAIActionResult secondDisableAttempt = controller.GenerateNewAIActionResult();
             yield return controller.StartCoroutine(controller.AttemptToDetonateMine(actingUnit, secondDisableAttempt.id));
             if (secondDisableAttempt.endedSuccesfully)
             {
                 AsyncAIActionResult moveToCloserCover = controller.GenerateNewAIActionResult();
+                if (!actingUnit) yield break;
                 yield return controller.StartCoroutine(controller.MoveTowardsCoverCloseToEnemy(actingUnit, moveToCloserCover.id));
             }
         }

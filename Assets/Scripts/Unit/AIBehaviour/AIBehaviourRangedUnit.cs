@@ -25,6 +25,7 @@ public class AIBehaviourRangedUnit : AIBehaviour
                     AsyncAIActionResult SecondAttackAttempt = controller.GenerateNewAIActionResult();
                     yield return controller.StartCoroutine(controller.AttemptAttack(actingUnit, SecondAttackAttempt.id));
                 }
+                if (!actingUnit) yield break;
             }
         }
         else
@@ -36,6 +37,7 @@ public class AIBehaviourRangedUnit : AIBehaviour
                 AsyncAIActionResult SecondAattackAttemptFromCover = controller.GenerateNewAIActionResult();
                 yield return controller.StartCoroutine(controller.AttemptAttack(actingUnit, SecondAattackAttemptFromCover.id));
             }
+            if (!actingUnit) yield break;
         }
     }
 }
