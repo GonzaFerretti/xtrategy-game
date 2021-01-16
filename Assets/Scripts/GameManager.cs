@@ -19,9 +19,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] int totalTurns;
     [SerializeField] int currentTurn = 1;
 
-    public void Start()
+    public void InitiateGame()
     {
-        ExecutePreLoadMethods();
+        ExecutePreSetupMethods();
         grid.Init();
         if (saveManager && saveManager.isLoadingFromSave)
         {
@@ -31,12 +31,13 @@ public class GameManager : MonoBehaviour
         {
             PrepareAlreadyExistingUnits();
         }
-        ExecutePostLoadMethods();
+        ExecutePostSetupMethods();
         if (saveManager && saveManager.isLoadingFromSave)
         {
             saveManager.ResetStagedData();
         }
     }
+
     public int GetTurnNumber()
     {
         return currentTurn;
@@ -147,7 +148,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ExecutePreLoadMethods()
+    public void ExecutePreSetupMethods()
     {
         CheckGridManagerReferences();
         GetHudReference();
@@ -157,7 +158,7 @@ public class GameManager : MonoBehaviour
         InitUnitAndPlayerList();
     }
 
-    public void ExecutePostLoadMethods()
+    public void ExecutePostSetupMethods()
     {
         CheckUnitOwnerReferences();
         CompleteRemaingPlayerList();

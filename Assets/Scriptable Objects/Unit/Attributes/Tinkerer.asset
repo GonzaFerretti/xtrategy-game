@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b523493f5b01c4088b388fe729cab4, type: 3}
   m_Name: Tinkerer
   m_EditorClassIdentifier: 
-  maxHp: 5
+  maxHp: 5000
   movementRange: 3
   minAttackRange: 0
   maxAttackRange: 6

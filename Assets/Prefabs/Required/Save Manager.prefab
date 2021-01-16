@@ -44,8 +44,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isLoadingFromSave: 0
+  loadingSceneName: Loading
   stagedSaveDataToLoad:
     levelName: 
     units: []
+    mines: []
     hasUsedPower: 0
     isEnemyTurn: 0

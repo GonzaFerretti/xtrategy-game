@@ -14,7 +14,6 @@ public class Select : MonoBehaviour
 
     public void CambiarEscena()
     {
-
         SceneManager.LoadScene(nombreEscenaDestino);
     }
 }

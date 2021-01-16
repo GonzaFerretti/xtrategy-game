@@ -9,6 +9,7 @@ public class SaveManager : MonoBehaviour
 {
     string basePath;
     public bool isLoadingFromSave = false;
+    [SerializeField] string loadingSceneName;
     public SaveData stagedSaveDataToLoad;
 
     public void ResetStagedData()
@@ -99,17 +100,46 @@ public class SaveManager : MonoBehaviour
         file.Close();
     }
 
-    public void StageLoad()
+    public void StageLoad(bool shouldLoadFromFile)
     {
-        DirectoryInfo di = new DirectoryInfo(basePath);
-        FileInfo[] savesInFolder = di.GetFiles("*.json");
-        if (savesInFolder.Length == 0) return;
+        isLoadingFromSave = shouldLoadFromFile;
+        if (shouldLoadFromFile)
+        {
+            DirectoryInfo di = new DirectoryInfo(basePath);
+            FileInfo[] savesInFolder = di.GetFiles("*.json");
+            if (savesInFolder.Length == 0) return;
 
-        string saveDataRaw = File.ReadAllText(savesInFolder[0].FullName);
-        stagedSaveDataToLoad = JsonUtility.FromJson<SaveData>(saveDataRaw);
+            string saveDataRaw = File.ReadAllText(savesInFolder[0].FullName);
+            stagedSaveDataToLoad = JsonUtility.FromJson<SaveData>(saveDataRaw);
+        }
+        else
+        {
+            // TO DO: Change this when level select is done
+            stagedSaveDataToLoad = new SaveData
+            {
+                levelName = "Level1"
+            };
+        }
 
-        isLoadingFromSave = true;
-        SceneManager.LoadScene(stagedSaveDataToLoad.levelName);
+        AsyncOperation loadHandle = SceneManager.LoadSceneAsync(loadingSceneName);
+        StartCoroutine(WaitForLoadingSceneLoad(loadHandle));
+    }
+
+    IEnumerator WaitForLoadingSceneLoad(AsyncOperation loadHandle)
+    {
+        while (!loadHandle.isDone)
+        {
+            yield return null;
+        }
+
+        LoadingScreen loadingScreen = FindObjectOfType<LoadingScreen>();
+
+        if (!loadingScreen)
+        {
+            throw new ArgumentException("Couldn't find loading screen");
+        }
+
+        loadingScreen.StartLevelAsyncLoad(stagedSaveDataToLoad);
     }
 
     public void DeleteExistingSave()
