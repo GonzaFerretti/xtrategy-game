@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,10 +20,20 @@ public class GameManager : MonoBehaviour
     [SerializeField] int totalTurns;
     [SerializeField] int currentTurn = 1;
 
-    public void InitiateGame()
+    public IEnumerator InitiateGame(LoadingScreen loadingScreen)
     {
+        // I know this method of hardcoding current level load isn't ideal but I wanted a cheap way 
+        // to show some progress to the user without having to build too much infrastructure for it.
+
+        // It also forces the game init to take at least 5 frames to allow for the UI to update properly inbetween.
+        // This is to be expected.
+
         ExecutePreSetupMethods();
+        loadingScreen.inLevelSetupProgress = 1f / 5;
+        yield return null;
         grid.Init();
+        loadingScreen.inLevelSetupProgress = 2f / 5;
+        yield return null;
         if (saveManager && saveManager.isLoadingFromSave)
         {
             SetupGameFromLoad();
@@ -31,11 +42,16 @@ public class GameManager : MonoBehaviour
         {
             PrepareAlreadyExistingUnits();
         }
+        loadingScreen.inLevelSetupProgress = 3f / 5;
+        yield return null;
         ExecutePostSetupMethods();
+        loadingScreen.inLevelSetupProgress = 4f / 5;
+        yield return null;
         if (saveManager && saveManager.isLoadingFromSave)
         {
             saveManager.ResetStagedData();
         }
+        loadingScreen.inLevelSetupProgress = 1;
     }
 
     public int GetTurnNumber()

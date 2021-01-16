@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 public class LoadingScreen : MonoBehaviour
 {
     [SerializeField] Image fillLoadImage;
-    bool isLoadingNewLevel = false;
+    [SerializeField] float baseLevelLoadShownPercentage;
+    [HideInInspector] public float inLevelSetupProgress = 0;
 
     void UpdateBar(float percentage)
     {
@@ -27,7 +28,7 @@ public class LoadingScreen : MonoBehaviour
         while (loadHandle.progress < 0.9f)
         {
             Debug.Log(loadHandle.progress);
-            UpdateBar(loadHandle.progress/2);
+            UpdateBar(loadHandle.progress*0.9f*(1-baseLevelLoadShownPercentage));
             yield return null;
         }
 
@@ -38,7 +39,20 @@ public class LoadingScreen : MonoBehaviour
             yield return null;
         }
 
-        FindObjectOfType<GameManager>().InitiateGame();
+        GameManager gm = null;
+
+        do
+        {
+            gm = FindObjectOfType<GameManager>();
+            yield return null;
+        } while (!gm);
+
+        StartCoroutine(gm.InitiateGame(this));
+        while (inLevelSetupProgress < 1)
+        {
+            UpdateBar(baseLevelLoadShownPercentage + inLevelSetupProgress * (1-baseLevelLoadShownPercentage));
+            yield return null;
+        }
         // TODO Here we could add a fade transition for the level
         Destroy(gameObject);
     }
