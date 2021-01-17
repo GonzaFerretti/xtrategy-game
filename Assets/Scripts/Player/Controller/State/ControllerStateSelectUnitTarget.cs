@@ -9,7 +9,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
     {
         base.OnUpdate();
         if (Input.GetMouseButtonDown(0) && !CheckAttackAction()) (controller as PlayerController).CheckUnitDeselect();
-        if (controller.currentlySelectedUnit) (controller as PlayerController).OnHoverGrid(GridIndicatorMode.possibleAttack, GridIndicatorMode.selectedAttack, controller.currentlySelectedUnit.possibleAttacks);
+        if (controller.currentlySelectedUnit) (controller as PlayerController).OnHoverGrid(GridIndicatorMode.attackRange, GridIndicatorMode.possibleAttack, controller.currentlySelectedUnit.possibleAttacks);
     }
 
     public override void OnTransitionIn()

@@ -15,7 +15,7 @@ public class ControllerTransitionSwitchBackToMovement : ControllerStateTransitio
         base.Transition(controller);
         controller.GetGridReference().EnableCellIndicator(controller.currentlySelectedUnit.GetCoordinates(), GridIndicatorMode.selectedUnit);
         controller.GetGridReference().SetAllCoverIndicators(true);
-        if (controller.currentlySelectedUnit.possibleMovements != null) controller.GetGridReference().EnableCellIndicators(controller.currentlySelectedUnit.possibleMovements,GridIndicatorMode.possibleMovement);
+        if (controller.currentlySelectedUnit.possibleMovements != null) controller.GetGridReference().EnableCellIndicators(controller.currentlySelectedUnit.possibleMovements,GridIndicatorMode.movementRange);
         if (controller.currentlySelectedUnit.attackState == CurrentActionState.notStarted)
         {
             controller.GetGridReference().gameManager.hud.EnableHudElementByName("SwitchToAttack");

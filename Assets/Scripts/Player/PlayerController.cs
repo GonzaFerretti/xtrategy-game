@@ -170,6 +170,9 @@ public class PlayerController : BaseController
 
     public void OnHoverGrid(GridIndicatorMode possibleCellsMode, GridIndicatorMode selectedCellsMode, List<Vector3Int> listToCheck)
     {
+        // This method only exists because of debugging reasons right now, as the game is currently mobile and there's no hover.
+        // Gameplay-wise this was replaced by an indicator that appears beneath a possible target.
+
         if (GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("GroundBase")))
         {
             GameGridCell cell = objectSelected.transform.parent.GetComponent<GameGridCell>();

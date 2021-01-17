@@ -36,4 +36,9 @@ public class AttackTypePlantBomb : AttackType
         }
         return false;
     }
+
+    public override void CheckAdditionalCellIndicatorsConditions(IEnumerable<Vector3Int> indicatorsToCheck, GameGridManager grid, PlayerController controller)
+    {
+        return;
+    }
 }

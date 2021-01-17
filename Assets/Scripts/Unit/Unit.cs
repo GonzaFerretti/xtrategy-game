@@ -140,7 +140,7 @@ public class Unit : GameGridElement
     void SetupInitialPosition(bool isLoading)
     {
         if (desiredStartingPos != new Vector2Int(-1, -1) && !isLoading) currentCell = grid.GetCellAtCoordinate(new Vector3Int(desiredStartingPos.x, desiredStartingPos.y, 0));
-        if (!currentCell) currentCell = grid.GetRandomUnusedCell();
+        if (!currentCell) UpdateCell();
         transform.position = currentCell.transform.position;
         currentCovers = grid.GetCoversFromCoord(GetCoordinates());
     }
@@ -151,9 +151,21 @@ public class Unit : GameGridElement
         currentHp = savedInfo.hpLeft;
         owner = GameObject.Find(savedInfo.owner).GetComponent<BaseController>();
         if (savedInfo.isShielded) Shield();
-        currentCell = grid.GetCellAtCoordinate(savedInfo.position);
+        UpdateCell(savedInfo.position);
         attackState = (savedInfo.hasAttacked) ? CurrentActionState.ended : CurrentActionState.notStarted;
         moveState = (savedInfo.hasMoved) ? CurrentActionState.ended : CurrentActionState.notStarted;
+    }
+
+    void UpdateCell(Vector3Int coordinates)
+    {
+        currentCell = grid.GetCellAtCoordinate(coordinates);
+        grid.UpdateUnitPositionCache(this, coordinates);
+    }
+
+    void UpdateCell()
+    {
+        currentCell = grid.GetRandomUnusedCell();
+        grid.UpdateUnitPositionCache(this, currentCell.GetCoordinates());
     }
 
     void InitModel()
@@ -219,7 +231,7 @@ public class Unit : GameGridElement
         }
         else
         {
-            grid.EnableCellIndicators(possibleMovements, GridIndicatorMode.possibleMovement);
+            grid.EnableCellIndicators(possibleMovements, GridIndicatorMode.movementRange);
         }
     }
 
@@ -244,7 +256,8 @@ public class Unit : GameGridElement
         }
         else
         {
-            grid.EnableCellIndicators(possibleAttacks, GridIndicatorMode.possibleAttack);
+            grid.EnableCellIndicators(possibleAttacks, GridIndicatorMode.attackRange);
+            unitAttributes.attackType.CheckAdditionalCellIndicatorsConditions(possibleAttacks, grid, owner as PlayerController);
         }
     }
 
@@ -290,7 +303,7 @@ public class Unit : GameGridElement
             yield return new WaitForSeconds(0.25f);
         }
         possibleMovements = new List<Vector3Int>();
-        currentCell = grid.GetCellAtCoordinate(currentCoordinates);
+        UpdateCell(currentCoordinates);
         currentCovers = grid.GetCoversFromCoord(GetCoordinates());
 
         anim.SetTrigger("endCurrentAnim");
@@ -305,7 +318,7 @@ public class Unit : GameGridElement
         }
 
         possibleMovements = currentRangeQuery.cellsInRange;
-        grid.EnableCellIndicators(possibleMovements, GridIndicatorMode.possibleMovement);
+        grid.EnableCellIndicators(possibleMovements, GridIndicatorMode.movementRange);
         currentRangeQuery.End();
     }
 
@@ -319,7 +332,8 @@ public class Unit : GameGridElement
         possibleAttacks = currentRangeQuery.cellsInRange;
         List<Vector3Int> allyPositionsInRange = possibleAttacks.Intersect(owner.GetOwnedUnitsPosition()).ToList();
         possibleAttacks.RemoveAll(x => allyPositionsInRange.Contains(x));
-        grid.EnableCellIndicators(possibleAttacks, GridIndicatorMode.possibleAttack);
+        grid.EnableCellIndicators(possibleAttacks, GridIndicatorMode.attackRange);
+        unitAttributes.attackType.CheckAdditionalCellIndicatorsConditions(possibleAttacks, grid, owner as PlayerController);
         currentRangeQuery.End();
     }
 

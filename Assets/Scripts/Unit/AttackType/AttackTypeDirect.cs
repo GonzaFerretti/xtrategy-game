@@ -35,4 +35,17 @@ public class AttackTypeDirect : AttackType
         }
         return false;
     }
+
+    public override void CheckAdditionalCellIndicatorsConditions(IEnumerable<Vector3Int> coordinatesToCheck, GameGridManager grid, PlayerController controller) 
+    {
+        foreach (var coordinates in coordinatesToCheck)
+        {
+            var cell = grid.GetCellAtCoordinate(coordinates);
+            Unit unit = grid.GetUnitAtCoordinates(coordinates);
+            if (unit && unit.owner != controller)
+            {
+                grid.EnableCellIndicator(coordinates, GridIndicatorMode.possibleAttack);
+            }
+        }
+    }
 }

@@ -18,7 +18,7 @@ public class ControllerTransitionOtherActionAvailable : ControllerStateTransitio
         controller.GetGridReference().DisableAllCellIndicators();
         if (controller.currentlySelectedUnit.moveState == CurrentActionState.notStarted)
         {
-            controller.GetGridReference().EnableCellIndicators(controller.currentlySelectedUnit.possibleMovements, GridIndicatorMode.possibleMovement);
+            controller.GetGridReference().EnableCellIndicators(controller.currentlySelectedUnit.possibleMovements, GridIndicatorMode.movementRange);
         }
 
         if (controller.currentlySelectedUnit.attackState == CurrentActionState.notStarted)

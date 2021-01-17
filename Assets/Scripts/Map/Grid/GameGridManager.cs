@@ -18,6 +18,8 @@ public class GameGridManager : MonoBehaviour
     public Dictionary<Vector3Int, List<Vector3Int>> neighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
     public Dictionary<Vector3Int, List<Vector3Int>> mineNeighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
 
+    Dictionary<Vector3Int, Unit> unitPositionDict = new Dictionary<Vector3Int, Unit>();
+
     public Dictionary<Vector3Int, MagicMine> mineTriggerTiles = new Dictionary<Vector3Int, MagicMine>();
     public Dictionary<Vector3Int, MagicMine> mineDetonationTiles = new Dictionary<Vector3Int, MagicMine>();
 
@@ -178,6 +180,7 @@ public class GameGridManager : MonoBehaviour
     {
         GameGridCell cell = unusedCells[Random.Range(0, unusedCells.Count - 1)];
         unusedCells.Remove(cell);
+
         return cell;
     }
 
@@ -217,6 +220,18 @@ public class GameGridManager : MonoBehaviour
             cell.SetCoordinates(coordinates);
             cell.SetGridManagerReference(this);
             gridCoordinates.Add(coordinates, cell);
+        }
+    }
+
+    public void UpdateUnitPositionCache(Unit unit, Vector3Int coordinates)
+    {
+        if (!unitPositionDict.ContainsKey(coordinates))
+        {
+            unitPositionDict.Add(coordinates, unit);
+        }
+        else
+        {
+            unitPositionDict[coordinates] = unit;
         }
     }
 
@@ -360,7 +375,7 @@ public class GameGridManager : MonoBehaviour
             {
                 ExplosionEffect explosion = Instantiate(explosionPrefab);
                 explosion.Setup(true);
-                explosion.transform.position = GetWorldPositionFromCoords(triggerTile) + Vector3.up * indicatorHeight * 2;
+                explosion.transform.position = GetWorldPositionFromCoords(triggerTile) + Vector3.up * indicatorHeight * 5;
                 explosion.transform.parent = cellIndicatorsRootTransform;
                 explosion.transform.localRotation = Quaternion.identity;
                 Unit unit = GetUnitAtCoordinates(triggerTile);
@@ -377,7 +392,7 @@ public class GameGridManager : MonoBehaviour
             {
                 Unit unit = GetUnitAtCoordinates(explosionTile);
                 ExplosionEffect explosion = Instantiate(explosionPrefab);
-                explosion.transform.position = GetWorldPositionFromCoords(explosionTile) + Vector3.up * indicatorHeight * 2;
+                explosion.transform.position = GetWorldPositionFromCoords(explosionTile) + Vector3.up * indicatorHeight * 5;
                 explosion.Setup(false);
                 explosion.transform.parent = cellIndicatorsRootTransform;
                 explosion.transform.localRotation = Quaternion.identity;
@@ -652,9 +667,9 @@ public class GameGridManager : MonoBehaviour
 
     public Unit GetUnitAtCoordinates(Vector3Int coordinates)
     {
-        foreach (var unit in gameManager.allUnits)
+        if (unitPositionDict.ContainsKey(coordinates))
         {
-            if (unit.GetCoordinates() == coordinates) return unit;
+            return unitPositionDict[coordinates];
         }
         return null;
     }

@@ -12,7 +12,7 @@ public class AttackTypeDisarmBomb : AttackType
 
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
-        attackingUnit.grid.DetonateMine(coordinatesToAttack,attackingUnit.owner);
+        attackingUnit.grid.DetonateMine(coordinatesToAttack, attackingUnit.owner);
         attackingUnit.attackState = CurrentActionState.ended;
     }
 
@@ -29,5 +29,20 @@ public class AttackTypeDisarmBomb : AttackType
             return true;
         }
         return false;
+    }
+
+    public override void CheckAdditionalCellIndicatorsConditions(IEnumerable<Vector3Int> indicatorsToCheck, GameGridManager grid, PlayerController controller)
+    {
+        foreach (var coordinates in indicatorsToCheck)
+        {
+            if (grid.mineTriggerTiles.ContainsKey(coordinates))
+            {
+                var mine = grid.mineTriggerTiles[coordinates];
+                if (mine.owner != controller)
+                {
+                    grid.EnableCellIndicator(coordinates, GridIndicatorMode.possibleDisarm);
+                }
+            }
+        }
     }
 }

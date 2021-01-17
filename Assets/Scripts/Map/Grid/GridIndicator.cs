@@ -15,16 +15,23 @@ public class GridIndicator : MonoBehaviour
 
     public void Enable(GridIndicatorMode mode)
     {
-        rend.material = availableMaterials.GetMaterial(mode);
+        Material material = availableMaterials.GetMaterial(mode);
+        if (material)
+        {
+            rend.material = material;
+        }
     }
 }
 
 public enum GridIndicatorMode
 {
     disabled,
-    possibleMovement,
+    movementRange,
+    attackRange,
     possibleAttack,
-    selectedAttack,
     selectedMovement,
+    possibleMine,
+    possibleDisarm,
+    possibleHeal,
     selectedUnit,
 }
