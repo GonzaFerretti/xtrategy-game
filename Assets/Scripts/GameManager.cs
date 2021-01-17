@@ -311,7 +311,7 @@ public class GameManager : MonoBehaviour
             string nextScene = SceneUtility.GetScenePathByBuildIndex(currentSceneIndex + 1);
             if (nextScene.Contains("Level"))
             {
-                SceneManager.LoadScene("Level" + (currentSceneIndex + 1));
+                saveManager.StageLoadForCleanLevel("Level" + (currentSceneIndex + 1));
             }
             else
             {

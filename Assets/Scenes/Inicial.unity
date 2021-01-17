@@ -663,12 +663,17 @@ PrefabInstance:
     - target: {fileID: 2785893735492891685, guid: 03e64b46ad5d24949902eb88c76c6245,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: StageLoad
+      value: StageLoadForCleanLevel
       objectReference: {fileID: 0}
     - target: {fileID: 2785893735492891685, guid: 03e64b46ad5d24949902eb88c76c6245,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785893735492891685, guid: 03e64b46ad5d24949902eb88c76c6245,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Level1
       objectReference: {fileID: 0}
     - target: {fileID: 8063591675031762066, guid: 03e64b46ad5d24949902eb88c76c6245,
         type: 3}
@@ -678,12 +683,12 @@ PrefabInstance:
     - target: {fileID: 8063591675031762066, guid: 03e64b46ad5d24949902eb88c76c6245,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: StageLoad
+      value: StageLoadFromSave
       objectReference: {fileID: 0}
     - target: {fileID: 8063591675031762066, guid: 03e64b46ad5d24949902eb88c76c6245,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8063591675031762066, guid: 03e64b46ad5d24949902eb88c76c6245,
         type: 3}

@@ -100,26 +100,26 @@ public class SaveManager : MonoBehaviour
         file.Close();
     }
 
-    public void StageLoad(bool shouldLoadFromFile)
+    public void StageLoadFromSave()
     {
-        isLoadingFromSave = shouldLoadFromFile;
-        if (shouldLoadFromFile)
-        {
-            DirectoryInfo di = new DirectoryInfo(basePath);
-            FileInfo[] savesInFolder = di.GetFiles("*.json");
-            if (savesInFolder.Length == 0) return;
+        DirectoryInfo di = new DirectoryInfo(basePath);
+        FileInfo[] savesInFolder = di.GetFiles("*.json");
+        if (savesInFolder.Length == 0) return;
 
-            string saveDataRaw = File.ReadAllText(savesInFolder[0].FullName);
-            stagedSaveDataToLoad = JsonUtility.FromJson<SaveData>(saveDataRaw);
-        }
-        else
+        isLoadingFromSave = true;
+        string saveDataRaw = File.ReadAllText(savesInFolder[0].FullName);
+        stagedSaveDataToLoad = JsonUtility.FromJson<SaveData>(saveDataRaw);
+
+        AsyncOperation loadHandle = SceneManager.LoadSceneAsync(loadingSceneName);
+        StartCoroutine(WaitForLoadingSceneLoad(loadHandle));
+    }
+
+    public void StageLoadForCleanLevel(string levelToLoadEmpty)
+    {
+        stagedSaveDataToLoad = new SaveData
         {
-            // TO DO: Change this when level select is done
-            stagedSaveDataToLoad = new SaveData
-            {
-                levelName = "Level1"
-            };
-        }
+            levelName = levelToLoadEmpty
+        };
 
         AsyncOperation loadHandle = SceneManager.LoadSceneAsync(loadingSceneName);
         StartCoroutine(WaitForLoadingSceneLoad(loadHandle));
