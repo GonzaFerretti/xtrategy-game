@@ -73,8 +73,7 @@ public class Unit : GameGridElement
         }
         if (isShielded)
         {
-            isShielded = false;
-            shieldIcon.enabled = false;
+            UpdateShieldStatus(false);
             PlaySound("shieldhit");
         }
         else
@@ -131,10 +130,10 @@ public class Unit : GameGridElement
         StartCoroutine(healIcon.ShowIcon());
     }
 
-    public void Shield()
+    public void UpdateShieldStatus(bool newStatus)
     {
-        isShielded = true;
-        shieldIcon.enabled = true;
+        isShielded = newStatus;
+        shieldIcon.enabled = newStatus;
     }
 
     void SetupInitialPosition(bool isLoading)
@@ -150,7 +149,7 @@ public class Unit : GameGridElement
         if (savedInfo == null) return;
         currentHp = savedInfo.hpLeft;
         owner = GameObject.Find(savedInfo.owner).GetComponent<BaseController>();
-        if (savedInfo.isShielded) Shield();
+        UpdateShieldStatus(savedInfo.isShielded);
         UpdateCell(savedInfo.position);
         attackState = (savedInfo.hasAttacked) ? CurrentActionState.ended : CurrentActionState.notStarted;
         moveState = (savedInfo.hasMoved) ? CurrentActionState.ended : CurrentActionState.notStarted;
@@ -304,6 +303,13 @@ public class Unit : GameGridElement
         }
         possibleMovements = new List<Vector3Int>();
         UpdateCell(currentCoordinates);
+
+        if (owner is PlayerController && !(owner as PlayerController).HasItem() && grid.CheckItemAtCoordinate(out ItemPickup outItem, currentCoordinates))
+        {
+            (owner as PlayerController).UpdateCurrentItem(outItem.itemData);
+            grid.DestroyItemPickup(outItem);
+        }
+
         currentCovers = grid.GetCoversFromCoord(GetCoordinates());
 
         anim.SetTrigger("endCurrentAnim");

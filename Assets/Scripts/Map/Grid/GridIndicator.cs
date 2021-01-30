@@ -34,4 +34,5 @@ public enum GridIndicatorMode
     possibleDisarm,
     possibleHeal,
     selectedUnit,
+    item,
 }

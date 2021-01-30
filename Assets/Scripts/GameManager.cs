@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
     {
         List<Unit> playerUnits = GetHumanPlayerUnits();
 
-        playerUnits[UnityEngine.Random.Range(0, playerUnits.Count - 1)].Shield();
+        playerUnits[UnityEngine.Random.Range(0, playerUnits.Count - 1)].UpdateShieldStatus(true);
     }
 
     private void HealAllUnits()
@@ -158,7 +158,8 @@ public class GameManager : MonoBehaviour
     {
         foreach (var unitInfo in saveData.units)
         {
-            Unit unit = Instantiate(unitInfo.unitType.defaultPrefab).GetComponent<Unit>();
+            UnitAttributes unitType = saveManager.unitTypeBank.GetUnitType(unitInfo.unitId);
+            Unit unit = Instantiate(unitType.defaultPrefab).GetComponent<Unit>();
             unit.InitUnit(grid, soundManager, unitInfo);
             allUnits.Add(unit);
         }

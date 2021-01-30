@@ -51,3 +51,10 @@ MonoBehaviour:
     mines: []
     hasUsedPower: 0
     isEnemyTurn: 0
+  unitTypeBank:
+    unitTypes:
+    - {fileID: 11400000, guid: 8efef1a3c8500c94abc67994c2ecd11b, type: 2}
+    - {fileID: 11400000, guid: dbe7e9714a1eb5b4099a029bef53f0a6, type: 2}
+    - {fileID: 11400000, guid: e2f632ac56ff34044aec6ef8d9a9937a, type: 2}
+    - {fileID: 11400000, guid: 9c8989348f466374a95d624127af1d01, type: 2}
+    - {fileID: 11400000, guid: 7ee05a943c35201478dcbfd23dc7f0ca, type: 2}

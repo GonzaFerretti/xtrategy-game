@@ -15,6 +15,9 @@ public class MapDictData : ScriptableObject
     public List<Vector3Int> cellsCoordinates;
     public List<string> cellsPrefabNames;
 
+    [Header("Items")]
+    public List<ItemData> itemsToSpawn;
+
     public void Init(GridCoordinates gridCoordinates, CoverInformation coverInfo)
     {
         cellsCoordinates = new List<Vector3Int>();

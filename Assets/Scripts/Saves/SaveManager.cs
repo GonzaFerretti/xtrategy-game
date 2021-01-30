@@ -11,6 +11,7 @@ public class SaveManager : MonoBehaviour
     public bool isLoadingFromSave = false;
     [SerializeField] string loadingSceneName;
     public SaveData stagedSaveDataToLoad;
+    public UnitTypeBank unitTypeBank;
 
     public void ResetStagedData()
     {
@@ -83,7 +84,7 @@ public class SaveManager : MonoBehaviour
                 hasMoved = unit.moveState == CurrentActionState.ended,
                 hpLeft = unit.currentHp,
                 owner = unit.owner.name,
-                unitType = unit.unitAttributes,
+                unitId = unitTypeBank.GetUnitId(unit.unitAttributes),
                 position = unit.GetCoordinates(),
                 isShielded = unit.isShielded
             };
@@ -156,5 +157,29 @@ public class SaveManager : MonoBehaviour
     {
         string currentTime = System.DateTime.Now.ToString("yyyyMMdd-HH_mm_ss");
         return basePath + "/" + currentTime + ".json";
+    }
+}
+
+[System.Serializable]
+public struct UnitTypeBank
+{
+    [SerializeField] List<UnitAttributes> unitTypes;
+
+    public UnitAttributes GetUnitType(int id)
+    {
+        if (id < unitTypes.Count-1 && id >= 0)
+        {
+            return unitTypes[id];
+        }
+        return null;
+    }
+
+    public int GetUnitId(UnitAttributes unitType)
+    {
+        if (unitTypes.Contains(unitType))
+        {
+            return unitTypes.IndexOf(unitType);
+        }
+        else return -1;
     }
 }

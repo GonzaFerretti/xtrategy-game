@@ -9,16 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ab845645d41faf4f8f3f7ca8de690df, type: 3}
-  m_Name: Select Attack
+  m_Script: {fileID: 11500000, guid: 97a53bf29401a554cbfe9fd2b241f8b1, type: 3}
+  m_Name: Select Item Target
   m_EditorClassIdentifier: 
-  destinationState: {fileID: 11400000, guid: 6910220df67a2584f830a8439b03065d, type: 2}
+  destinationState: {fileID: 11400000, guid: 1c1677a160a55de45bf50f1fc5857596, type: 2}
   hudElementsToEnable:
-  - RightClick
-  - LeftClick
-  - SkipTurn
-  - MenuButton
   - YourTurn
+  - MenuButton
   - AdButton
+  - SkipTurn
   - ItemButton
-  shouldShowUnitCycleHUD: 1
+  shouldShowUnitCycleHUD: 0

@@ -20,3 +20,5 @@ MonoBehaviour:
   - MenuButton
   - RightClick
   - AdButton
+  - ItemButton
+  shouldShowUnitCycleHUD: 0

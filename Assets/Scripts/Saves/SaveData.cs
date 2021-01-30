@@ -18,7 +18,7 @@ public class UnitSaveInfo
 {
     public string owner;
     public int hpLeft;
-    public UnitAttributes unitType;
+    public int unitId;
     public bool hasMoved;
     public bool hasAttacked;
     public bool isShielded;

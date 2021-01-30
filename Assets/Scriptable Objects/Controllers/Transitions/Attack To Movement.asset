@@ -17,4 +17,5 @@ MonoBehaviour:
   - YourTurn
   - MenuButton
   - AdButton
+  - ItemButton
   shouldShowUnitCycleHUD: 1

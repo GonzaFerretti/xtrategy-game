@@ -124,6 +124,7 @@ Transform:
   - {fileID: 1567534016}
   - {fileID: 3382640925051958261}
   - {fileID: 1138914214598688520}
+  - {fileID: 1948024819131057193}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -155,11 +156,15 @@ MonoBehaviour:
   cellsRootTransform: {fileID: 1567534016}
   coversRootTransform: {fileID: 1969876207}
   cellIndicatorsRootTransform: {fileID: 3382640925051958261}
+  itemPickupsRootTransform: {fileID: 1948024819131057193}
   minesRootTransform: {fileID: 1138914214598688520}
   minePrefab: {fileID: 3211451036490268790, guid: bffb7a4e258c7c84b88db0cf9e343ebd,
     type: 3}
   explosionPrefab: {fileID: 6336729613740813091, guid: 27cf3bee1052ea04caea490871df9c85,
     type: 3}
+  itemPickupPrefab: {fileID: 8750455126255859265, guid: cf88fd49a7bc4764897b6beaa6b8ad73,
+    type: 3}
+  itemPickupHeight: 0.125
   gridCoordinates:
     reorderableList:
       canAdd: 1
@@ -217,12 +222,12 @@ MonoBehaviour:
   gameManager: {fileID: 0}
   gridIndicatorPrefab: {fileID: 7021019133523631581, guid: 932832e07ebdd594ca6753f9bec4d409,
     type: 3}
-  indicatorHeight: 0
+  indicatorHeight: 0.125
   LowCoverIndicatorPrefab: {fileID: 4927382475311194824, guid: a11b35826a1eeac4faec543d56e5018f,
     type: 3}
   HighCoverIndicatorPrefab: {fileID: 240087029261144798, guid: f2cf7a74987d4a045a43f96a15f2137f,
     type: 3}
-  coverIndicatorDistance: {x: 0, y: 0}
+  coverIndicatorDistance: {x: 0.125, y: 1}
 --- !u!114 &1097648072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,6 +301,36 @@ MonoBehaviour:
     type: 3}
   indicatorCover: {fileID: 0}
   gameGridSize: {x: 10, y: 10}
+--- !u!1 &7396783094992516947
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1948024819131057193}
+  m_Layer: 0
+  m_Name: itemPickups
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1948024819131057193
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7396783094992516947}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6409168009872196253}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8484184444875438673
 GameObject:
   m_ObjectHideFlags: 0

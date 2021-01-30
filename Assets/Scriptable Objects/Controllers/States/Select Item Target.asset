@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 691c2be107eb26d4b86d1c5ef1f657ad, type: 3}
+  m_Name: Select Item Target
+  m_EditorClassIdentifier: 
+  stateName: selectItemTarget
+  transitions:
+  - {fileID: 11400000, guid: 343788d9e1b3cb74b9a40f5df05e50cd, type: 2}

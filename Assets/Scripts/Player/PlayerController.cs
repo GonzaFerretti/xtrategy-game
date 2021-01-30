@@ -5,6 +5,14 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : BaseController
 {
+    ItemData currentItem;
+    ItemButtonTrigger itemUI;
+
+    public void SetItemButtonReference(ItemButtonTrigger reference)
+    {
+        itemUI = reference;
+    }
+
     public override void Update()
     {
         base.Update();
@@ -15,6 +23,31 @@ public class PlayerController : BaseController
     {
         lastSelectedCoord = null;
         base.SwitchStates(identifier);
+    }
+
+    public void UpdateCurrentItem(ItemData item)
+    {
+        currentItem = item;
+        itemUI.SetUsability(true);
+        itemUI.ChangeIcon(item.icon);
+    }
+
+    public bool HasItem()
+    {
+        return currentItem;
+    }
+
+    public void UseItem(Unit unit)
+    {
+        if (currentItem.OnUse(unit))
+        { 
+            currentItem = null;
+            itemUI.SetUsability(false);
+        }
+        else
+        {
+            // IMPLEMENT ANY FAILURE CONDITIONS HERE!
+        }
     }
 
     GameGridCell lastSelectedCoord = null;

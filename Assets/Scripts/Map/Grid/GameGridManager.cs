@@ -14,11 +14,14 @@ public class GameGridManager : MonoBehaviour
     public Transform cellsRootTransform;
     public Transform coversRootTransform;
     public Transform cellIndicatorsRootTransform;
+    public Transform itemPickupsRootTransform;
     public Transform minesRootTransform;
     public Dictionary<Vector3Int, List<Vector3Int>> neighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
     public Dictionary<Vector3Int, List<Vector3Int>> mineNeighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
 
     Dictionary<Vector3Int, Unit> unitPositionDict = new Dictionary<Vector3Int, Unit>();
+
+    Dictionary<Vector3Int, ItemPickup> pickupItemsDict = new Dictionary<Vector3Int, ItemPickup>();
 
     public Dictionary<Vector3Int, MagicMine> mineTriggerTiles = new Dictionary<Vector3Int, MagicMine>();
     public Dictionary<Vector3Int, MagicMine> mineDetonationTiles = new Dictionary<Vector3Int, MagicMine>();
@@ -26,6 +29,10 @@ public class GameGridManager : MonoBehaviour
     [SerializeField] MagicMine minePrefab;
 
     [SerializeField] ExplosionEffect explosionPrefab;
+
+    [SerializeField] ItemPickup itemPickupPrefab;
+
+    [SerializeField] float itemPickupHeight;
 
     public GridCoordinates gridCoordinates;
     public CoverInformation covers;
@@ -53,8 +60,24 @@ public class GameGridManager : MonoBehaviour
         BuildCoversFromData();
         InitializeGridIndicators();
         CopyListOfCellsToUnusedList();
+        SetupItems();
         GenerateAllPossibleNeighbours();
         GenerateAllPossibleMineNeighbours();
+    }
+
+    public void SetupItems()
+    {
+        foreach (var itemData in savedData.itemsToSpawn)
+        {
+            var newItemPickup = Instantiate(itemPickupPrefab);
+            var coordinates = GetRandomUnusedCell().GetCoordinates();
+            pickupItemsDict.Add(coordinates, newItemPickup);
+
+            newItemPickup.transform.position = GetWorldPositionFromCoords(coordinates) + Vector3.up * itemPickupHeight;
+            newItemPickup.transform.parent = itemPickupsRootTransform;
+            newItemPickup.transform.localRotation = Quaternion.identity;
+            newItemPickup.UpdateItem(itemData, coordinates);
+        }
     }
 
     public void InitCoverIndicator(Vector3 coverPosition, Cover cover)
@@ -108,6 +131,24 @@ public class GameGridManager : MonoBehaviour
         int distY = Mathf.Abs(pos1.y - pos2.y);
 
         return Mathf.Max(distX, distY);
+    }
+
+    public bool CheckItemAtCoordinate(out ItemPickup outItem, Vector3Int coords)
+    {
+        outItem = null;
+        if (pickupItemsDict.ContainsKey(coords))
+        {
+            outItem = pickupItemsDict[coords];
+            return true;
+        }
+        return false;
+    }
+
+    public void DestroyItemPickup(ItemPickup pickupToDestroy)
+    {
+        pickupItemsDict.Remove(pickupToDestroy.coordinates);
+
+        Destroy(pickupToDestroy.gameObject);
     }
 
     public IEnumerator CreateMine(BaseController owner, Vector3Int position)
