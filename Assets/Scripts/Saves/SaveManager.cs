@@ -12,6 +12,7 @@ public class SaveManager : MonoBehaviour
     [SerializeField] string loadingSceneName;
     public SaveData stagedSaveDataToLoad;
     public UnitTypeBank unitTypeBank;
+    public ItemTypeBank itemTypeBank;
 
     public void ResetStagedData()
     {
@@ -39,15 +40,17 @@ public class SaveManager : MonoBehaviour
         basePath = Application.persistentDataPath;
     }
 
-    public void ProcessDataAndSave(string levelName, List<Unit> units, bool hasUsedPower, bool isEnemyTurn, List<MagicMine> mines)
+    public void ProcessDataAndSave(PreSaveData data)
     {
         var saveData = new SaveData
         {
-            levelName = levelName,
-            units = GetSaveInfoFromUnits(units),
-            mines = GetMineSaveInfo(mines),
-            hasUsedPower = hasUsedPower,
-            isEnemyTurn = isEnemyTurn
+            levelName = data.levelName,
+            units = GetSaveInfoFromUnits(data.units),
+            mines = GetMineSaveInfo(data.mines),
+            pickupItems = GetItemSaveInfo(data.pickupItems),
+            hasUsedPower = data.hasUsedPower,
+            isEnemyTurn = data.isEnemyTurn,
+            currentPlayerItemId = itemTypeBank.GetItemId(data.playerCurrentItem)
         };
 
         Save(saveData);
@@ -66,6 +69,22 @@ public class SaveManager : MonoBehaviour
                 position = mine.coordinates,
                 detonationTiles = mine.detonationTiles,
                 triggerTiles = mine.triggerTiles
+            };
+        }
+        return saveInfo;
+    }
+
+    public PickupItemSaveInfo[] GetItemSaveInfo(List<ItemPickup> items)
+    {
+        PickupItemSaveInfo[] saveInfo = new PickupItemSaveInfo[items.Count];
+        for (int i = 0; i < items.Count; i++)
+        {
+            ItemPickup item = items[i];
+            if (!item) continue;
+            saveInfo[i] = new PickupItemSaveInfo
+            {
+                position = item.coordinates,
+                itemId = itemTypeBank.GetItemId(item.itemData)
             };
         }
         return saveInfo;
@@ -167,7 +186,7 @@ public struct UnitTypeBank
 
     public UnitAttributes GetUnitType(int id)
     {
-        if (id < unitTypes.Count-1 && id >= 0)
+        if (id <= unitTypes.Count-1 && id >= 0)
         {
             return unitTypes[id];
         }
@@ -183,3 +202,39 @@ public struct UnitTypeBank
         else return -1;
     }
 }
+
+[System.Serializable]
+public struct ItemTypeBank
+{
+    [SerializeField] List<ItemData> itemTypes;
+
+    public ItemData GetItemType(int id)
+    {
+        if (id <= itemTypes.Count - 1 && id >= 0)
+        {
+            return itemTypes[id];
+        }
+        return null;
+    }
+
+    public int GetItemId(ItemData itemType)
+    {
+        if (itemTypes.Contains(itemType))
+        {
+            return itemTypes.IndexOf(itemType);
+        }
+        else return -1;
+    }
+}
+
+public struct PreSaveData
+{
+    public string levelName;
+    public List<Unit> units;
+    public bool hasUsedPower;
+    public bool isEnemyTurn;
+    public List<MagicMine> mines;
+    public List<ItemPickup> pickupItems;
+    public ItemData playerCurrentItem;
+}
+

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : BaseController
 {
-    ItemData currentItem;
+    public ItemData currentItem;
     ItemButtonTrigger itemUI;
 
     public void SetItemButtonReference(ItemButtonTrigger reference)

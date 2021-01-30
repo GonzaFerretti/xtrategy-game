@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
         else
         {
             PrepareAlreadyExistingUnits();
+            grid.SetupNewItems();
         }
         loadingScreen.inLevelSetupProgress = 3f / 5;
         yield return null;
@@ -71,6 +72,25 @@ public class GameManager : MonoBehaviour
         }
 
         SetPowerUsageStatus(true);
+    }
+
+    public PlayerController GetPlayer()
+    {
+        foreach (var player in players)
+        {
+            if (player is PlayerController)
+            {
+                return (player as PlayerController);
+            }
+        }
+        return null;
+    }
+
+    ItemData GetPlayerCurrentItem()
+    {
+        PlayerController player = GetPlayer();
+        if (!player) return null;
+        return player.currentItem;
     }
 
     private void ShieldRandomUnit()
@@ -129,6 +149,27 @@ public class GameManager : MonoBehaviour
             SetTurn(saveData.isEnemyTurn);
             SanitizeControllerUnitList();
             LoadMines(saveData.mines);
+            LoadPickupItems(saveData.pickupItems);
+            SetPlayerCurrentItem(saveData.currentPlayerItemId);
+        }
+    }
+
+    void SetPlayerCurrentItem(int itemId)
+    {
+        PlayerController player = GetPlayer();
+        if (player)
+        {
+            player.UpdateCurrentItem(saveManager.itemTypeBank.GetItemType(itemId));
+        }
+    }
+
+    void LoadPickupItems(PickupItemSaveInfo[] pickupItemSaveInfo)
+    {
+        foreach (var pickupItem in pickupItemSaveInfo)
+        {
+
+            ItemData itemType = saveManager.itemTypeBank.GetItemType(pickupItem.itemId);
+            grid.SetupSingleItem(itemType, pickupItem.position);
         }
     }
 
@@ -195,7 +236,18 @@ public class GameManager : MonoBehaviour
 
     public void SaveMatch()
     {
-        saveManager.ProcessDataAndSave(SceneManager.GetActiveScene().name, allUnits, hasUsedPower, currentPlayer is AIController, FindObjectsOfType<MagicMine>().ToList());
+        PreSaveData dataToProcess = new PreSaveData
+        {
+            levelName = SceneManager.GetActiveScene().name,
+            units = allUnits,
+            hasUsedPower = hasUsedPower,
+            isEnemyTurn = currentPlayer is AIController,
+            mines = FindObjectsOfType<MagicMine>().ToList(),
+            pickupItems = FindObjectsOfType<ItemPickup>().ToList(),
+            playerCurrentItem = GetPlayerCurrentItem()
+        };
+
+        saveManager.ProcessDataAndSave(dataToProcess);
     }
 
     void GetHudReference()

@@ -60,24 +60,28 @@ public class GameGridManager : MonoBehaviour
         BuildCoversFromData();
         InitializeGridIndicators();
         CopyListOfCellsToUnusedList();
-        SetupItems();
         GenerateAllPossibleNeighbours();
         GenerateAllPossibleMineNeighbours();
     }
 
-    public void SetupItems()
+    public void SetupNewItems()
     {
         foreach (var itemData in savedData.itemsToSpawn)
         {
-            var newItemPickup = Instantiate(itemPickupPrefab);
             var coordinates = GetRandomUnusedCell().GetCoordinates();
-            pickupItemsDict.Add(coordinates, newItemPickup);
-
-            newItemPickup.transform.position = GetWorldPositionFromCoords(coordinates) + Vector3.up * itemPickupHeight;
-            newItemPickup.transform.parent = itemPickupsRootTransform;
-            newItemPickup.transform.localRotation = Quaternion.identity;
-            newItemPickup.UpdateItem(itemData, coordinates);
+            SetupSingleItem(itemData, coordinates);
         }
+    }
+
+    public void SetupSingleItem(ItemData itemData, Vector3Int coordinates)
+    {
+        var newItemPickup = Instantiate(itemPickupPrefab);
+        pickupItemsDict.Add(coordinates, newItemPickup);
+
+        newItemPickup.transform.position = GetWorldPositionFromCoords(coordinates) + Vector3.up * itemPickupHeight;
+        newItemPickup.transform.parent = itemPickupsRootTransform;
+        newItemPickup.transform.localRotation = Quaternion.identity;
+        newItemPickup.UpdateItem(itemData, coordinates);
     }
 
     public void InitCoverIndicator(Vector3 coverPosition, Cover cover)
