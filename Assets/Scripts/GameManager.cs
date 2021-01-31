@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public List<BaseController> playersRemaining;
     public List<Unit> allUnits;
     public HUDManager hud;
-    SaveManager saveManager;
+    public SaveManager saveManager;
     SoundManager soundManager;
     public bool hasUsedPower = false;
 
@@ -96,8 +96,14 @@ public class GameManager : MonoBehaviour
     private void ShieldRandomUnit()
     {
         List<Unit> playerUnits = GetHumanPlayerUnits();
-
-        playerUnits[UnityEngine.Random.Range(0, playerUnits.Count - 1)].UpdateShieldStatus(true);
+        bool hasBuffedOne = false;
+        int currentIndex = -1;
+        Buff shieldBuff = saveManager.buffTypeBank.GetBuffType("shield");
+        do
+        {
+            hasBuffedOne = playerUnits[UnityEngine.Random.Range(0, playerUnits.Count - 1)].TryAddBuff(shieldBuff);
+            currentIndex++;
+        } while (!hasBuffedOne || currentIndex < playerUnits.Count);
     }
 
     private void HealAllUnits()
@@ -110,7 +116,7 @@ public class GameManager : MonoBehaviour
 
     List<Unit> GetHumanPlayerUnits()
     {
-        return FindObjectOfType<PlayerController>().unitsControlled;
+        return GetPlayer().unitsControlled;
     }
 
     void SanitizeControllerUnitList()

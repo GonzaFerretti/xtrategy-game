@@ -23,6 +23,7 @@ public class UnitSaveInfo
     public bool hasMoved;
     public bool hasAttacked;
     public bool isShielded;
+    public string[] activeBuffs;
     public Vector3Int position;
 }
 

@@ -47,7 +47,7 @@ public class AIBehaviourTinkerer : AIBehaviour
             {
                 if (!grid.mineTriggerTiles.ContainsKey(possibleAttack))
                 {
-                    yield return controller.StartCoroutine(grid.CreateMine(actingUnit.owner, possibleAttack));
+                    yield return controller.StartCoroutine(grid.CreateMine(actingUnit.owner, possibleAttack, actingUnit));
                     actingUnit.attackState = CurrentActionState.ended;
                     if (controller.AIUnitsSavedData.ContainsKey(actingUnit))
                     {

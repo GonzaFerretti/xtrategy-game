@@ -155,11 +155,13 @@ public class GameGridManager : MonoBehaviour
         Destroy(pickupToDestroy.gameObject);
     }
 
-    public IEnumerator CreateMine(BaseController owner, Vector3Int position)
+    public IEnumerator CreateMine(BaseController owner, Vector3Int position, Unit spawningUnit)
     {
         MagicMine newMine = InstantiateMine(owner, position);
         newMine.triggerTiles.Add(position);
         mineTriggerTiles.Add(position, newMine);
+        spawningUnit.TryConsumeBuff("attackBoost");
+        newMine.stepDamage = spawningUnit.CalculateFinalDamage();
 
         foreach (var minedPosition in mineNeighbourDict[position])
         {
@@ -411,7 +413,7 @@ public class GameGridManager : MonoBehaviour
         return true;
     }
 
-    public void DetonateMine(Vector3Int mineCoords, BaseController owner)
+    public void DetonateMine(Vector3Int mineCoords, Unit detonatingUnit)
     {
         if (mineTriggerTiles.ContainsKey(mineCoords))
         {
@@ -426,9 +428,9 @@ public class GameGridManager : MonoBehaviour
                 Unit unit = GetUnitAtCoordinates(triggerTile);
                 if (unit)
                 {
-                    if (!unit.unitAttributes.isImmuneToExplosions && unit.owner != owner)
+                    if (!unit.unitAttributes.isImmuneToExplosives && unit.owner != detonatingUnit.owner)
                     {
-                        unit.TakeDamage(mine.centerDetonateDamage, mineCoords);
+                        unit.TakeDamage(detonatingUnit.CalculateFinalDamage() * 2, mineCoords);
                     }
                 }
             }
@@ -444,9 +446,9 @@ public class GameGridManager : MonoBehaviour
 
                 if (unit)
                 {
-                    if (!unit.unitAttributes.isImmuneToExplosions && unit.owner != owner)
+                    if (!unit.unitAttributes.isImmuneToExplosives && unit.owner != detonatingUnit.owner)
                     {
-                        unit.TakeDamage(mine.sideDetonateDamage, mineCoords);
+                        unit.TakeDamage(detonatingUnit.CalculateFinalDamage(), mineCoords);
                     }
                 }
             }

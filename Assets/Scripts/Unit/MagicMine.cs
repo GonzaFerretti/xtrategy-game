@@ -7,13 +7,13 @@ public class MagicMine : MonoBehaviour
     public BaseController owner;
     [HideInInspector] public Vector3Int coordinates;
 
-    public int stepDamage;
+    [HideInInspector] public int stepDamage = 0;
 
-    public int centerDetonateDamage;
-    public int sideDetonateDamage;
+    [HideInInspector] public int centerDetonateDamage = 0;
+    [HideInInspector] public int sideDetonateDamage = 0;
 
-    public List<Vector3Int> triggerTiles = new List<Vector3Int>();
-    public List<Vector3Int> detonationTiles = new List<Vector3Int>();
+    [HideInInspector] public List<Vector3Int> triggerTiles = new List<Vector3Int>();
+    [HideInInspector] public List<Vector3Int> detonationTiles = new List<Vector3Int>();
 
     public void SetTeamColor()
     {

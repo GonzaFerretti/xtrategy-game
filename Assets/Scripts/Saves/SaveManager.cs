@@ -13,6 +13,7 @@ public class SaveManager : MonoBehaviour
     public SaveData stagedSaveDataToLoad;
     public UnitTypeBank unitTypeBank;
     public ItemTypeBank itemTypeBank;
+    public BuffTypeBank buffTypeBank;
 
     public void ResetStagedData()
     {
@@ -105,7 +106,7 @@ public class SaveManager : MonoBehaviour
                 owner = unit.owner.name,
                 unitId = unitTypeBank.GetUnitId(unit.unitAttributes),
                 position = unit.GetCoordinates(),
-                isShielded = unit.isShielded
+                activeBuffs = unit.GetCurrentlyActiveBuffs()
             };
         }
         return saveInfo;
@@ -224,6 +225,21 @@ public struct ItemTypeBank
             return itemTypes.IndexOf(itemType);
         }
         else return -1;
+    }
+}
+
+[System.Serializable]
+public struct BuffTypeBank
+{
+    [SerializeField] List<Buff> buffTypes;
+
+    public Buff GetBuffType(string identifier)
+    {
+        foreach (var buff in buffTypes)
+        {
+            if (buff.identifier == identifier) return buff;
+        }
+        return null;
     }
 }
 

@@ -50,7 +50,7 @@ public class AIController : BaseController
         attackingUnit.model.transform.forward = (attackedUnit.transform.position - attackingUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
-        attackedUnit.TakeDamage(attackingUnit.damage, attackingUnit.GetCoordinates());
+        attackedUnit.TakeDamage(attackingUnit.CalculateFinalDamage(), attackingUnit.GetCoordinates());
         attackingUnit.attackState = CurrentActionState.ended;
     }
 
@@ -193,7 +193,7 @@ public class AIController : BaseController
             MagicMine unitInRangeOfMine = gridManager.GetMineWithEnemyNearby(attackQuery.cellsInRange, actingUnit.owner);
             if (unitInRangeOfMine)
             {
-                gridManager.DetonateMine(unitInRangeOfMine.coordinates,this);
+                gridManager.DetonateMine(unitInRangeOfMine.coordinates,actingUnit);
                 currentActions[id].endedSuccesfully = true;
             }
             else

@@ -7,10 +7,12 @@ public class UnitAttributes : ScriptableObject
 {
     public int maxHp;
     public int movementRange;
+    public int movementBoost;
     public int minAttackRange;
     public int maxAttackRange;
     public int damage;
-    public bool isImmuneToExplosions = false;
+    public int damageBoost;
+    public bool isImmuneToExplosives = false;
     public AIBehaviour aiBehaviour;
     public AttackType attackType;
 

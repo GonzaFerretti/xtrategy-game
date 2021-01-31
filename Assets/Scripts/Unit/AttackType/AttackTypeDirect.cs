@@ -14,7 +14,8 @@ public class AttackTypeDirect : AttackType
         attackingUnit.model.transform.forward = (enemyToAttack.transform.position - attackingUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
-        enemyToAttack.TakeDamage(attackingUnit.damage, attackingUnit.GetCoordinates());
+        attackingUnit.TryConsumeBuff("attackBoost");
+        enemyToAttack.TakeDamage(CalculateFinalDamage(attackingUnit), attackingUnit.GetCoordinates());
         attackingUnit.attackState = CurrentActionState.ended;
     }
 
