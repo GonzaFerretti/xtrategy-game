@@ -27,7 +27,6 @@ public class LoadingScreen : MonoBehaviour
     {
         while (loadHandle.progress < 0.9f)
         {
-            Debug.Log(loadHandle.progress);
             UpdateBar(loadHandle.progress*0.9f*(1-baseLevelLoadShownPercentage));
             yield return null;
         }

@@ -55,7 +55,7 @@ public class PlayerController : BaseController
     {
         hitObject = null;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Debug.DrawLine(ray.origin, ray.origin + ray.direction * 500f, Color.red, 5);
+        //Debug.DrawLine(ray.origin, ray.origin + ray.direction * 500f, Color.red, 5);
         bool hasHitObject = Physics.Raycast(ray, out RaycastHit hit, 500f, layerMaskOfObject);
         if (hasHitObject)
         {

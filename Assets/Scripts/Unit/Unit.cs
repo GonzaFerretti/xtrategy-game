@@ -66,6 +66,7 @@ public class Unit : GameGridElement
 
     public void ProcessBuffCharges()
     {
+        List<string> buffsToConsume = new List<string>();
         foreach (var buffData in activeBuffs)
         {
             Buff buff = buffData.Value;
@@ -88,7 +89,14 @@ public class Unit : GameGridElement
             }
 
             if (shouldConsumeBuff)
-                TryConsumeBuff(buffData.Key);
+            {
+                buffsToConsume.Add(buffData.Key);
+            }
+        }
+
+        foreach (var buff in buffsToConsume)
+        {
+            TryConsumeBuff(buff);
         }
     }
 

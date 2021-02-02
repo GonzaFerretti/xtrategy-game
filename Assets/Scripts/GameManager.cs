@@ -163,7 +163,7 @@ public class GameManager : MonoBehaviour
     void SetPlayerCurrentItem(int itemId)
     {
         PlayerController player = GetPlayer();
-        if (player)
+        if (player && itemId != -1)
         {
             player.UpdateCurrentItem(saveManager.itemTypeBank.GetItemType(itemId));
         }

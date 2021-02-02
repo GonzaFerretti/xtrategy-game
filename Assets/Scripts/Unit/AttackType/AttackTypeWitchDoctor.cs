@@ -25,6 +25,7 @@ public class AttackTypeWitchDoctor : AttackType
             Buff poisonBuff = attackingUnit.grid.gameManager.saveManager.buffTypeBank.GetBuffType("poison");
             poisonBuff = Instantiate(poisonBuff);
             poisonBuff.charges = turns;
+            unitToInteract.TryAddBuff(poisonBuff, false);
         }
         else unitToInteract.Heal(Mathf.RoundToInt(CalculateFinalDamage(attackingUnit) * healMultiplier));
 
