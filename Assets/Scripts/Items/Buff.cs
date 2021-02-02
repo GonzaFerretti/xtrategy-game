@@ -7,4 +7,5 @@ public class Buff : ScriptableObject
 {
     public string identifier;
     public Sprite icon; 
+    public int charges = -1;
 }

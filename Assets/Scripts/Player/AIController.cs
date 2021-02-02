@@ -50,7 +50,7 @@ public class AIController : BaseController
         attackingUnit.model.transform.forward = (attackedUnit.transform.position - attackingUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
-        attackedUnit.TakeDamage(attackingUnit.CalculateFinalDamage(), attackingUnit.GetCoordinates());
+        attackedUnit.TakeDamage(attackingUnit.CalculateFinalDamage(), attackingUnit.GetCoordinates(), true);
         attackingUnit.attackState = CurrentActionState.ended;
     }
 

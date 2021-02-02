@@ -438,8 +438,4 @@ MonoBehaviour:
   - GrassFloorCell
   - GrassFloorCell
   - GrassFloorCell
-  itemsToSpawn:
-  - {fileID: 11400000, guid: 29e8b61e49fbe5345a345956fa5677fe, type: 2}
-  - {fileID: 11400000, guid: a10fcae5c77c2a94ba735bf8f325293f, type: 2}
-  - {fileID: 11400000, guid: a10fcae5c77c2a94ba735bf8f325293f, type: 2}
-  - {fileID: 11400000, guid: a10fcae5c77c2a94ba735bf8f325293f, type: 2}
+  itemsToSpawn: []

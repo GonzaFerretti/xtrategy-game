@@ -112,6 +112,8 @@ public class BaseController : MonoBehaviour
 
     public virtual void StartTurn(bool shouldResetUnits = true)
     {
+        ProcessUnitBuffCharges();
+
         if (!shouldResetUnits) return;
         foreach (Unit unit in unitsControlled)
         {
@@ -119,7 +121,15 @@ public class BaseController : MonoBehaviour
         }
     }
 
-    public int GetAmountOfUnitsLeft()
+public void ProcessUnitBuffCharges()
+{
+    foreach (Unit unit in unitsControlled)
+    {
+        unit.ProcessBuffCharges();
+    }
+}
+
+public int GetAmountOfUnitsLeft()
     {
         return unitsControlled.Count;
     }

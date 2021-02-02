@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
         Buff shieldBuff = saveManager.buffTypeBank.GetBuffType("shield");
         do
         {
-            hasBuffedOne = playerUnits[UnityEngine.Random.Range(0, playerUnits.Count - 1)].TryAddBuff(shieldBuff);
+            hasBuffedOne = playerUnits[UnityEngine.Random.Range(0, playerUnits.Count - 1)].TryAddBuff(shieldBuff,false);
             currentIndex++;
         } while (!hasBuffedOne || currentIndex < playerUnits.Count);
     }
@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (var unit in GetHumanPlayerUnits())
         {
-            unit.HealCompletely();
+            unit.Heal(-1);
         }
     }
 

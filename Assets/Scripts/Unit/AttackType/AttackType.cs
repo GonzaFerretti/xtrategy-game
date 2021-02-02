@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class AttackType : ScriptableObject
 {
+    [SerializeField] public bool shouldAllowAllyTargeting;
+
     public abstract bool CheckPossibleTarget(PlayerController controller);
 
     public abstract IEnumerator ExecuteAttack(Vector3Int coordinatesToAttack, Unit attackingUnit);

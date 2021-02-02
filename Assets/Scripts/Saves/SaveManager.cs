@@ -91,6 +91,23 @@ public class SaveManager : MonoBehaviour
         return saveInfo;
     }
 
+    public SavedBuffInfo[] GetSavedBuffInfoFromUnit(Unit unit)
+    {
+        List<Buff> buffs = unit.GetCurrentlyActiveBuffs();
+        SavedBuffInfo[] saveInfo = new SavedBuffInfo[buffs.Count];
+        for (int i = 0; i < buffs.Count; i++)
+        {
+            Buff buff = buffs[i];
+            if (!buff) continue;
+            saveInfo[i] = new SavedBuffInfo
+            {
+                identifier = buff.identifier,
+                remainingCharges = buff.charges
+            };
+        }
+        return saveInfo;
+    }
+
     public UnitSaveInfo[] GetSaveInfoFromUnits(List<Unit> units)
     {
         UnitSaveInfo[] saveInfo = new UnitSaveInfo[units.Count];
@@ -106,7 +123,7 @@ public class SaveManager : MonoBehaviour
                 owner = unit.owner.name,
                 unitId = unitTypeBank.GetUnitId(unit.unitAttributes),
                 position = unit.GetCoordinates(),
-                activeBuffs = unit.GetCurrentlyActiveBuffs()
+                activeBuffs = GetSavedBuffInfoFromUnit(unit)
             };
         }
         return saveInfo;

@@ -23,7 +23,7 @@ public class UnitSaveInfo
     public bool hasMoved;
     public bool hasAttacked;
     public bool isShielded;
-    public string[] activeBuffs;
+    public SavedBuffInfo[] activeBuffs;
     public Vector3Int position;
 }
 
@@ -41,4 +41,11 @@ public class PickupItemSaveInfo
 {
     public Vector3Int position;
     public int itemId;
+}
+
+[System.Serializable]
+public class SavedBuffInfo
+{
+    public string identifier;
+    public int remainingCharges;
 }

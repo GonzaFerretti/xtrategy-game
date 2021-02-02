@@ -17,6 +17,6 @@ public class ItemData : ScriptableObject
     // Returns whether or not the use was succesful
     public virtual bool OnUse(Unit user)
     {
-        return user.TryAddBuff(buff);
+        return user.TryAddBuff(buff,buff.charges != -1);
     }
 }
