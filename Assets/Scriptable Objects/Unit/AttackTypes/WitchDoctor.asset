@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: WitchDoctor
   m_EditorClassIdentifier: 
   shouldAllowAllyTargeting: 1
-  healMultiplier: 0
+  healMultiplier: 3
+  turns: 3

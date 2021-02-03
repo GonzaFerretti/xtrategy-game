@@ -17,7 +17,7 @@ MonoBehaviour:
   movementBoost: 3
   minAttackRange: 0
   maxAttackRange: 4
-  damage: 8
+  damage: 1
   damageBoost: 3
   isImmuneToExplosives: 0
   aiBehaviour: {fileID: 0}

@@ -51,11 +51,7 @@ public class AdManager : MonoBehaviour
             HideOptions();
             ShowPrize();
             StartCoroutine(StartGiveBonusTimer());
-        }/*
-        else
-        {
-            ShowTryAgain();
-        }*/
+        }
     }
 
     IEnumerator StartGiveBonusTimer()
