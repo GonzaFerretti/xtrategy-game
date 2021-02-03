@@ -121,15 +121,23 @@ public class BaseController : MonoBehaviour
         }
     }
 
-public void ProcessUnitBuffCharges()
-{
-    foreach (Unit unit in unitsControlled)
+    public void ProcessUnitBuffCharges()
     {
-        unit.ProcessBuffCharges();
-    }
-}
+        List<Unit> tempList = new List<Unit>();
 
-public int GetAmountOfUnitsLeft()
+        foreach (var unit in unitsControlled)
+        {
+            tempList.Add(unit);
+        }
+
+        // We do this to avoid getting collection modified errors, as a buff may trigger a kill event and remove the unit from unitsControlled
+        foreach (var unit in tempList)
+        {
+            unit.ProcessBuffCharges();
+        }
+    }
+
+    public int GetAmountOfUnitsLeft()
     {
         return unitsControlled.Count;
     }
@@ -147,7 +155,7 @@ public int GetAmountOfUnitsLeft()
 
     public bool OwnsUnit(Unit unit)
     {
-        return unitsControlled.Contains(unit);        
+        return unitsControlled.Contains(unit);
     }
 
     public bool HasMultipleUnits()
