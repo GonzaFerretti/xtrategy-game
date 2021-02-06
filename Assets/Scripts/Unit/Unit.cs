@@ -232,6 +232,11 @@ public class Unit : GameGridElement
         UpdateHpBar();
     }
 
+    public bool IsDamaged()
+    {
+        return currentHp != unitAttributes.maxHp;
+    }
+
     public void Heal(int amount)
     {
         currentHp = (amount == -1) ? unitAttributes.maxHp : Mathf.Clamp(currentHp + amount, 0, unitAttributes.maxHp);

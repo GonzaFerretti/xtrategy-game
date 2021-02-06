@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Unit/Attack Types/Disarm bomb")]
@@ -34,16 +35,30 @@ public class AttackTypeDisarmBomb : AttackType
 
     public override void CheckAdditionalCellIndicatorsConditions(IEnumerable<Vector3Int> indicatorsToCheck, GameGridManager grid, PlayerController controller)
     {
-        foreach (var coordinates in indicatorsToCheck)
+        List<Vector3Int> indicatorList = indicatorsToCheck.ToList();
+        foreach (var mine in grid.GetEnemyMines(controller))
         {
-            if (grid.mineTriggerTiles.ContainsKey(coordinates))
+            if (indicatorList.Contains(mine.coordinates))
             {
-                var mine = grid.mineTriggerTiles[coordinates];
-                if (mine.owner != controller)
-                {
-                    grid.EnableCellIndicator(coordinates, GridIndicatorMode.possibleDisarm);
-                }
+                CheckExplosionIndicators(mine.triggerTiles, GridIndicatorMode.explosionRangeNear, grid, controller);
+                
+                CheckExplosionIndicators(mine.detonationTiles, GridIndicatorMode.explosionRangeFar, grid, controller);
+
+                grid.EnableCellIndicator(mine.coordinates, GridIndicatorMode.possibleDetonation);
             }
+        }
+    }
+
+    void CheckExplosionIndicators(List<Vector3Int> coordinatesToCheck, GridIndicatorMode gridIndicatorMode, GameGridManager grid, PlayerController controller)
+    {
+        foreach (var coordinates in coordinatesToCheck)
+        {
+            Unit possibleUnit = grid.GetUnitAtCoordinates(coordinates);
+            if (possibleUnit && possibleUnit.owner == controller)
+            {
+                continue;
+            }
+            grid.EnableCellIndicator(coordinates, gridIndicatorMode);
         }
     }
 }

@@ -35,4 +35,7 @@ public enum GridIndicatorMode
     possibleHeal,
     selectedUnit,
     item,
+    possibleDetonation,
+    explosionRangeNear,
+    explosionRangeFar,
 }

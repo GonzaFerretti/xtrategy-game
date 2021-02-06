@@ -27,7 +27,8 @@ public class AttackTypeWitchDoctor : AttackType
             poisonBuff.charges = turns;
             unitToInteract.TryAddBuff(poisonBuff, false);
         }
-        else unitToInteract.Heal(Mathf.RoundToInt(CalculateFinalDamage(attackingUnit) * healMultiplier));
+        else if (unitToInteract.IsDamaged())
+            unitToInteract.Heal(Mathf.RoundToInt(CalculateFinalDamage(attackingUnit) * healMultiplier));
 
         attackingUnit.attackState = CurrentActionState.ended;
     }
@@ -41,6 +42,7 @@ public class AttackTypeWitchDoctor : AttackType
             Vector3Int unitPosition = unitSelected.GetCoordinates();
             if (controller.currentlySelectedUnit.possibleAttacks.Contains(unitPosition))
             {
+                if (unitSelected.owner == controller && !unitSelected.IsDamaged()) return false;
                 controller.currentlySelectedUnit.attackState = CurrentActionState.inProgress;
                 controller.StartCoroutine(ExecuteAttack(unitPosition, controller.currentlySelectedUnit));
                 return true;
@@ -63,7 +65,9 @@ public class AttackTypeWitchDoctor : AttackType
                 }
                 else
                 {
-                    grid.EnableCellIndicator(coordinates, GridIndicatorMode.possibleHeal);
+                    if (unit.IsDamaged())
+                        grid.EnableCellIndicator(coordinates, GridIndicatorMode.possibleHeal);
+                    else grid.DisableCellIndicator(coordinates);
                 }
             }
         }
