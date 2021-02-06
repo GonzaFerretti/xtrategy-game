@@ -14,11 +14,14 @@ public class GameGridManager : MonoBehaviour
     public Transform cellsRootTransform;
     public Transform coversRootTransform;
     public Transform cellIndicatorsRootTransform;
+    public Transform itemPickupsRootTransform;
     public Transform minesRootTransform;
     public Dictionary<Vector3Int, List<Vector3Int>> neighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
     public Dictionary<Vector3Int, List<Vector3Int>> mineNeighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
 
     Dictionary<Vector3Int, Unit> unitPositionDict = new Dictionary<Vector3Int, Unit>();
+
+    Dictionary<Vector3Int, ItemPickup> pickupItemsDict = new Dictionary<Vector3Int, ItemPickup>();
 
     public Dictionary<Vector3Int, MagicMine> mineTriggerTiles = new Dictionary<Vector3Int, MagicMine>();
     public Dictionary<Vector3Int, MagicMine> mineDetonationTiles = new Dictionary<Vector3Int, MagicMine>();
@@ -26,6 +29,10 @@ public class GameGridManager : MonoBehaviour
     [SerializeField] MagicMine minePrefab;
 
     [SerializeField] ExplosionEffect explosionPrefab;
+
+    [SerializeField] ItemPickup itemPickupPrefab;
+
+    [SerializeField] float itemPickupHeight;
 
     public GridCoordinates gridCoordinates;
     public CoverInformation covers;
@@ -55,6 +62,26 @@ public class GameGridManager : MonoBehaviour
         CopyListOfCellsToUnusedList();
         GenerateAllPossibleNeighbours();
         GenerateAllPossibleMineNeighbours();
+    }
+
+    public void SetupNewItems()
+    {
+        foreach (var itemData in savedData.itemsToSpawn)
+        {
+            var coordinates = GetRandomUnusedCell().GetCoordinates();
+            SetupSingleItem(itemData, coordinates);
+        }
+    }
+
+    public void SetupSingleItem(ItemData itemData, Vector3Int coordinates)
+    {
+        var newItemPickup = Instantiate(itemPickupPrefab);
+        pickupItemsDict.Add(coordinates, newItemPickup);
+
+        newItemPickup.transform.position = GetWorldPositionFromCoords(coordinates) + Vector3.up * itemPickupHeight;
+        newItemPickup.transform.parent = itemPickupsRootTransform;
+        newItemPickup.transform.localRotation = Quaternion.identity;
+        newItemPickup.UpdateItem(itemData, coordinates);
     }
 
     public void InitCoverIndicator(Vector3 coverPosition, Cover cover)
@@ -110,11 +137,31 @@ public class GameGridManager : MonoBehaviour
         return Mathf.Max(distX, distY);
     }
 
-    public IEnumerator CreateMine(BaseController owner, Vector3Int position)
+    public bool CheckItemAtCoordinate(out ItemPickup outItem, Vector3Int coords)
+    {
+        outItem = null;
+        if (pickupItemsDict.ContainsKey(coords))
+        {
+            outItem = pickupItemsDict[coords];
+            return true;
+        }
+        return false;
+    }
+
+    public void DestroyItemPickup(ItemPickup pickupToDestroy)
+    {
+        pickupItemsDict.Remove(pickupToDestroy.coordinates);
+
+        Destroy(pickupToDestroy.gameObject);
+    }
+
+    public IEnumerator CreateMine(BaseController owner, Vector3Int position, Unit spawningUnit)
     {
         MagicMine newMine = InstantiateMine(owner, position);
         newMine.triggerTiles.Add(position);
         mineTriggerTiles.Add(position, newMine);
+        spawningUnit.TryConsumeBuff("attackBoost");
+        newMine.stepDamage = spawningUnit.CalculateFinalDamage();
 
         foreach (var minedPosition in mineNeighbourDict[position])
         {
@@ -366,7 +413,7 @@ public class GameGridManager : MonoBehaviour
         return true;
     }
 
-    public void DetonateMine(Vector3Int mineCoords, BaseController owner)
+    public void DetonateMine(Vector3Int mineCoords, Unit detonatingUnit)
     {
         if (mineTriggerTiles.ContainsKey(mineCoords))
         {
@@ -381,9 +428,9 @@ public class GameGridManager : MonoBehaviour
                 Unit unit = GetUnitAtCoordinates(triggerTile);
                 if (unit)
                 {
-                    if (!unit.unitAttributes.isImmuneToExplosions && unit.owner != owner)
+                    if (!unit.unitAttributes.isImmuneToExplosives && unit.owner != detonatingUnit.owner)
                     {
-                        unit.TakeDamage(mine.centerDetonateDamage, mineCoords);
+                        unit.TakeDamage(detonatingUnit.CalculateFinalDamage() * 2, mineCoords,true);
                     }
                 }
             }
@@ -399,9 +446,9 @@ public class GameGridManager : MonoBehaviour
 
                 if (unit)
                 {
-                    if (!unit.unitAttributes.isImmuneToExplosions && unit.owner != owner)
+                    if (!unit.unitAttributes.isImmuneToExplosives && unit.owner != detonatingUnit.owner)
                     {
-                        unit.TakeDamage(mine.sideDetonateDamage, mineCoords);
+                        unit.TakeDamage(detonatingUnit.CalculateFinalDamage(), mineCoords,true);
                     }
                 }
             }

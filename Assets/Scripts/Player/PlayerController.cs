@@ -5,6 +5,14 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : BaseController
 {
+    public ItemData currentItem;
+    ItemButtonTrigger itemUI;
+
+    public void SetItemButtonReference(ItemButtonTrigger reference)
+    {
+        itemUI = reference;
+    }
+
     public override void Update()
     {
         base.Update();
@@ -17,12 +25,37 @@ public class PlayerController : BaseController
         base.SwitchStates(identifier);
     }
 
+    public void UpdateCurrentItem(ItemData item)
+    {
+        currentItem = item;
+        itemUI.SetUsability(true);
+        itemUI.ChangeIcon(item.icon);
+    }
+
+    public bool HasItem()
+    {
+        return currentItem;
+    }
+
+    public void UseItem(Unit unit)
+    {
+        if (currentItem.OnUse(unit))
+        { 
+            currentItem = null;
+            itemUI.SetUsability(false);
+        }
+        else
+        {
+            // IMPLEMENT ANY FAILURE CONDITIONS HERE!
+        }
+    }
+
     GameGridCell lastSelectedCoord = null;
     public bool GetObjectUnderMouse(out GameObject hitObject, int layerMaskOfObject)
     {
         hitObject = null;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Debug.DrawLine(ray.origin, ray.origin + ray.direction * 500f, Color.red, 5);
+        //Debug.DrawLine(ray.origin, ray.origin + ray.direction * 500f, Color.red, 5);
         bool hasHitObject = Physics.Raycast(ray, out RaycastHit hit, 500f, layerMaskOfObject);
         if (hasHitObject)
         {

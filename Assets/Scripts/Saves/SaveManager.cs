@@ -11,6 +11,9 @@ public class SaveManager : MonoBehaviour
     public bool isLoadingFromSave = false;
     [SerializeField] string loadingSceneName;
     public SaveData stagedSaveDataToLoad;
+    public UnitTypeBank unitTypeBank;
+    public ItemTypeBank itemTypeBank;
+    public BuffTypeBank buffTypeBank;
 
     public void ResetStagedData()
     {
@@ -38,15 +41,17 @@ public class SaveManager : MonoBehaviour
         basePath = Application.persistentDataPath;
     }
 
-    public void ProcessDataAndSave(string levelName, List<Unit> units, bool hasUsedPower, bool isEnemyTurn, List<MagicMine> mines)
+    public void ProcessDataAndSave(PreSaveData data)
     {
         var saveData = new SaveData
         {
-            levelName = levelName,
-            units = GetSaveInfoFromUnits(units),
-            mines = GetMineSaveInfo(mines),
-            hasUsedPower = hasUsedPower,
-            isEnemyTurn = isEnemyTurn
+            levelName = data.levelName,
+            units = GetSaveInfoFromUnits(data.units),
+            mines = GetMineSaveInfo(data.mines),
+            pickupItems = GetItemSaveInfo(data.pickupItems),
+            hasUsedPower = data.hasUsedPower,
+            isEnemyTurn = data.isEnemyTurn,
+            currentPlayerItemId = itemTypeBank.GetItemId(data.playerCurrentItem)
         };
 
         Save(saveData);
@@ -70,6 +75,39 @@ public class SaveManager : MonoBehaviour
         return saveInfo;
     }
 
+    public PickupItemSaveInfo[] GetItemSaveInfo(List<ItemPickup> items)
+    {
+        PickupItemSaveInfo[] saveInfo = new PickupItemSaveInfo[items.Count];
+        for (int i = 0; i < items.Count; i++)
+        {
+            ItemPickup item = items[i];
+            if (!item) continue;
+            saveInfo[i] = new PickupItemSaveInfo
+            {
+                position = item.coordinates,
+                itemId = itemTypeBank.GetItemId(item.itemData)
+            };
+        }
+        return saveInfo;
+    }
+
+    public SavedBuffInfo[] GetSavedBuffInfoFromUnit(Unit unit)
+    {
+        List<Buff> buffs = unit.GetCurrentlyActiveBuffs();
+        SavedBuffInfo[] saveInfo = new SavedBuffInfo[buffs.Count];
+        for (int i = 0; i < buffs.Count; i++)
+        {
+            Buff buff = buffs[i];
+            if (!buff) continue;
+            saveInfo[i] = new SavedBuffInfo
+            {
+                identifier = buff.identifier,
+                remainingCharges = buff.charges
+            };
+        }
+        return saveInfo;
+    }
+
     public UnitSaveInfo[] GetSaveInfoFromUnits(List<Unit> units)
     {
         UnitSaveInfo[] saveInfo = new UnitSaveInfo[units.Count];
@@ -83,9 +121,9 @@ public class SaveManager : MonoBehaviour
                 hasMoved = unit.moveState == CurrentActionState.ended,
                 hpLeft = unit.currentHp,
                 owner = unit.owner.name,
-                unitType = unit.unitAttributes,
+                unitId = unitTypeBank.GetUnitId(unit.unitAttributes),
                 position = unit.GetCoordinates(),
-                isShielded = unit.isShielded
+                activeBuffs = GetSavedBuffInfoFromUnit(unit)
             };
         }
         return saveInfo;
@@ -158,3 +196,78 @@ public class SaveManager : MonoBehaviour
         return basePath + "/" + currentTime + ".json";
     }
 }
+
+[System.Serializable]
+public struct UnitTypeBank
+{
+    [SerializeField] List<UnitAttributes> unitTypes;
+
+    public UnitAttributes GetUnitType(int id)
+    {
+        if (id <= unitTypes.Count-1 && id >= 0)
+        {
+            return unitTypes[id];
+        }
+        return null;
+    }
+
+    public int GetUnitId(UnitAttributes unitType)
+    {
+        if (unitTypes.Contains(unitType))
+        {
+            return unitTypes.IndexOf(unitType);
+        }
+        else return -1;
+    }
+}
+
+[System.Serializable]
+public struct ItemTypeBank
+{
+    [SerializeField] List<ItemData> itemTypes;
+
+    public ItemData GetItemType(int id)
+    {
+        if (id <= itemTypes.Count - 1 && id >= 0)
+        {
+            return itemTypes[id];
+        }
+        return null;
+    }
+
+    public int GetItemId(ItemData itemType)
+    {
+        if (itemTypes.Contains(itemType))
+        {
+            return itemTypes.IndexOf(itemType);
+        }
+        else return -1;
+    }
+}
+
+[System.Serializable]
+public struct BuffTypeBank
+{
+    [SerializeField] List<Buff> buffTypes;
+
+    public Buff GetBuffType(string identifier)
+    {
+        foreach (var buff in buffTypes)
+        {
+            if (buff.identifier == identifier) return buff;
+        }
+        return null;
+    }
+}
+
+public struct PreSaveData
+{
+    public string levelName;
+    public List<Unit> units;
+    public bool hasUsedPower;
+    public bool isEnemyTurn;
+    public List<MagicMine> mines;
+    public List<ItemPickup> pickupItems;
+    public ItemData playerCurrentItem;
+}
+

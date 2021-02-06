@@ -44,12 +44,21 @@ public class GridEditor : Editor
         {
             string path = "Assets/Scriptable Objects/Map/" + saveName + ".asset";
             MapDictData mapData = AssetDatabase.LoadAssetAtPath<MapDictData>(path);
+            List<ItemData> previousItems = new List<ItemData>();
             if (mapData)
             {
+                if (mapData.itemsToSpawn.Count > 0)
+                {
+                    foreach (var item in mapData.itemsToSpawn)
+                    {
+                        previousItems.Add(item);
+                    }
+                }
                 AssetDatabase.DeleteAsset(path);
             }
             mapData = CreateInstance<MapDictData>();
             mapData.Init(gridBuilder.gridCoordinates, gridBuilder.covers);
+            mapData.itemsToSpawn = previousItems;
             AssetDatabase.CreateAsset(mapData, path);
             gridBuilder.gameGridManager.savedData = mapData;
             EditorUtility.SetDirty(gridBuilder.gameGridManager);

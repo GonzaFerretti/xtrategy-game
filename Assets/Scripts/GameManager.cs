@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public List<BaseController> playersRemaining;
     public List<Unit> allUnits;
     public HUDManager hud;
-    SaveManager saveManager;
+    public SaveManager saveManager;
     SoundManager soundManager;
     public bool hasUsedPower = false;
 
@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
         else
         {
             PrepareAlreadyExistingUnits();
+            grid.SetupNewItems();
         }
         loadingScreen.inLevelSetupProgress = 3f / 5;
         yield return null;
@@ -73,24 +74,49 @@ public class GameManager : MonoBehaviour
         SetPowerUsageStatus(true);
     }
 
+    public PlayerController GetPlayer()
+    {
+        foreach (var player in players)
+        {
+            if (player is PlayerController)
+            {
+                return (player as PlayerController);
+            }
+        }
+        return null;
+    }
+
+    ItemData GetPlayerCurrentItem()
+    {
+        PlayerController player = GetPlayer();
+        if (!player) return null;
+        return player.currentItem;
+    }
+
     private void ShieldRandomUnit()
     {
         List<Unit> playerUnits = GetHumanPlayerUnits();
-
-        playerUnits[UnityEngine.Random.Range(0, playerUnits.Count - 1)].Shield();
+        bool hasBuffedOne = false;
+        int currentIndex = -1;
+        Buff shieldBuff = saveManager.buffTypeBank.GetBuffType("shield");
+        do
+        {
+            hasBuffedOne = playerUnits[UnityEngine.Random.Range(0, playerUnits.Count - 1)].TryAddBuff(shieldBuff,false);
+            currentIndex++;
+        } while (!hasBuffedOne || currentIndex < playerUnits.Count);
     }
 
     private void HealAllUnits()
     {
         foreach (var unit in GetHumanPlayerUnits())
         {
-            unit.HealCompletely();
+            unit.Heal(-1);
         }
     }
 
     List<Unit> GetHumanPlayerUnits()
     {
-        return FindObjectOfType<PlayerController>().unitsControlled;
+        return GetPlayer().unitsControlled;
     }
 
     void SanitizeControllerUnitList()
@@ -129,6 +155,27 @@ public class GameManager : MonoBehaviour
             SetTurn(saveData.isEnemyTurn);
             SanitizeControllerUnitList();
             LoadMines(saveData.mines);
+            LoadPickupItems(saveData.pickupItems);
+            SetPlayerCurrentItem(saveData.currentPlayerItemId);
+        }
+    }
+
+    void SetPlayerCurrentItem(int itemId)
+    {
+        PlayerController player = GetPlayer();
+        if (player && itemId != -1)
+        {
+            player.UpdateCurrentItem(saveManager.itemTypeBank.GetItemType(itemId));
+        }
+    }
+
+    void LoadPickupItems(PickupItemSaveInfo[] pickupItemSaveInfo)
+    {
+        foreach (var pickupItem in pickupItemSaveInfo)
+        {
+
+            ItemData itemType = saveManager.itemTypeBank.GetItemType(pickupItem.itemId);
+            grid.SetupSingleItem(itemType, pickupItem.position);
         }
     }
 
@@ -158,7 +205,8 @@ public class GameManager : MonoBehaviour
     {
         foreach (var unitInfo in saveData.units)
         {
-            Unit unit = Instantiate(unitInfo.unitType.defaultPrefab).GetComponent<Unit>();
+            UnitAttributes unitType = saveManager.unitTypeBank.GetUnitType(unitInfo.unitId);
+            Unit unit = Instantiate(unitType.defaultPrefab).GetComponent<Unit>();
             unit.InitUnit(grid, soundManager, unitInfo);
             allUnits.Add(unit);
         }
@@ -194,7 +242,18 @@ public class GameManager : MonoBehaviour
 
     public void SaveMatch()
     {
-        saveManager.ProcessDataAndSave(SceneManager.GetActiveScene().name, allUnits, hasUsedPower, currentPlayer is AIController, FindObjectsOfType<MagicMine>().ToList());
+        PreSaveData dataToProcess = new PreSaveData
+        {
+            levelName = SceneManager.GetActiveScene().name,
+            units = allUnits,
+            hasUsedPower = hasUsedPower,
+            isEnemyTurn = currentPlayer is AIController,
+            mines = FindObjectsOfType<MagicMine>().ToList(),
+            pickupItems = FindObjectsOfType<ItemPickup>().ToList(),
+            playerCurrentItem = GetPlayerCurrentItem()
+        };
+
+        saveManager.ProcessDataAndSave(dataToProcess);
     }
 
     void GetHudReference()

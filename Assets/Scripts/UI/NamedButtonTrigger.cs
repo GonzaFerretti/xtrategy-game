@@ -5,10 +5,10 @@ using UnityEngine.EventSystems;
 
 public class NamedButtonTrigger : EventTrigger
 {
-    PlayerController playerController;
-    [SerializeField] string buttonName;
+    protected PlayerController playerController;
+    [SerializeField] protected string buttonName;
 
-    public void SetPlayerController(PlayerController pc)
+    public virtual void SetPlayerController(PlayerController pc)
     {
         playerController = pc;
     }

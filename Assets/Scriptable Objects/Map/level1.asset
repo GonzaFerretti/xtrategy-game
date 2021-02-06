@@ -438,3 +438,4 @@ MonoBehaviour:
   - GrassFloorCell
   - GrassFloorCell
   - GrassFloorCell
+  itemsToSpawn: []

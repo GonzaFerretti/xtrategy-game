@@ -12,8 +12,8 @@ public class AttackTypePlantBomb : AttackType
 
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
-
-        yield return attackingUnit.StartCoroutine(attackingUnit.grid.CreateMine(attackingUnit.owner, coordinatesToAttack));
+        attackingUnit.TryConsumeBuff("attackBoost");
+        yield return attackingUnit.StartCoroutine(attackingUnit.grid.CreateMine(attackingUnit.owner, coordinatesToAttack, attackingUnit));
         attackingUnit.attackState = CurrentActionState.ended;
     }
 

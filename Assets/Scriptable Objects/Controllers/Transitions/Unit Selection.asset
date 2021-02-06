@@ -20,4 +20,5 @@ MonoBehaviour:
   - MenuButton
   - AdButton
   - SkipTurn
+  - ItemButton
   shouldShowUnitCycleHUD: 1

@@ -17,3 +17,5 @@ MonoBehaviour:
   - EnemyTurn
   - MenuButton
   - AdButton
+  - ItemButton
+  shouldShowUnitCycleHUD: 0

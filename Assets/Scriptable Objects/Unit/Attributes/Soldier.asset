@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 10
   movementRange: 3
+  movementBoost: 3
   minAttackRange: 0
   maxAttackRange: 1
   damage: 3
+  damageBoost: 0
+  isImmuneToExplosives: 0
   aiBehaviour: {fileID: 11400000, guid: f7ed7888e75d7a74a9adce2ac213f3bb, type: 2}
   attackType: {fileID: 11400000, guid: 06703122216fd824689f7347a176ebae, type: 2}
   attackSound: {fileID: 11400000, guid: 930a90c393486d74b890d1046b051ab8, type: 2}

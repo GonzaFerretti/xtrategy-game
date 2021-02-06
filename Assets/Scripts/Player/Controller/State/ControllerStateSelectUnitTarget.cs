@@ -30,6 +30,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
         float startTime = Time.time;
         while (controller.currentlySelectedUnit.possibleAttacks.Count == 0)
         {
+            // TO DO: is this really necessary now?
             if (Time.time - startTime > 2f) 
             {
                 yield break;

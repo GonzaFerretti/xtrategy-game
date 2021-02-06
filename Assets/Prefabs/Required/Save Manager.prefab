@@ -49,5 +49,26 @@ MonoBehaviour:
     levelName: 
     units: []
     mines: []
+    pickupItems: []
     hasUsedPower: 0
     isEnemyTurn: 0
+    currentPlayerItemId: 0
+  unitTypeBank:
+    unitTypes:
+    - {fileID: 11400000, guid: 8efef1a3c8500c94abc67994c2ecd11b, type: 2}
+    - {fileID: 11400000, guid: dbe7e9714a1eb5b4099a029bef53f0a6, type: 2}
+    - {fileID: 11400000, guid: e2f632ac56ff34044aec6ef8d9a9937a, type: 2}
+    - {fileID: 11400000, guid: 9c8989348f466374a95d624127af1d01, type: 2}
+    - {fileID: 11400000, guid: 7ee05a943c35201478dcbfd23dc7f0ca, type: 2}
+    - {fileID: 11400000, guid: f2e20f8018231374193b5bd9cec66b76, type: 2}
+  itemTypeBank:
+    itemTypes:
+    - {fileID: 11400000, guid: 7b8b06af797178d41a01dccd9fad90e7, type: 2}
+    - {fileID: 11400000, guid: a10fcae5c77c2a94ba735bf8f325293f, type: 2}
+    - {fileID: 11400000, guid: 8be8d83633339be47bbda657d9f814a3, type: 2}
+  buffTypeBank:
+    buffTypes:
+    - {fileID: 11400000, guid: e2a18d811b0528a4c9245444a6d15c32, type: 2}
+    - {fileID: 11400000, guid: 86c5c0bf6999bc342a40f6a00e78f25f, type: 2}
+    - {fileID: 11400000, guid: be80270e8a15b6c4382537bdb2f5ff31, type: 2}
+    - {fileID: 11400000, guid: b4ccfd07edd3d064d981e7a396930e9c, type: 2}

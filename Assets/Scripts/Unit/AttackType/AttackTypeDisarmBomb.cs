@@ -12,7 +12,8 @@ public class AttackTypeDisarmBomb : AttackType
 
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
-        attackingUnit.grid.DetonateMine(coordinatesToAttack, attackingUnit.owner);
+        attackingUnit.TryConsumeBuff("attackBoost");
+        attackingUnit.grid.DetonateMine(coordinatesToAttack, attackingUnit);
         attackingUnit.attackState = CurrentActionState.ended;
     }
 

@@ -13,7 +13,12 @@ public class Unit : GameGridElement
     [SerializeField] GameGridCell currentCell;
     public List<Cover> currentCovers;
 
-    public bool isShielded = false;
+    Dictionary<string, Buff> activeBuffs = new Dictionary<string, Buff>();
+    Dictionary<string, BuffIcon> activeBuffsUI = new Dictionary<string, BuffIcon>();
+
+    [SerializeField] BuffIcon buffIconPrefab;
+    [SerializeField] RectTransform buffIconRoot;
+    [SerializeField] float buffIconSpacing;
 
     public int currentHp;
     public CurrentActionState moveState = CurrentActionState.notStarted;
@@ -31,9 +36,9 @@ public class Unit : GameGridElement
     [SerializeField] SoundRepository sounds;
 
     [SerializeField] private UiHpBar hpBar;
-    [SerializeField] FloatingHeal healIcon;
+    [SerializeField] FloatingIcon healIcon;
+    [SerializeField] FloatingIcon poisonIcon;
     [SerializeField] TextMeshProUGUI typeText;
-    [SerializeField] Image shieldIcon;
 
     public Renderer[] rens;
     public Material seethroughBaseMaterial;
@@ -43,6 +48,11 @@ public class Unit : GameGridElement
     public BaseController owner;
     public List<Vector3Int> possibleMovements;
     public List<Vector3Int> possibleAttacks;
+
+    public int GetFinalMovementRange()
+    {
+        return movementRange + (HasBuff("movement") ? unitAttributes.movementBoost : 0);
+    }
 
     public void PlaySound(string name)
     {
@@ -54,31 +64,80 @@ public class Unit : GameGridElement
         soundManager.Play(clip);
     }
 
+    public void ProcessBuffCharges()
+    {
+        List<string> buffsToConsume = new List<string>();
+        foreach (var buffData in activeBuffs)
+        {
+            Buff buff = buffData.Value;
+            if (buff.charges == -1) continue;
+
+            buff.charges--;
+            bool shouldConsumeBuff = false;
+
+            if (TryConsumeBuff("shield"))
+                shouldConsumeBuff = true;
+            else
+            {
+                // Here I would execute some kind of stragegy method of the Buff to process each charge use.
+                // However, there's only one buff that currently uses this and we won't program any other buff.
+                // eg. buff.OnTurnTick()
+                TakeDamage(1, Vector3Int.right, false);
+                shouldConsumeBuff = buff.charges == 0;
+                StartCoroutine(poisonIcon.ShowIcon());
+                activeBuffsUI[buff.identifier].UpdateAmount(buff.charges);
+            }
+
+            if (shouldConsumeBuff)
+            {
+                buffsToConsume.Add(buffData.Key);
+            }
+        }
+
+        foreach (var buff in buffsToConsume)
+        {
+            TryConsumeBuff(buff);
+        }
+    }
+
+    public List<Buff> GetCurrentlyActiveBuffs()
+    {
+        return activeBuffs.Values.ToList();
+    }
+
+    public int CalculateFinalDamage()
+    {
+        return unitAttributes.attackType.CalculateFinalDamage(this);
+    }
+
     public Vector3Int GetCoordinates()
     {
         return currentCell.GetCoordinates();
     }
 
-    public void TakeDamage(int baseDamage, Vector3Int damageSourcePosition)
+    public void TakeDamage(int baseDamage, Vector3Int damageSourcePosition, bool isDamageDirectional)
     {
         bool isCoverInTheWay = false;
-        foreach (Cover cover in currentCovers)
+        if (isDamageDirectional)
         {
-            if (cover is HighCover) continue;
-            if (grid.IsCoverInTheWayOfAttack(damageSourcePosition, GetCoordinates(), cover))
+            foreach (Cover cover in currentCovers)
             {
-                isCoverInTheWay = true;
-                break;
+                // We could probably handle mines doing damage behind high covers, here.
+                if (cover is HighCover) continue;
+                if (grid.IsCoverInTheWayOfAttack(damageSourcePosition, GetCoordinates(), cover))
+                {
+                    isCoverInTheWay = true;
+                    break;
+                }
             }
         }
-        if (isShielded)
+        if (TryConsumeBuff("shield"))
         {
-            isShielded = false;
-            shieldIcon.enabled = false;
             PlaySound("shieldhit");
         }
         else
         {
+            // We should probably swap this for a multiplier!!
             currentHp = (isCoverInTheWay) ? currentHp - (baseDamage - 1) : currentHp - baseDamage;
             if (currentHp <= 0)
             {
@@ -99,6 +158,55 @@ public class Unit : GameGridElement
                 UpdateHpBar();
             }
         }
+    }
+
+    public bool HasBuff(string identifier)
+    {
+        return activeBuffs.ContainsKey(identifier);
+    }
+
+    public bool TryConsumeBuff(string identifier)
+    {
+        if (HasBuff(identifier))
+        {
+            GameObject buffIcon = activeBuffsUI[identifier].gameObject;
+            activeBuffs.Remove(identifier);
+            activeBuffsUI.Remove(identifier);
+            Destroy(buffIcon);
+            UpdateBuffUI();
+            return true;
+        }
+        else return false;
+
+    }
+
+    public bool TryAddBuff(Buff buff, bool shouldInstance)
+    {
+        if (!HasBuff(buff.identifier))
+        {
+            activeBuffsUI.Add(buff.identifier, CreateBuffUiIcon(buff));
+            buff = (shouldInstance) ? Instantiate(buff) : buff;
+            activeBuffs.Add(buff.identifier, buff);
+            UpdateBuffUI();
+            return true;
+        }
+        else return false;
+    }
+
+    public void UpdateBuffUI()
+    {
+        for (int i = 0; i < buffIconRoot.childCount; i++)
+        {
+            (buffIconRoot.GetChild(i) as RectTransform).anchoredPosition = i * buffIconSpacing * Vector2.left;
+        }
+    }
+
+    public BuffIcon CreateBuffUiIcon(Buff buff)
+    {
+        BuffIcon newIcon = Instantiate(buffIconPrefab, buffIconRoot);
+        newIcon.Setup(buff.icon, buff.charges);
+
+        return newIcon;
     }
 
     public void UpdateHpBar()
@@ -124,17 +232,11 @@ public class Unit : GameGridElement
         UpdateHpBar();
     }
 
-    public void HealCompletely()
+    public void Heal(int amount)
     {
-        currentHp = unitAttributes.maxHp;
+        currentHp = (amount == -1) ? unitAttributes.maxHp : Mathf.Clamp(currentHp + amount, 0, unitAttributes.maxHp);
         UpdateHpBar();
         StartCoroutine(healIcon.ShowIcon());
-    }
-
-    public void Shield()
-    {
-        isShielded = true;
-        shieldIcon.enabled = true;
     }
 
     void SetupInitialPosition(bool isLoading)
@@ -150,7 +252,16 @@ public class Unit : GameGridElement
         if (savedInfo == null) return;
         currentHp = savedInfo.hpLeft;
         owner = GameObject.Find(savedInfo.owner).GetComponent<BaseController>();
-        if (savedInfo.isShielded) Shield();
+        foreach (var savedBuff in savedInfo.activeBuffs)
+        {
+            Buff buff = grid.gameManager.saveManager.buffTypeBank.GetBuffType(savedBuff.identifier);
+            if (buff.charges != -1)
+            {
+                buff = Instantiate(buff);
+                buff.charges = savedBuff.remainingCharges;
+            }
+            TryAddBuff(buff, false);
+        }
         UpdateCell(savedInfo.position);
         attackState = (savedInfo.hasAttacked) ? CurrentActionState.ended : CurrentActionState.notStarted;
         moveState = (savedInfo.hasMoved) ? CurrentActionState.ended : CurrentActionState.notStarted;
@@ -225,9 +336,7 @@ public class Unit : GameGridElement
         grid.SetAllCoverIndicators(true);
         if (possibleMovements.Count == 0)
         {
-            currentRangeQuery = StartRangeQuery();
-            possibleMovements = new List<Vector3Int>();
-            StartCoroutine(WaitForRangeQuery());
+            ProcessRange(true);
         }
         else
         {
@@ -235,9 +344,16 @@ public class Unit : GameGridElement
         }
     }
 
+    public void ProcessRange(bool shouldShowRangeAfterwards)
+    {
+        currentRangeQuery = StartRangeQuery();
+        possibleMovements = new List<Vector3Int>();
+        StartCoroutine(WaitForRangeQuery(shouldShowRangeAfterwards));
+    }
+
     public AsyncRangeQuery StartRangeQuery()
     {
-        return grid.QueryUnitRange(movementRange, GetCoordinates());
+        return grid.QueryUnitRange(GetFinalMovementRange(), GetCoordinates());
     }
 
     public AsyncRangeQuery StartAttackRangeQuery()
@@ -256,9 +372,14 @@ public class Unit : GameGridElement
         }
         else
         {
-            grid.EnableCellIndicators(possibleAttacks, GridIndicatorMode.attackRange);
-            unitAttributes.attackType.CheckAdditionalCellIndicatorsConditions(possibleAttacks, grid, owner as PlayerController);
+            EnableAttackCellIndicators();
         }
+    }
+
+    void EnableAttackCellIndicators()
+    {
+        grid.EnableCellIndicators(possibleAttacks, GridIndicatorMode.attackRange);
+        unitAttributes.attackType.CheckAdditionalCellIndicatorsConditions(possibleAttacks, grid, owner as PlayerController);
     }
 
     public IEnumerator MoveByDestinationCoords(Vector3Int destinationCoords)
@@ -290,11 +411,11 @@ public class Unit : GameGridElement
             model.transform.forward = (grid.GetWorldPositionFromCoords(givenPath[i]) - lastPosition).normalized;
             transform.position = grid.GetWorldPositionFromCoords(givenPath[i]);
             currentCoordinates = givenPath[i];
-            if (!unitAttributes.isImmuneToExplosions)
+            if (!unitAttributes.isImmuneToExplosives)
             {
                 if (grid.CheckMineProximity(out int damage, currentCoordinates, owner))
                 {
-                    TakeDamage(damage, currentCoordinates);
+                    TakeDamage(damage, currentCoordinates, true);
                     break;
                 }
             }
@@ -304,21 +425,33 @@ public class Unit : GameGridElement
         }
         possibleMovements = new List<Vector3Int>();
         UpdateCell(currentCoordinates);
+
+        if (owner is PlayerController && !(owner as PlayerController).HasItem() && grid.CheckItemAtCoordinate(out ItemPickup outItem, currentCoordinates))
+        {
+            (owner as PlayerController).UpdateCurrentItem(outItem.itemData);
+            grid.DestroyItemPickup(outItem);
+        }
+
         currentCovers = grid.GetCoversFromCoord(GetCoordinates());
 
         anim.SetTrigger("endCurrentAnim");
+        TryConsumeBuff("movement");
         moveState = CurrentActionState.ended;
     }
 
-    public IEnumerator WaitForRangeQuery()
+    public IEnumerator WaitForRangeQuery(bool shouldShowIndicators)
     {
         while (!currentRangeQuery.hasFinished)
         {
             yield return new WaitForEndOfFrame();
         }
-
         possibleMovements = currentRangeQuery.cellsInRange;
-        grid.EnableCellIndicators(possibleMovements, GridIndicatorMode.movementRange);
+
+
+        if (shouldShowIndicators)
+        {
+            grid.EnableCellIndicators(possibleMovements, GridIndicatorMode.movementRange);
+        }
         currentRangeQuery.End();
     }
 
@@ -330,10 +463,12 @@ public class Unit : GameGridElement
         }
 
         possibleAttacks = currentRangeQuery.cellsInRange;
-        List<Vector3Int> allyPositionsInRange = possibleAttacks.Intersect(owner.GetOwnedUnitsPosition()).ToList();
-        possibleAttacks.RemoveAll(x => allyPositionsInRange.Contains(x));
-        grid.EnableCellIndicators(possibleAttacks, GridIndicatorMode.attackRange);
-        unitAttributes.attackType.CheckAdditionalCellIndicatorsConditions(possibleAttacks, grid, owner as PlayerController);
+        if (!unitAttributes.attackType.shouldAllowAllyTargeting)
+        {
+            List<Vector3Int> allyPositionsInRange = possibleAttacks.Intersect(owner.GetOwnedUnitsPosition()).ToList();
+            possibleAttacks.RemoveAll(x => allyPositionsInRange.Contains(x));
+        }
+        EnableAttackCellIndicators();
         currentRangeQuery.End();
     }
 
