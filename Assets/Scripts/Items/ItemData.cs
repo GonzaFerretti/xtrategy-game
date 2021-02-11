@@ -10,7 +10,7 @@ public class ItemData : ScriptableObject
 
     public Buff buff;
 
-    public ItemVisualInfo itemVisualInfo;
+    public GameObject modelPrefab;
 
     public Sprite icon;
 
