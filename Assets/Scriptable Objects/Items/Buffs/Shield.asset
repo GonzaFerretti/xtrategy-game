@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Shield
   m_EditorClassIdentifier: 
   identifier: shield
-  icon: {fileID: 21300000, guid: 08e23374b708e28409b49844a3662997, type: 3}
+  icon: {fileID: 21300000, guid: 5ee1a21c479fdef4d819d50f493f98f2, type: 3}
+  charges: -1

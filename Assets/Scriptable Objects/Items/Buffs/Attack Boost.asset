@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Attack Boost
   m_EditorClassIdentifier: 
   identifier: attackBoost
-  icon: {fileID: 21300000, guid: 3942a996eb3a10d4ab56ec4d6e339226, type: 3}
+  icon: {fileID: 21300000, guid: 84aef1656b6aa6741b69fb1f84fab0ac, type: 3}
+  charges: -1
