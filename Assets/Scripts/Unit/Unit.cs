@@ -32,6 +32,8 @@ public class Unit : GameGridElement
     [HideInInspector] public Animator anim;
     public GameObject model;
 
+    float lastMovementQueryDistance = -1;
+
     [SerializeField] SoundManager soundManager;
     [SerializeField] SoundRepository sounds;
 
@@ -316,6 +318,7 @@ public class Unit : GameGridElement
         moveState = CurrentActionState.notStarted;
         possibleAttacks = new List<Vector3Int>();
         possibleMovements = new List<Vector3Int>();
+        lastMovementQueryDistance = -1;
     }
 
     public virtual void SetUnitAttributes(bool isSaveLoad)
@@ -339,7 +342,7 @@ public class Unit : GameGridElement
         if (moveState == CurrentActionState.ended) return;
         grid.EnableCellIndicator(GetCoordinates(), GridIndicatorMode.selectedUnit);
         grid.SetAllCoverIndicators(true);
-        if (possibleMovements.Count == 0)
+        if (possibleMovements.Count == 0 || lastMovementQueryDistance != GetFinalMovementRange())
         {
             ProcessRange(true);
         }
@@ -353,6 +356,7 @@ public class Unit : GameGridElement
     {
         currentRangeQuery = StartRangeQuery();
         possibleMovements = new List<Vector3Int>();
+        lastMovementQueryDistance = GetFinalMovementRange();
         StartCoroutine(WaitForRangeQuery(shouldShowRangeAfterwards));
     }
 
