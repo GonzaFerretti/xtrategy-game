@@ -38,4 +38,5 @@ public enum GridIndicatorMode
     possibleDetonation,
     explosionRangeNear,
     explosionRangeFar,
+    poison,
 }

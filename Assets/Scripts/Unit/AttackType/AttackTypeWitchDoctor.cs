@@ -61,7 +61,7 @@ public class AttackTypeWitchDoctor : AttackType
             {
                 if (unit.owner != controller)
                 {
-                    grid.EnableCellIndicator(coordinates, GridIndicatorMode.possibleAttack);
+                    grid.EnableCellIndicator(coordinates, GridIndicatorMode.poison);
                 }
                 else
                 {
