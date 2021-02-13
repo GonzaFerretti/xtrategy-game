@@ -8,18 +8,18 @@ public class AIBehaviourMeleeUnit : AIBehaviour
     public override IEnumerator ExecuteBehaviour(AIController controller, Unit actingUnit)
     {
         AsyncAIActionResult firstAttackAtempt = controller.GenerateNewAIActionResult();
-        yield return controller.StartCoroutine(controller.AttemptAttack(actingUnit, firstAttackAtempt.id));
+        yield return controller.StartCoroutine(controller.AttemptInteractWithLowestHPTarget(actingUnit, firstAttackAtempt.id));
         if (firstAttackAtempt.endedSuccesfully)
         {
             yield break;
         }
         else
         {
-            yield return controller.StartCoroutine(controller.MoveTowardsClosestEnemy(actingUnit));
+            yield return controller.StartCoroutine(controller.MoveTowardsClosestTarget(actingUnit,controller.GetUnitsFromOthers()));
             if (!actingUnit) yield break;
             
             AsyncAIActionResult secondAttackAtempt = controller.GenerateNewAIActionResult();
-            yield return controller.StartCoroutine(controller.AttemptAttack(actingUnit, secondAttackAtempt.id));
+            yield return controller.StartCoroutine(controller.AttemptInteractWithLowestHPTarget(actingUnit, secondAttackAtempt.id));
         }
     }
 }

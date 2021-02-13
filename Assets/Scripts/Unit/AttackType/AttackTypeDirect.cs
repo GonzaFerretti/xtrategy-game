@@ -15,8 +15,13 @@ public class AttackTypeDirect : AttackType
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
         attackingUnit.TryConsumeBuff("attackBoost");
-        enemyToAttack.TakeDamage(CalculateFinalDamage(attackingUnit), attackingUnit.GetCoordinates(),true);
+        AttackAction(attackingUnit, enemyToAttack);
         attackingUnit.attackState = CurrentActionState.ended;
+    }
+
+    public override void AttackAction(Unit attackingUnit, Unit attackedUnit)
+    {
+        attackedUnit.TakeDamage(CalculateFinalDamage(attackingUnit, false), attackingUnit.GetCoordinates(), true);
     }
 
     public override bool CheckPossibleTarget(PlayerController controller)

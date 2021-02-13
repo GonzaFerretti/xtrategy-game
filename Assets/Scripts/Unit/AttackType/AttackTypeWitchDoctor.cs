@@ -19,18 +19,23 @@ public class AttackTypeWitchDoctor : AttackType
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
         attackingUnit.TryConsumeBuff("attackBoost");
-        if (unitToInteract.owner != attackingUnit.owner)
+        AttackAction(attackingUnit, unitToInteract);
+
+        attackingUnit.attackState = CurrentActionState.ended;
+    }
+
+    public override void AttackAction(Unit attackingUnit, Unit attackedUnit)
+    {
+        if (attackedUnit.owner != attackingUnit.owner)
         {
-            unitToInteract.TakeDamage(CalculateFinalDamage(attackingUnit), attackingUnit.GetCoordinates(), true);
+            attackedUnit.TakeDamage(CalculateFinalDamage(attackingUnit, false), attackingUnit.GetCoordinates(), true);
             Buff poisonBuff = attackingUnit.grid.gameManager.saveManager.buffTypeBank.GetBuffType("poison");
             poisonBuff = Instantiate(poisonBuff);
             poisonBuff.charges = turns;
-            unitToInteract.TryAddBuff(poisonBuff, false);
+            attackedUnit.TryAddBuff(poisonBuff, false);
         }
-        else if (unitToInteract.IsDamaged())
-            unitToInteract.Heal(Mathf.RoundToInt(CalculateFinalDamage(attackingUnit) * healMultiplier));
-
-        attackingUnit.attackState = CurrentActionState.ended;
+        else if (attackedUnit.IsDamaged())
+            attackedUnit.Heal(CalculateFinalDamage(attackingUnit, true));
     }
 
     public override bool CheckPossibleTarget(PlayerController controller)
@@ -71,5 +76,10 @@ public class AttackTypeWitchDoctor : AttackType
                 }
             }
         }
+    }
+
+    public override float GetAttackMultiplier()
+    {
+        return healMultiplier;
     }
 }

@@ -43,19 +43,20 @@ public class AIController : BaseController
     }
 
 
-    IEnumerator Attack(Unit attackedUnit, Unit attackingUnit)
+    IEnumerator InteractWithTarget(Unit interactedUnit, Unit interactingUnit, TargetType targetType)
     {
-        attackingUnit.anim.Play("attack");
-        attackingUnit.PlaySound(attackingUnit.unitAttributes.attackSound);
-        attackingUnit.model.transform.forward = (attackedUnit.transform.position - attackingUnit.transform.position).normalized;
+        interactingUnit.anim.Play("attack");
+        interactingUnit.PlaySound(interactingUnit.unitAttributes.attackSound);
+        interactingUnit.model.transform.forward = (interactedUnit.transform.position - interactingUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);
-        attackingUnit.anim.SetTrigger("endCurrentAnim");
-        attackedUnit.TakeDamage(attackingUnit.CalculateFinalDamage(), attackingUnit.GetCoordinates(), true);
-        attackingUnit.attackState = CurrentActionState.ended;
+        interactingUnit.anim.SetTrigger("endCurrentAnim");
+        interactingUnit.unitAttributes.attackType.AttackAction(interactingUnit, interactedUnit);
+        interactingUnit.attackState = CurrentActionState.ended;
     }
 
     public override void Update()
     {
+        // Just do nothing on update :D
     }
 
     public bool WaitForAction()
@@ -63,14 +64,14 @@ public class AIController : BaseController
         return true;
     }
 
-    public List<Unit> GetUnitsInAttackRange(List<Vector3Int> attacksInRange)
+    public List<Unit> GetUnitsInAttackRange(List<Vector3Int> attacksInRange, TargetType targetType)
     {
         List<Unit> possibleUnitsToAttack = new List<Unit>();
         foreach (Unit unit in gridManager.gameManager.allUnits)
         {
             foreach (Vector3Int possibleAttackPosition in attacksInRange)
             {
-                if (!unitsControlled.Contains(unit))
+                if (ShouldTargetUnit(unit,targetType))
                 {
                     if (unit.GetCoordinates() == possibleAttackPosition)
                     {
@@ -83,9 +84,16 @@ public class AIController : BaseController
         return possibleUnitsToAttack;
     }
 
-    public Unit GetLowestUnitInAttackRange(List<Vector3Int> attackRange)
+    bool ShouldTargetUnit(Unit unit, TargetType targetType)
     {
-        List<Unit> unitsInAttackRange = GetUnitsInAttackRange(attackRange);
+        return targetType == TargetType.AllUnits
+            ||  (targetType == TargetType.AllyOnly && unitsControlled.Contains(unit))
+            || (targetType == TargetType.EnemyOnly && !unitsControlled.Contains(unit));
+    }
+
+    public Unit GetLowestUnitInAttackRange(List<Vector3Int> attackRange, TargetType targetType)
+    {
+        List<Unit> unitsInAttackRange = GetUnitsInAttackRange(attackRange, targetType);
         if (unitsInAttackRange.Count > 0)
         {
             Unit lowestHpUnit = null;
@@ -135,7 +143,7 @@ public class AIController : BaseController
         return actionResult;
     }
 
-    public IEnumerator AttemptAttack(Unit actingUnit, int id)
+    public IEnumerator AttemptInteractWithLowestHPTarget(Unit actingUnit, int id, TargetType targetType = TargetType.EnemyOnly)
     {
         AsyncRangeQuery attackQuery = actingUnit.StartAttackRangeQuery();
 
@@ -153,10 +161,10 @@ public class AIController : BaseController
         }
         if (attackQuery.cellsInRange.Count > 0)
         {
-            Unit lowestHpUnitInRange = GetLowestUnitInAttackRange(attackQuery.cellsInRange);
+            Unit lowestHpUnitInRange = GetLowestUnitInAttackRange(attackQuery.cellsInRange, targetType);
             if (lowestHpUnitInRange)
             {
-                StartCoroutine(Attack(lowestHpUnitInRange, actingUnit));
+                StartCoroutine(InteractWithTarget(lowestHpUnitInRange, actingUnit, targetType));
                 currentActions[id].endedSuccesfully = true;
             }
             else
@@ -209,7 +217,7 @@ public class AIController : BaseController
         attackQuery.End();
     }
 
-    public IEnumerator MoveTowardsClosestEnemy(Unit actingUnit)
+    public IEnumerator MoveTowardsClosestTarget(Unit actingUnit, List<Unit> unitsToInteract)
     {
         if (!currentlySelectedUnit) yield break;
         if (currentlySelectedUnit.moveState == CurrentActionState.ended)
@@ -218,26 +226,26 @@ public class AIController : BaseController
         }
 
         GameGridManager grid = GetGridReference();
-        AsyncPathQuery query = grid.StartBestPathToClosestUnitQuery(actingUnit, GetUnitsFromOthers());
+        AsyncPathQuery query = grid.StartBestPathToClosestUnitQuery(actingUnit, unitsToInteract);
         currentlySelectedUnit.moveState = CurrentActionState.inProgress;
         while (!query.hasFinished)
         {
             yield return null;
         }
-        Vector3Int[] pathToClosestEnemy = query.GetPathArray();
-        if (pathToClosestEnemy.Length > 0)
+        Vector3Int[] pathToClosestTarget = query.GetPathArray();
+        if (pathToClosestTarget.Length > 0)
         {
             int movementRange = actingUnit.movementRange;
-            if (pathToClosestEnemy.Length > movementRange)
+            if (pathToClosestTarget.Length > movementRange)
             {
                 Vector3Int[] longestPossiblePath = new Vector3Int[movementRange];
                 for (int i = 0; i < movementRange; i++)
                 {
-                    longestPossiblePath[i] = pathToClosestEnemy[i];
+                    longestPossiblePath[i] = pathToClosestTarget[i];
                 }
-                pathToClosestEnemy = longestPossiblePath;
+                pathToClosestTarget = longestPossiblePath;
             }
-            yield return StartCoroutine(actingUnit.MoveAlongPath(pathToClosestEnemy));
+            yield return StartCoroutine(actingUnit.MoveAlongPath(pathToClosestTarget));
         }
     }
 
@@ -318,6 +326,13 @@ public class AIController : BaseController
             currentActions[id].endedSuccesfully = false;
         }
     }
+}
+
+public enum TargetType
+{
+    AllyOnly,
+    EnemyOnly,
+    AllUnits
 }
 
 public struct AISavedData 

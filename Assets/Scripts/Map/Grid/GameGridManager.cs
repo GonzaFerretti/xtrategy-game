@@ -430,7 +430,7 @@ public class GameGridManager : MonoBehaviour
                 {
                     if (!unit.unitAttributes.isImmuneToExplosives && unit.owner != detonatingUnit.owner)
                     {
-                        unit.TakeDamage(detonatingUnit.CalculateFinalDamage() * 2, mineCoords,true);
+                        unit.TakeDamage(detonatingUnit.CalculateFinalDamage(true), mineCoords,true);
                     }
                 }
             }

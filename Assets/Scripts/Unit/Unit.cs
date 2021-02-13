@@ -107,9 +107,9 @@ public class Unit : GameGridElement
         return activeBuffs.Values.ToList();
     }
 
-    public int CalculateFinalDamage()
+    public int CalculateFinalDamage(bool shouldUseMultiplier = false)
     {
-        return unitAttributes.attackType.CalculateFinalDamage(this);
+        return unitAttributes.attackType.CalculateFinalDamage(this, shouldUseMultiplier);
     }
 
     public Vector3Int GetCoordinates()
@@ -234,9 +234,9 @@ public class Unit : GameGridElement
         UpdateHpBar();
     }
 
-    public bool IsDamaged()
+    public bool IsDamaged(float threshold = 1)
     {
-        return currentHp != unitAttributes.maxHp;
+        return (currentHp*1.0f)/(unitAttributes.maxHp*1.0f) < threshold;
     }
 
     public void Heal(int amount)

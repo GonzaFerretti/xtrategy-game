@@ -5,62 +5,62 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Unit/AiBehaviour/Witch Doctor")]
 public class AIBehaviourWitchDoctor : AIBehaviour
 {
+    [SerializeField] [Range(0,1)] float hpThreshold;
+
     public override IEnumerator ExecuteBehaviour(AIController controller, Unit actingUnit)
     {
         yield return null;
-        /*
-        if (allyWounded)
+        if (GetWoundedAllies(controller, out List<Unit> woundedAllies))
         {
-            if (allyClose)
+            AsyncAIActionResult healAttempt = controller.GenerateNewAIActionResult();
+            yield return controller.StartCoroutine(controller.AttemptInteractWithLowestHPTarget(actingUnit, healAttempt.id, TargetType.AllyOnly));
+            if (healAttempt.endedSuccesfully)
             {
-                if (TryHeal())
+                if (GetWoundedAllies(controller, out woundedAllies))
                 {
-                    if (allyWounded)
-                    {
-                        TryMoveToAlly()
-                    }
-                    else
-                    {
-                        TryMoveToEnemy()
-                    }
+                    yield return controller.StartCoroutine(controller.MoveTowardsClosestTarget(actingUnit, woundedAllies));
                 }
-                // If it's close, it won't fail.
+                else
+                {
+                    AsyncAIActionResult moveToCoverClosestToEnemy = controller.GenerateNewAIActionResult();
+                    yield return controller.StartCoroutine(controller.MoveTowardsCoverCloseToEnemy(actingUnit, moveToCoverClosestToEnemy.id));
+                }
             }
             else
             {
-                if (TryMoveToAlly())
+                yield return controller.StartCoroutine(controller.MoveTowardsClosestTarget(actingUnit, woundedAllies));
+                AsyncAIActionResult healAttempt2 = controller.GenerateNewAIActionResult();
+                yield return controller.StartCoroutine(controller.AttemptInteractWithLowestHPTarget(actingUnit, healAttempt2.id, TargetType.AllyOnly));
+                if (!healAttempt2.endedSuccesfully)
                 {
-                    if (Allyclose)
-                    {
-                        TryHeal();
-                    }
-                    else
-                    {
-                        TryAttack();
-                    }
-                }
-                // Can you even not move towards someone?
-                else
-                {
-                    if (TryAttack())
-                    {
-                        TryMoveToClosestCover();
-                    }
+                    yield return controller.StartCoroutine(controller.AttemptInteractWithLowestHPTarget(actingUnit, controller.GenerateNewAIActionResult().id));
                 }
             }
         }
         else
         {
-            if (TryAttack())
+            AsyncAIActionResult attackAttempt = controller.GenerateNewAIActionResult();
+            yield return controller.StartCoroutine(controller.AttemptInteractWithLowestHPTarget(actingUnit, attackAttempt.id));
+            AsyncAIActionResult moveToCoverClosestToEnemy = controller.GenerateNewAIActionResult();
+            yield return controller.StartCoroutine(controller.MoveTowardsCoverCloseToEnemy(actingUnit, moveToCoverClosestToEnemy.id));
+            if (!attackAttempt.endedSuccesfully && moveToCoverClosestToEnemy.endedSuccesfully)
             {
-                TryMoveToClosestCover();
-            }
-            else
-            {
-                TryMoveToEnemy();
-                TryAttack();
+                AsyncAIActionResult attackAttempt2 = controller.GenerateNewAIActionResult();
+                yield return controller.StartCoroutine(controller.AttemptInteractWithLowestHPTarget(actingUnit, attackAttempt2.id));
             }
         }
-        */
+    }
+
+    bool GetWoundedAllies(AIController controller, out List<Unit> woundedAllies)
+    {
+        woundedAllies = new List<Unit>();
+        foreach (Unit unit in controller.unitsControlled)
+        {
+            if (unit.IsDamaged(hpThreshold))
+            {
+                woundedAllies.Add(unit);
+            }
+        }
+        return woundedAllies.Count > 0;
     }
 }

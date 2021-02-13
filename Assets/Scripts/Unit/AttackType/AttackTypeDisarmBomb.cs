@@ -6,6 +6,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Unit/Attack Types/Disarm bomb")]
 public class AttackTypeDisarmBomb : AttackType
 {
+    [SerializeField] float centerDamageMultiplier;
+
     public override IEnumerator ExecuteAttack(Vector3Int coordinatesToAttack, Unit attackingUnit)
     {
         attackingUnit.anim.Play("attack");
@@ -60,5 +62,10 @@ public class AttackTypeDisarmBomb : AttackType
             }
             grid.EnableCellIndicator(coordinates, gridIndicatorMode);
         }
+    }
+
+    public override float GetAttackMultiplier()
+    {
+        return centerDamageMultiplier;
     }
 }

@@ -6,14 +6,19 @@ public abstract class AttackType : ScriptableObject
 {
     [SerializeField] public bool shouldAllowAllyTargeting;
 
+    public virtual float GetAttackMultiplier() { return 1f; } 
+
     public abstract bool CheckPossibleTarget(PlayerController controller);
 
     public abstract IEnumerator ExecuteAttack(Vector3Int coordinatesToAttack, Unit attackingUnit);
 
+    public virtual void AttackAction(Unit attackingUnit, Unit attackedUnit) { }
+
     public abstract void CheckAdditionalCellIndicatorsConditions(IEnumerable<Vector3Int> indicatorsToCheck, GameGridManager grid, PlayerController controller);
 
-    public virtual int CalculateFinalDamage(Unit attackingUnit)
+    public virtual int CalculateFinalDamage(Unit attackingUnit, bool shouldUseMultiplier)
     {
-        return attackingUnit.damage + (attackingUnit.HasBuff("attackBoost") ? attackingUnit.unitAttributes.damageBoost : 0);
+        float multiplier = shouldUseMultiplier ? GetAttackMultiplier() : 1;
+        return Mathf.RoundToInt((attackingUnit.damage + (attackingUnit.HasBuff("attackBoost") ? attackingUnit.unitAttributes.damageBoost : 0))*multiplier);
     }
 }

@@ -11,7 +11,7 @@ public class AIBehaviourRangedUnit : AIBehaviour
         if (actingUnit.currentCovers.Count > 0)
         {
             AsyncAIActionResult attackFromCover = controller.GenerateNewAIActionResult();
-            yield return controller.StartCoroutine(controller.AttemptAttack(actingUnit, attackFromCover.id));
+            yield return controller.StartCoroutine(controller.AttemptInteractWithLowestHPTarget(actingUnit, attackFromCover.id));
             if (attackFromCover.endedSuccesfully)
             {
                 yield break;
@@ -23,7 +23,7 @@ public class AIBehaviourRangedUnit : AIBehaviour
                 if (moveToCloserCover.endedSuccesfully)
                 {
                     AsyncAIActionResult SecondAttackAttempt = controller.GenerateNewAIActionResult();
-                    yield return controller.StartCoroutine(controller.AttemptAttack(actingUnit, SecondAttackAttempt.id));
+                    yield return controller.StartCoroutine(controller.AttemptInteractWithLowestHPTarget(actingUnit, SecondAttackAttempt.id));
                 }
                 if (!actingUnit) yield break;
             }
@@ -35,7 +35,7 @@ public class AIBehaviourRangedUnit : AIBehaviour
             if (moveToCloserCover.endedSuccesfully)
             {
                 AsyncAIActionResult SecondAattackAttemptFromCover = controller.GenerateNewAIActionResult();
-                yield return controller.StartCoroutine(controller.AttemptAttack(actingUnit, SecondAattackAttemptFromCover.id));
+                yield return controller.StartCoroutine(controller.AttemptInteractWithLowestHPTarget(actingUnit, SecondAattackAttemptFromCover.id));
             }
             if (!actingUnit) yield break;
         }
