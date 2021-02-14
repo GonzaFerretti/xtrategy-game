@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f2b3ea66cf66104ca98c4175479315c, type: 3}
   m_Name: DisarmBomb
   m_EditorClassIdentifier: 
+  shouldAllowAllyTargeting: 0
+  centerDamageMultiplier: 2

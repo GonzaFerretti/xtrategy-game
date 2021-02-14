@@ -31,8 +31,17 @@ public class TSShowInfo : TutorialStep
 public struct TutorialStepInfoPromptConfig
 {
     public string promptText;
-    public Vector2 positionInScreen;
+    public Vector2Percent percentPosition;
     public TSPromptArrowDirection arrowDirection;
+}
+
+[System.Serializable]
+public struct Vector2Percent
+{
+    [Range(0, 1)]
+    public float X;
+    [Range(0, 1)]
+    public float Y;
 }
 
 public enum TSPromptArrowDirection

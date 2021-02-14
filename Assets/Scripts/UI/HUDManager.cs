@@ -100,8 +100,20 @@ public class HUDManager : MonoBehaviour
 
     public void ShowPrompt(TutorialStepInfoPromptConfig promptData)
     {
-        currentPrompt = Instantiate(currentPrompt);
-        (currentPrompt.transform as RectTransform).anchoredPosition = promptData.positionInScreen;
+        currentPrompt = Instantiate(tutorialPromptPrefab);
+
+        (currentPrompt.transform as RectTransform).parent = (transform as RectTransform);
+        (currentPrompt.transform as RectTransform).anchoredPosition = GetCanvasPositionFromPercent(promptData.percentPosition);
+
+        currentPrompt.Init(promptData);
+    }
+
+    Vector2 GetCanvasPositionFromPercent(Vector2Percent percent)
+    {
+        Vector2 canvasSize = (transform as RectTransform).sizeDelta;
+        Vector2 basePosition = new Vector2(canvasSize.x * percent.X, canvasSize.y * percent.Y);
+        Vector2 normalizedPosition = basePosition - canvasSize / 2;
+        return normalizedPosition;
     }
 
     public void RemoveCurrentPrompt()

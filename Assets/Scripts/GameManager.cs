@@ -230,6 +230,16 @@ public class GameManager : MonoBehaviour
         ExecuteControllerStarts();
         CheckLoser();
         StartPlayerTurn(saveManager ? saveManager.isLoadingFromSave : false);
+        CheckTutorial();
+    }
+
+    void CheckTutorial()
+    {
+        TutorialManager tutorialManager = FindObjectOfType<TutorialManager>();
+        if (tutorialManager)
+        {
+            tutorialManager.StartTutorial();
+        }
     }
 
     private void ExecuteControllerStarts()

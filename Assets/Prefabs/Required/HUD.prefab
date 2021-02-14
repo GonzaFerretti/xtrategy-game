@@ -593,7 +593,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -660,6 +660,8 @@ MonoBehaviour:
   adManager: {fileID: 8500770050251773193}
   adButton: {fileID: 1495520174993184054}
   gm: {fileID: 0}
+  tutorialPromptPrefab: {fileID: 1248674711191046910, guid: 4023408c14fd4b9469114f6df068ed5f,
+    type: 3}
 --- !u!1 &4612570648701700245
 GameObject:
   m_ObjectHideFlags: 0

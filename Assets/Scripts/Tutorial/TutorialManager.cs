@@ -6,7 +6,7 @@ public class TutorialManager : MonoBehaviour
 {
     [SerializeField] TutorialStep[] tutorialSteps;
 
-    public HUDManager HudManager;
+    [HideInInspector] public HUDManager HudManager;
 
     int currentIndex = 0;
 
@@ -22,7 +22,7 @@ public class TutorialManager : MonoBehaviour
 
     IEnumerator CycleThroughSteps()
     {
-        while (currentIndex <= tutorialSteps.Length)
+        while (currentIndex < tutorialSteps.Length)
         {
             TutorialStep currentStep = tutorialSteps[currentIndex];
             if (currentStep.shouldBlockEntireInterface) SetInterfaceLock(true);

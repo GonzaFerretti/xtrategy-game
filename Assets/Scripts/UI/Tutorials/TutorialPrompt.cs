@@ -6,17 +6,17 @@ using TMPro;
 
 public class TutorialPrompt : MonoBehaviour
 {
-    List<TutorialPromptArrow> arrows;
+    [SerializeField] List<TutorialPromptArrow> arrows;
     [SerializeField] TextMeshProUGUI text;
 
-    public void Init(string textToShow, TSPromptArrowDirection arrowDirection)
+    public void Init(TutorialStepInfoPromptConfig promptData)
     {
-        text.SetText(textToShow);
+        text.SetText(promptData.promptText);
         foreach (var arrow in arrows)
         {
-            if (arrow.direction == arrowDirection)
+            if (arrow.direction == promptData.arrowDirection)
             {
-                arrow.enabled = true;
+                arrow.gameObject.SetActive(true);
                 break;
             }
         }
