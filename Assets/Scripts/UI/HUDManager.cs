@@ -14,6 +14,9 @@ public class HUDManager : MonoBehaviour
     [SerializeField] GameObject adButton;
     public GameManager gm;
 
+    [SerializeField] TutorialPrompt tutorialPromptPrefab;
+    TutorialPrompt currentPrompt;
+
     public void Init()
     {
         InitElementList();
@@ -93,5 +96,17 @@ public class HUDManager : MonoBehaviour
         {
             hudElement.SetActive(false);
         }
+    }
+
+    public void ShowPrompt(TutorialStepInfoPromptConfig promptData)
+    {
+        currentPrompt = Instantiate(currentPrompt);
+        (currentPrompt.transform as RectTransform).anchoredPosition = promptData.positionInScreen;
+    }
+
+    public void RemoveCurrentPrompt()
+    {
+        Destroy(currentPrompt.gameObject);
+        currentPrompt = null;
     }
 }
