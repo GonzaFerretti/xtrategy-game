@@ -17,6 +17,8 @@ MonoBehaviour:
   disabledUiElements: []
   secondsDuration: 4
   infoPromptConfig:
-    promptText: Lorem Ipsum Dolor Amet
-    positionInScreen: {x: 0, y: 0}
+    promptText: Press the skip turn button if you don't have any moves left!
+    percentPosition:
+      X: 0
+      Y: 0
     arrowDirection: 1

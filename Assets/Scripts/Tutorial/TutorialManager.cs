@@ -8,6 +8,8 @@ public class TutorialManager : MonoBehaviour
 
     [HideInInspector] public HUDManager HudManager;
 
+    List<string> buttonPressStates = new List<string>();
+
     int currentIndex = 0;
 
     public void StartTutorial()
@@ -43,6 +45,25 @@ public class TutorialManager : MonoBehaviour
     void DisableUIElements(List<string> elementIdentifiers)
     {
 
+    }
+
+    public void OnInteraction(string identifier)
+    {
+        if (!buttonPressStates.Contains(identifier))
+            buttonPressStates.Add(identifier);
+    }
+
+    public bool CheckInteraction(string identifier, bool shouldConsume = true)
+    {
+        bool wasActivated = buttonPressStates.Contains(identifier);
+        if (wasActivated && shouldConsume)
+            buttonPressStates.Remove(identifier);
+        return wasActivated;
+    }
+
+    public void ClearInteractions()
+    {
+        buttonPressStates.Clear();
     }
 }
 
