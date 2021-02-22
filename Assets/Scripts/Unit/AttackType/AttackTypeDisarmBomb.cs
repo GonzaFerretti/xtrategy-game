@@ -29,6 +29,7 @@ public class AttackTypeDisarmBomb : AttackType
             Vector3Int target = objectSelected.GetComponent<MagicMine>().coordinates;
 
             controller.currentlySelectedUnit.attackState = CurrentActionState.inProgress;
+            controller.GetGridReference().EnableCellIndicator(target, GridIndicatorMode.possibleDisarm);
             controller.StartCoroutine(ExecuteAttack(target, controller.currentlySelectedUnit));
             return true;
         }
@@ -46,7 +47,7 @@ public class AttackTypeDisarmBomb : AttackType
                 
                 CheckExplosionIndicators(mine.detonationTiles, GridIndicatorMode.explosionRangeFar, grid, controller);
 
-                grid.EnableCellIndicator(mine.coordinates, GridIndicatorMode.possibleDetonation);
+                grid.EnableCellIndicator(mine.coordinates, GridIndicatorMode.possibleDetonation, true);
             }
         }
     }

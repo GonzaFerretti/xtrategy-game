@@ -15,7 +15,7 @@ public class ControllerStateUnitSelected : ControllerState
     public override void OnTransitionOut()
     {
         controller.GetGridReference().SetAllCoverIndicators(false);
-        controller.GetGridReference().DisableAllCellIndicators();
+        controller.GetGridReference().DisableAllCellIndicators(true);
     }
 
     public override void OnTransitionIn()

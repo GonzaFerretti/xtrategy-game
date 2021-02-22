@@ -35,6 +35,7 @@ public class AttackTypeDirect : AttackType
             if (controller.currentlySelectedUnit.possibleAttacks.Contains(unitPosition))
             {
                 controller.currentlySelectedUnit.attackState = CurrentActionState.inProgress;
+                controller.GetGridReference().EnableCellIndicator(unitPosition, GridIndicatorMode.possibleAttack, true);
                 controller.StartCoroutine(ExecuteAttack(unitPosition,controller.currentlySelectedUnit));
                 return true;
             }

@@ -47,8 +47,10 @@ public class AttackTypeWitchDoctor : AttackType
             Vector3Int unitPosition = unitSelected.GetCoordinates();
             if (controller.currentlySelectedUnit.possibleAttacks.Contains(unitPosition))
             {
-                if (unitSelected.owner == controller && !unitSelected.IsDamaged()) return false;
+                bool isAllyUnit = unitSelected.owner == controller;
+                if (isAllyUnit && !unitSelected.IsDamaged()) return false;
                 controller.currentlySelectedUnit.attackState = CurrentActionState.inProgress;
+                controller.GetGridReference().EnableCellIndicator(unitPosition, isAllyUnit ? GridIndicatorMode.possibleHeal : GridIndicatorMode.poison);
                 controller.StartCoroutine(ExecuteAttack(unitPosition, controller.currentlySelectedUnit));
                 return true;
             }
@@ -66,12 +68,12 @@ public class AttackTypeWitchDoctor : AttackType
             {
                 if (unit.owner != controller)
                 {
-                    grid.EnableCellIndicator(coordinates, GridIndicatorMode.poison);
+                    grid.EnableCellIndicator(coordinates, GridIndicatorMode.poison, true);
                 }
                 else
                 {
                     if (unit.IsDamaged())
-                        grid.EnableCellIndicator(coordinates, GridIndicatorMode.possibleHeal);
+                        grid.EnableCellIndicator(coordinates, GridIndicatorMode.possibleHeal, true);
                     else grid.DisableCellIndicator(coordinates);
                 }
             }

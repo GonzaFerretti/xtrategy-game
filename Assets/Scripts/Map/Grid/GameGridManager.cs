@@ -488,9 +488,9 @@ public class GameGridManager : MonoBehaviour
         }
     }
 
-    public void EnableCellIndicator(Vector3Int indicatorToEnable, GridIndicatorMode gridIndicatorMode)
+    public void EnableCellIndicator(Vector3Int indicatorToEnable, GridIndicatorMode gridIndicatorMode, bool shouldLockIndicator = false)
     {
-        gridIndicators[indicatorToEnable].Enable(gridIndicatorMode);
+        gridIndicators[indicatorToEnable].Enable(gridIndicatorMode, shouldLockIndicator);
     }
 
     public void DisableCellIndicators(IEnumerable<Vector3Int> indicatorsToDisable)
@@ -506,11 +506,11 @@ public class GameGridManager : MonoBehaviour
         gridIndicators[indicatorToDisable].Disable();
     }
 
-    public void DisableAllCellIndicators()
+    public void DisableAllCellIndicators(bool forceUnlock = false)
     {
         foreach (KeyValuePair<Vector3Int, GridIndicator> indicatorData in gridIndicators)
         {
-            indicatorData.Value.Disable();
+            indicatorData.Value.Disable(forceUnlock);
         }
     }
 

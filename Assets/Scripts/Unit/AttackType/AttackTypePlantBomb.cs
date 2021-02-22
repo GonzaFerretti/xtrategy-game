@@ -31,6 +31,7 @@ public class AttackTypePlantBomb : AttackType
             if (controller.GetGridReference().CheckMineProximity(out int dmg, target)) return false;
 
             controller.currentlySelectedUnit.attackState = CurrentActionState.inProgress;
+            controller.GetGridReference().EnableCellIndicator(target, GridIndicatorMode.possibleMine, true);
             controller.StartCoroutine(ExecuteAttack(target, controller.currentlySelectedUnit));
             return true;
         }
