@@ -164,7 +164,7 @@ public class AIController : BaseController
             Unit lowestHpUnitInRange = GetLowestUnitInAttackRange(attackQuery.cellsInRange, targetType);
             if (lowestHpUnitInRange)
             {
-                StartCoroutine(InteractWithTarget(lowestHpUnitInRange, actingUnit, targetType));
+                yield return StartCoroutine(InteractWithTarget(lowestHpUnitInRange, actingUnit, targetType));
                 currentActions[id].endedSuccesfully = true;
             }
             else

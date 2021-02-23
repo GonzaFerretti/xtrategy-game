@@ -322,7 +322,7 @@ public class GameGridManager : MonoBehaviour
 
     public GameGridCell GetCellAtCoordinate(Vector3Int coord)
     {
-        return gridCoordinates[coord];
+        return gridCoordinates.ContainsKey(coord) ? gridCoordinates[coord] : null;
     }
 
     public AsyncPathQuery StartShortestPathQuery(Vector3Int startCoordinates, Vector3Int destinationCoordinates)
@@ -420,37 +420,12 @@ public class GameGridManager : MonoBehaviour
             MagicMine mine = mineTriggerTiles[mineCoords];
             foreach (var triggerTile in mine.triggerTiles)
             {
-                ExplosionEffect explosion = Instantiate(explosionPrefab);
-                explosion.Setup(true);
-                explosion.transform.position = GetWorldPositionFromCoords(triggerTile) + Vector3.up * indicatorHeight * 5;
-                explosion.transform.parent = cellIndicatorsRootTransform;
-                explosion.transform.localRotation = Quaternion.identity;
-                Unit unit = GetUnitAtCoordinates(triggerTile);
-                if (unit)
-                {
-                    if (!unit.unitAttributes.isImmuneToExplosives && unit.owner != detonatingUnit.owner)
-                    {
-                        unit.TakeDamage(detonatingUnit.CalculateFinalDamage(true), mineCoords,true);
-                    }
-                }
+                TriggerExplosion(triggerTile, mineCoords, true, detonatingUnit);
             }
 
             foreach (var explosionTile in mine.detonationTiles)
             {
-                Unit unit = GetUnitAtCoordinates(explosionTile);
-                ExplosionEffect explosion = Instantiate(explosionPrefab);
-                explosion.transform.position = GetWorldPositionFromCoords(explosionTile) + Vector3.up * indicatorHeight * 5;
-                explosion.Setup(false);
-                explosion.transform.parent = cellIndicatorsRootTransform;
-                explosion.transform.localRotation = Quaternion.identity;
-
-                if (unit)
-                {
-                    if (!unit.unitAttributes.isImmuneToExplosives && unit.owner != detonatingUnit.owner)
-                    {
-                        unit.TakeDamage(detonatingUnit.CalculateFinalDamage(), mineCoords,true);
-                    }
-                }
+                TriggerExplosion(explosionTile, mineCoords, false, detonatingUnit);
             }
 
             DestroyMine(mine);
@@ -478,6 +453,23 @@ public class GameGridManager : MonoBehaviour
         }
 
         Destroy(mine.gameObject);
+    }
+
+    public void TriggerExplosion(Vector3Int explosionTile, Vector3Int centerTile, bool shouldDoBoostedDamage, Unit detonatorUnit)
+    {
+        ExplosionEffect explosion = Instantiate(explosionPrefab);
+        explosion.Setup(true);
+        explosion.transform.position = GetWorldPositionFromCoords(explosionTile) + Vector3.up * indicatorHeight * 5;
+        explosion.transform.parent = cellIndicatorsRootTransform;
+        explosion.transform.localRotation = Quaternion.identity;
+        Unit unit = GetUnitAtCoordinates(explosionTile);
+        if (unit)
+        {
+            if (!unit.unitAttributes.isImmuneToExplosives && unit.owner != detonatorUnit.owner)
+            {
+                unit.TakeDamage(detonatorUnit.CalculateFinalDamage(shouldDoBoostedDamage), centerTile, true);
+            }
+        }
     }
 
     public void EnableCellIndicators(IEnumerable<Vector3Int> indicatorsToEnable, GridIndicatorMode gridIndicatorMode)
