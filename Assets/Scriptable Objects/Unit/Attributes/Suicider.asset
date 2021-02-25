@@ -22,6 +22,7 @@ MonoBehaviour:
   isImmuneToExplosives: 1
   aiBehaviour: {fileID: 11400000, guid: f7ed7888e75d7a74a9adce2ac213f3bb, type: 2}
   attackType: {fileID: 11400000, guid: ab6a338c3760acc4fbf8971ba23a3d7b, type: 2}
+  mainAttack: {fileID: 11400000, guid: eefdbcadd3dc9564eb6b5687a33a8b11, type: 2}
   attackSound: {fileID: 11400000, guid: 4acd884a7b11f57418e446f0c96e7f71, type: 2}
   defaultPrefab: {fileID: 241448454624865456, guid: 99406b8408547a84e83a8f8036062b51,
     type: 3}

@@ -27,7 +27,7 @@ public class Unit : GameGridElement
     [HideInInspector] int minAttackRange;
     [HideInInspector] int maxAttackRange;
     [HideInInspector] public int damage;
-    public UnitAttributes unitAttributes;
+    public UnitAttributes attributes;
     [HideInInspector] public AIBehaviour AI;
     [HideInInspector] public Animator anim;
     public GameObject model;
@@ -53,7 +53,7 @@ public class Unit : GameGridElement
 
     public int GetFinalMovementRange()
     {
-        return movementRange + (HasBuff("movement") ? unitAttributes.movementBoost : 0);
+        return movementRange + (HasBuff("movement") ? attributes.movementBoost : 0);
     }
 
     public void PlaySound(string name)
@@ -109,7 +109,7 @@ public class Unit : GameGridElement
 
     public int CalculateFinalDamage(bool shouldUseMultiplier = false)
     {
-        return unitAttributes.attackType.CalculateFinalDamage(this, shouldUseMultiplier);
+        return attributes.mainAttack.attackType.CalculateFinalDamage(this, shouldUseMultiplier);
     }
 
     public Vector3Int GetCoordinates()
@@ -213,7 +213,7 @@ public class Unit : GameGridElement
 
     public void UpdateHpBar()
     {
-        hpBar.UpdateHPbar(1f * currentHp / (1f * unitAttributes.maxHp));
+        hpBar.UpdateHPbar(1f * currentHp / (1f * attributes.maxHp));
     }
 
     IEnumerator DestroyBody(GameObject body)
@@ -230,18 +230,18 @@ public class Unit : GameGridElement
         SetupAfterLoad(savedInfo);
         InitModel();
         SetupInitialPosition(savedInfo != null);
-        typeText.text = unitAttributes.name;
+        typeText.text = attributes.name;
         UpdateHpBar();
     }
 
     public bool IsDamaged(float threshold = 1)
     {
-        return (currentHp*1.0f)/(unitAttributes.maxHp*1.0f) < threshold;
+        return (currentHp*1.0f)/(attributes.maxHp*1.0f) < threshold;
     }
 
     public void Heal(int amount)
     {
-        currentHp = (amount == -1) ? unitAttributes.maxHp : Mathf.Clamp(currentHp + amount, 0, unitAttributes.maxHp);
+        currentHp = (amount == -1) ? attributes.maxHp : Mathf.Clamp(currentHp + amount, 0, attributes.maxHp);
         UpdateHpBar();
         StartCoroutine(healIcon.ShowIcon());
     }
@@ -323,12 +323,12 @@ public class Unit : GameGridElement
 
     public virtual void SetUnitAttributes(bool isSaveLoad)
     {
-        if (!isSaveLoad) currentHp = unitAttributes.maxHp;
-        movementRange = unitAttributes.movementRange;
-        minAttackRange = unitAttributes.minAttackRange;
-        maxAttackRange = unitAttributes.maxAttackRange;
-        damage = unitAttributes.damage;
-        AI = unitAttributes.aiBehaviour;
+        if (!isSaveLoad) currentHp = attributes.maxHp;
+        movementRange = attributes.movementRange;
+        minAttackRange = attributes.mainAttack.minAttackRange;
+        maxAttackRange = attributes.mainAttack.maxAttackRange;
+        damage = attributes.mainAttack.damage;
+        AI = attributes.aiBehaviour;
     }
 
     public bool HasActionsLeft()
@@ -388,7 +388,7 @@ public class Unit : GameGridElement
     void EnableAttackCellIndicators()
     {
         grid.EnableCellIndicators(possibleAttacks, GridIndicatorMode.attackRange);
-        unitAttributes.attackType.CheckAdditionalCellIndicatorsConditions(possibleAttacks, grid, owner as PlayerController);
+        attributes.mainAttack.attackType.CheckAdditionalCellIndicatorsConditions(possibleAttacks, grid, owner as PlayerController);
     }
 
     public IEnumerator MoveByDestinationCoords(Vector3Int destinationCoords)
@@ -420,7 +420,7 @@ public class Unit : GameGridElement
             model.transform.forward = (grid.GetWorldPositionFromCoords(givenPath[i]) - lastPosition).normalized;
             transform.position = grid.GetWorldPositionFromCoords(givenPath[i]);
             currentCoordinates = givenPath[i];
-            if (!unitAttributes.isImmuneToExplosives)
+            if (!attributes.isImmuneToExplosives)
             {
                 if (grid.CheckMineProximity(out int damage, currentCoordinates, owner))
                 {
@@ -472,7 +472,7 @@ public class Unit : GameGridElement
         }
 
         possibleAttacks = currentRangeQuery.cellsInRange;
-        if (!unitAttributes.attackType.shouldAllowAllyTargeting)
+        if (!attributes.mainAttack.attackType.shouldAllowAllyTargeting)
         {
             List<Vector3Int> allyPositionsInRange = possibleAttacks.Intersect(owner.GetOwnedUnitsPosition()).ToList();
             possibleAttacks.RemoveAll(x => allyPositionsInRange.Contains(x));

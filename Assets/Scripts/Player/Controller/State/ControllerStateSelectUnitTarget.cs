@@ -22,7 +22,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
     bool CheckAttackAction()
     {
         if (controller.currentlySelectedUnit == null) return false;
-        return controller.currentlySelectedUnit.unitAttributes.attackType.CheckPossibleTarget(controller as PlayerController);
+        return controller.currentlySelectedUnit.attributes.mainAttack.attackType.CheckPossibleTarget(controller as PlayerController);
     }
 
     IEnumerator WaitForAttackListReady()

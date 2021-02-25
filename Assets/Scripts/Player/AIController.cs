@@ -46,11 +46,11 @@ public class AIController : BaseController
     IEnumerator InteractWithTarget(Unit interactedUnit, Unit interactingUnit, TargetType targetType)
     {
         interactingUnit.anim.Play("attack");
-        interactingUnit.PlaySound(interactingUnit.unitAttributes.attackSound);
+        interactingUnit.PlaySound(interactingUnit.attributes.mainAttack.attackSound);
         interactingUnit.model.transform.forward = (interactedUnit.transform.position - interactingUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);
         interactingUnit.anim.SetTrigger("endCurrentAnim");
-        interactingUnit.unitAttributes.attackType.AttackAction(interactingUnit, interactedUnit);
+        interactingUnit.attributes.mainAttack.attackType.AttackAction(interactingUnit, interactedUnit);
         interactingUnit.attackState = CurrentActionState.ended;
     }
 

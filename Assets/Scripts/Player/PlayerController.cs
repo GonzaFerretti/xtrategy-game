@@ -21,7 +21,6 @@ public class PlayerController : BaseController
     }
     public override void SwitchStates(string identifier)
     {
-        lastSelectedCoord = null;
         base.SwitchStates(identifier);
     }
 
@@ -49,8 +48,6 @@ public class PlayerController : BaseController
             // IMPLEMENT ANY FAILURE CONDITIONS HERE!
         }
     }
-
-    GameGridCell lastSelectedCoord = null;
     public bool GetObjectUnderMouse(out GameObject hitObject, int layerMaskOfObject)
     {
         hitObject = null;

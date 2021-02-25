@@ -465,7 +465,7 @@ public class GameGridManager : MonoBehaviour
         Unit unit = GetUnitAtCoordinates(explosionTile);
         if (unit)
         {
-            if (!unit.unitAttributes.isImmuneToExplosives && unit.owner != detonatorUnit.owner)
+            if (!unit.attributes.isImmuneToExplosives && unit.owner != detonatorUnit.owner)
             {
                 unit.TakeDamage(detonatorUnit.CalculateFinalDamage(shouldDoBoostedDamage), centerTile, true);
             }

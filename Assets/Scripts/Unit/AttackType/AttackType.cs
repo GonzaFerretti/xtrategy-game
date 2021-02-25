@@ -19,6 +19,6 @@ public abstract class AttackType : ScriptableObject
     public virtual int CalculateFinalDamage(Unit attackingUnit, bool shouldUseMultiplier)
     {
         float multiplier = shouldUseMultiplier ? GetAttackMultiplier() : 1;
-        return Mathf.RoundToInt((attackingUnit.damage + (attackingUnit.HasBuff("attackBoost") ? attackingUnit.unitAttributes.damageBoost : 0))*multiplier);
+        return Mathf.RoundToInt((attackingUnit.damage + (attackingUnit.HasBuff("attackBoost") ? attackingUnit.attributes.mainAttack.damageBoost : 0))*multiplier);
     }
 }

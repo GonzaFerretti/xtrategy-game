@@ -14,7 +14,7 @@ public class AttackTypeWitchDoctor : AttackType
         Unit unitToInteract = attackingUnit.owner.GetGridReference().GetUnitAtCoordinates(coordinatesToAttack);
 
         attackingUnit.anim.Play("attack");
-        attackingUnit.PlaySound(attackingUnit.unitAttributes.attackSound);
+        attackingUnit.PlaySound(attackingUnit.attributes.mainAttack.attackSound);
         attackingUnit.model.transform.forward = (unitToInteract.transform.position - attackingUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
