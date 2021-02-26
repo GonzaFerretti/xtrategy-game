@@ -19,9 +19,13 @@ public class AttackTypeDirect : AttackType
         attackingUnit.attackState = CurrentActionState.ended;
     }
 
-    public override void AttackAction(Unit attackingUnit, Unit attackedUnit)
+    public override void AttackAction(Unit attackingUnit, Unit attackedUnit, AttackAttributes attributesToUse = null)
     {
-        attackedUnit.TakeDamage(CalculateFinalDamage(attackingUnit, false), attackingUnit.GetCoordinates(), true);
+        if (!attributesToUse)
+        {
+            attributesToUse = attackingUnit.attributes.mainAttack;
+        }
+        attackedUnit.TakeDamage(CalculateFinalDamage(attackingUnit, false, attributesToUse), attackingUnit.GetCoordinates(), true);
     }
 
     public override bool CheckPossibleTarget(PlayerController controller)

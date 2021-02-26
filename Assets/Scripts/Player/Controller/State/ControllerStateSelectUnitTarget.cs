@@ -28,7 +28,7 @@ public class ControllerStateSelectUnitTarget : ControllerState
     IEnumerator WaitForAttackListReady()
     {
         float startTime = Time.time;
-        while (controller.currentlySelectedUnit.possibleAttacks.Count == 0)
+        while (controller.currentlySelectedUnit && controller.currentlySelectedUnit.possibleAttacks.Count == 0)
         {
             // TO DO: is this really necessary now?
             if (Time.time - startTime > 2f) 
@@ -37,6 +37,8 @@ public class ControllerStateSelectUnitTarget : ControllerState
             }
             yield return null;
         }
+
+        if (!controller.currentlySelectedUnit) yield break;
 
         GameGridManager gm = controller.GetGridReference();
         gm.SetCoverIndicators(controller.currentlySelectedUnit.possibleAttacks, true);

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &3932855685576033177
+--- !u!1001 &2467874601903360697
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 89401532851432632, guid: f133f2896d5322b43a7992ad3c1da85f,
         type: 3}
       propertyPath: m_Name
-      value: Rifleman
+      value: Tank
       objectReference: {fileID: 0}
     - target: {fileID: 89401532851432633, guid: f133f2896d5322b43a7992ad3c1da85f,
         type: 3}
@@ -22,13 +22,13 @@ PrefabInstance:
         type: 3}
       propertyPath: unitAttributes
       value: 
-      objectReference: {fileID: 11400000, guid: e2f632ac56ff34044aec6ef8d9a9937a,
+      objectReference: {fileID: 11400000, guid: f2e20f8018231374193b5bd9cec66b76,
         type: 2}
     - target: {fileID: 89401532851432633, guid: f133f2896d5322b43a7992ad3c1da85f,
         type: 3}
       propertyPath: attributes
       value: 
-      objectReference: {fileID: 11400000, guid: e2f632ac56ff34044aec6ef8d9a9937a,
+      objectReference: {fileID: 11400000, guid: f964810b22ea3ae4fa85dacc25f7f363,
         type: 2}
     - target: {fileID: 89401532851432635, guid: f133f2896d5322b43a7992ad3c1da85f,
         type: 3}

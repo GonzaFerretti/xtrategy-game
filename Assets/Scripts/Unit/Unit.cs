@@ -23,12 +23,7 @@ public class Unit : GameGridElement
     public int currentHp;
     public CurrentActionState moveState = CurrentActionState.notStarted;
     public CurrentActionState attackState = CurrentActionState.notStarted;
-    [HideInInspector] public int movementRange;
-    [HideInInspector] int minAttackRange;
-    [HideInInspector] int maxAttackRange;
-    [HideInInspector] public int damage;
     public UnitAttributes attributes;
-    [HideInInspector] public AIBehaviour AI;
     [HideInInspector] public Animator anim;
     public GameObject model;
 
@@ -53,7 +48,7 @@ public class Unit : GameGridElement
 
     public int GetFinalMovementRange()
     {
-        return movementRange + (HasBuff("movement") ? attributes.movementBoost : 0);
+        return attributes.movementRange + (HasBuff("movement") ? attributes.movementBoost : 0);
     }
 
     public void PlaySound(string name)
@@ -324,11 +319,6 @@ public class Unit : GameGridElement
     public virtual void SetUnitAttributes(bool isSaveLoad)
     {
         if (!isSaveLoad) currentHp = attributes.maxHp;
-        movementRange = attributes.movementRange;
-        minAttackRange = attributes.mainAttack.minAttackRange;
-        maxAttackRange = attributes.mainAttack.maxAttackRange;
-        damage = attributes.mainAttack.damage;
-        AI = attributes.aiBehaviour;
     }
 
     public bool HasActionsLeft()
@@ -365,9 +355,13 @@ public class Unit : GameGridElement
         return grid.QueryUnitRange(GetFinalMovementRange(), GetCoordinates());
     }
 
-    public AsyncRangeQuery StartAttackRangeQuery()
+    public AsyncRangeQuery StartAttackRangeQuery(AttackAttributes attackAttributes = null)
     {
-        return grid.QueryUnitAttackRange(minAttackRange, maxAttackRange, GetCoordinates());
+        if (!attackAttributes)
+        {
+            attackAttributes = attributes.mainAttack;
+        }
+        return grid.QueryUnitAttackRange(attackAttributes.minAttackRange, attackAttributes.maxAttackRange, GetCoordinates());
     }
 
     public virtual void PrepareAttack()

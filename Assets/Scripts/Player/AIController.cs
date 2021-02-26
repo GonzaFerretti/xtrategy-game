@@ -31,7 +31,7 @@ public class AIController : BaseController
             if (currentlySelectedUnit.HasActionsLeft())
             {
                 Camera.main.GetComponent<CameraController>().SetFollowTarget(unit.transform);
-                yield return StartCoroutine(unit.AI.ExecuteBehaviour(this, unit));
+                yield return StartCoroutine(unit.attributes.aiBehaviour.ExecuteBehaviour(this, unit));
                 if (unitsControlled.Count < startingUnitAmount)
                 {
                     StartCoroutine(CycleThroughUnitBehaviours());
@@ -43,15 +43,20 @@ public class AIController : BaseController
     }
 
 
-    IEnumerator InteractWithTarget(Unit interactedUnit, Unit interactingUnit, TargetType targetType)
+    IEnumerator InteractWithTarget(Unit interactedUnit, Unit interactingUnit, TargetType targetType, AttackAttributes attackToUse = null, bool shouldChangeAttackState = true)
     {
+        if (!attackToUse)
+        {
+            attackToUse = interactingUnit.attributes.mainAttack;
+        }
         interactingUnit.anim.Play("attack");
         interactingUnit.PlaySound(interactingUnit.attributes.mainAttack.attackSound);
         interactingUnit.model.transform.forward = (interactedUnit.transform.position - interactingUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);
         interactingUnit.anim.SetTrigger("endCurrentAnim");
-        interactingUnit.attributes.mainAttack.attackType.AttackAction(interactingUnit, interactedUnit);
-        interactingUnit.attackState = CurrentActionState.ended;
+        attackToUse.attackType.AttackAction(interactingUnit, interactedUnit, attackToUse);
+        if (shouldChangeAttackState)
+            interactingUnit.attackState = CurrentActionState.ended;
     }
 
     public override void Update()
@@ -143,11 +148,11 @@ public class AIController : BaseController
         return actionResult;
     }
 
-    public IEnumerator AttemptInteractWithLowestHPTarget(Unit actingUnit, int id, TargetType targetType = TargetType.EnemyOnly)
+    public IEnumerator AttemptInteractWithLowestHPTarget(Unit actingUnit, int id, TargetType targetType = TargetType.EnemyOnly, AttackAttributes attackToUse = null, bool shouldChangeAttackState = true)
     {
-        AsyncRangeQuery attackQuery = actingUnit.StartAttackRangeQuery();
+        AsyncRangeQuery attackQuery = actingUnit.StartAttackRangeQuery(attackToUse);
 
-        if (currentlySelectedUnit.attackState == CurrentActionState.ended)
+        if (currentlySelectedUnit.attackState == CurrentActionState.ended && shouldChangeAttackState)
         {
             currentActions[id].endedSuccesfully = false;
             yield break;
@@ -164,7 +169,7 @@ public class AIController : BaseController
             Unit lowestHpUnitInRange = GetLowestUnitInAttackRange(attackQuery.cellsInRange, targetType);
             if (lowestHpUnitInRange)
             {
-                yield return StartCoroutine(InteractWithTarget(lowestHpUnitInRange, actingUnit, targetType));
+                yield return StartCoroutine(InteractWithTarget(lowestHpUnitInRange, actingUnit, targetType, attackToUse, shouldChangeAttackState));
                 currentActions[id].endedSuccesfully = true;
             }
             else
@@ -235,7 +240,7 @@ public class AIController : BaseController
         Vector3Int[] pathToClosestTarget = query.GetPathArray();
         if (pathToClosestTarget.Length > 0)
         {
-            int movementRange = actingUnit.movementRange;
+            int movementRange = actingUnit.GetFinalMovementRange();
             if (pathToClosestTarget.Length > movementRange)
             {
                 Vector3Int[] longestPossiblePath = new Vector3Int[movementRange];
@@ -267,7 +272,7 @@ public class AIController : BaseController
         Vector3Int[] pathToClosestMine = query.GetPathArray();
         if (pathToClosestMine.Length > 0)
         {
-            int movementRange = actingUnit.movementRange;
+            int movementRange = actingUnit.GetFinalMovementRange();
             if (pathToClosestMine.Length > movementRange)
             {
                 Vector3Int[] longestPossiblePath = new Vector3Int[movementRange];
@@ -308,7 +313,7 @@ public class AIController : BaseController
 
         if (pathToClosestEnemy.Length > 0)
         {
-            int movementRange = actingUnit.movementRange;
+            int movementRange = actingUnit.GetFinalMovementRange();
             if (pathToClosestEnemy.Length > movementRange)
             {
                 Vector3Int[] longestPossiblePath = new Vector3Int[movementRange];

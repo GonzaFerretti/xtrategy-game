@@ -62,6 +62,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 7ee05a943c35201478dcbfd23dc7f0ca, type: 2}
     - {fileID: 11400000, guid: f2e20f8018231374193b5bd9cec66b76, type: 2}
     - {fileID: 11400000, guid: 5a9bd6188906d4a4ead6b8e486b8e66c, type: 2}
+    - {fileID: 11400000, guid: f964810b22ea3ae4fa85dacc25f7f363, type: 2}
   itemTypeBank:
     itemTypes:
     - {fileID: 11400000, guid: 7b8b06af797178d41a01dccd9fad90e7, type: 2}
