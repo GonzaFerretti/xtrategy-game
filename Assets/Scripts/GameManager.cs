@@ -130,7 +130,24 @@ public class GameManager : MonoBehaviour
     void PrepareAlreadyExistingUnits()
     {
         allUnits = FindObjectsOfType<Unit>().ToList();
-        foreach (Unit unit in allUnits)
+        var unitsToSetFirst = new List<Unit>();
+        var unitsToSetLast = new List<Unit>();
+        var defaultPos = new Vector2Int(-1, -1);
+
+        foreach (var unit in allUnits)
+        {
+            if (unit.desiredStartingPos != defaultPos)
+                unitsToSetFirst.Add(unit);
+            else
+                unitsToSetLast.Add(unit);
+        }
+
+        foreach (Unit unit in unitsToSetFirst)
+        {
+            unit.InitUnit(grid, soundManager);
+        }
+
+        foreach (Unit unit in unitsToSetLast)
         {
             unit.InitUnit(grid, soundManager);
         }

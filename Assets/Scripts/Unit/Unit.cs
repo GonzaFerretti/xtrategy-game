@@ -8,7 +8,7 @@ using TMPro;
 
 public class Unit : GameGridElement
 {
-    [SerializeField] Vector2Int desiredStartingPos = new Vector2Int(-1, -1);
+    public Vector2Int desiredStartingPos = new Vector2Int(-1, -1);
 
     [SerializeField] GameGridCell currentCell;
     public List<Cover> currentCovers;
@@ -231,7 +231,7 @@ public class Unit : GameGridElement
 
     public bool IsDamaged(float threshold = 1)
     {
-        return (currentHp*1.0f)/(attributes.maxHp*1.0f) < threshold;
+        return (currentHp * 1.0f) / (attributes.maxHp * 1.0f) < threshold;
     }
 
     public void Heal(int amount)
@@ -243,7 +243,12 @@ public class Unit : GameGridElement
 
     void SetupInitialPosition(bool isLoading)
     {
-        if (desiredStartingPos != new Vector2Int(-1, -1) && !isLoading) currentCell = grid.GetCellAtCoordinate(new Vector3Int(desiredStartingPos.x, desiredStartingPos.y, 0));
+        if (desiredStartingPos != new Vector2Int(-1, -1) && !isLoading)
+        {
+            var desiredCoord = new Vector3Int(desiredStartingPos.x, desiredStartingPos.y, 0);
+            currentCell = grid.GetCellAtCoordinate(desiredCoord);
+            grid.RemoveUnusedCell(desiredCoord, attributes is BossAttributes);
+        }
         if (!currentCell) UpdateCell();
         transform.position = currentCell.transform.position;
         currentCovers = grid.GetCoversFromCoord(GetCoordinates());
@@ -352,7 +357,7 @@ public class Unit : GameGridElement
 
     public AsyncRangeQuery StartRangeQuery()
     {
-        return grid.QueryUnitRange(GetFinalMovementRange(), GetCoordinates());
+        return grid.QueryUnitRange(GetFinalMovementRange(), GetCoordinates(), attributes is BossAttributes);
     }
 
     public AsyncRangeQuery StartAttackRangeQuery(AttackAttributes attackAttributes = null)
@@ -388,7 +393,7 @@ public class Unit : GameGridElement
     public IEnumerator MoveByDestinationCoords(Vector3Int destinationCoords)
     {
         grid.SetAllCoverIndicators(false);
-        AsyncPathQuery query = grid.StartShortestPathQuery(currentCell.GetCoordinates(), destinationCoords);
+        AsyncPathQuery query = grid.StartShortestPathQuery(currentCell.GetCoordinates(), destinationCoords, attributes is BossAttributes);
 
         while (!query.hasFinished)
         {

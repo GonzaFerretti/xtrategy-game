@@ -17,6 +17,7 @@ public class GameGridManager : MonoBehaviour
     public Transform itemPickupsRootTransform;
     public Transform minesRootTransform;
     public Dictionary<Vector3Int, List<Vector3Int>> neighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
+    public Dictionary<Vector3Int, List<Vector3Int>> bossNeighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
     public Dictionary<Vector3Int, List<Vector3Int>> mineNeighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
 
     Dictionary<Vector3Int, Unit> unitPositionDict = new Dictionary<Vector3Int, Unit>();
@@ -62,6 +63,8 @@ public class GameGridManager : MonoBehaviour
         CopyListOfCellsToUnusedList();
         GenerateAllPossibleNeighbours();
         GenerateAllPossibleMineNeighbours();
+        if (savedData.hasBoss)
+            GenerateAllPossibleBossNeighbours();
     }
 
     public void SetupNewItems()
@@ -70,6 +73,26 @@ public class GameGridManager : MonoBehaviour
         {
             var coordinates = GetRandomUnusedCell().GetCoordinates();
             SetupSingleItem(itemData, coordinates);
+        }
+    }
+
+    public void RemoveUnusedCell(Vector3Int center, bool removeNeighbours = false)
+    {
+        GameGridCell cell = GetCellAtCoordinate(center);
+        if (cell && unusedCells.Contains(cell))
+        {
+            unusedCells.Remove(cell);
+            if (removeNeighbours)
+            {
+                RemoveUnusedCell(center + new Vector3Int(1, 0, 0));
+                RemoveUnusedCell(center + new Vector3Int(-1, 0, 0));
+                RemoveUnusedCell(center + new Vector3Int(0, 1, 0));
+                RemoveUnusedCell(center + new Vector3Int(0, -1, 0));
+                RemoveUnusedCell(center + new Vector3Int(1, 1, 0));
+                RemoveUnusedCell(center + new Vector3Int(-1, -1, 0));
+                RemoveUnusedCell(center + new Vector3Int(-1, 1, 0));
+                RemoveUnusedCell(center + new Vector3Int(1, -1, 0));
+            }
         }
     }
 
@@ -326,17 +349,17 @@ public class GameGridManager : MonoBehaviour
         return gridCoordinates.ContainsKey(coord) ? gridCoordinates[coord] : null;
     }
 
-    public AsyncPathQuery StartShortestPathQuery(Vector3Int startCoordinates, Vector3Int destinationCoordinates)
+    public AsyncPathQuery StartShortestPathQuery(Vector3Int startCoordinates, Vector3Int destinationCoordinates, bool shouldUseBossNeighbours)
     {
         int queryId = GetAvailableQueryId();
         AsyncPathQuery query = new AsyncPathQuery(queryId, this);
         currentQueries.Add(queryId, query);
-        StartCoroutine(ProcessShortestPathQuery(startCoordinates, destinationCoordinates, queryId));
+        StartCoroutine(ProcessShortestPathQuery(startCoordinates, destinationCoordinates, queryId, shouldUseBossNeighbours));
 
         return query;
     }
 
-    public IEnumerator ProcessShortestPathQuery(Vector3Int startCoordinates, Vector3Int destinationCoordinates, int queryId)
+    public IEnumerator ProcessShortestPathQuery(Vector3Int startCoordinates, Vector3Int destinationCoordinates, int queryId, bool shouldUseBossNeighbours)
     {
         AsyncPathQuery currentQuery = currentQueries[queryId] as AsyncPathQuery;
         Dictionary<Vector3Int, Node> openSet = new Dictionary<Vector3Int, Node>();
@@ -374,7 +397,7 @@ public class GameGridManager : MonoBehaviour
                 yield break;
             }
 
-            List<Node> neighbourNodes = GetNeighbourNodes(node, openSet, closedSet);
+            List<Node> neighbourNodes = GetNeighbourNodes(node, openSet, closedSet, shouldUseBossNeighbours);
 
             for (int i = 0; i < neighbourNodes.Count; i++)
             {
@@ -396,6 +419,7 @@ public class GameGridManager : MonoBehaviour
                 }
             }
         }
+        currentQuery.hasFinished = true;
     }
 
     public bool CheckMineProximity(out int damage, Vector3Int unitPosition, BaseController owner = null)
@@ -514,6 +538,18 @@ public class GameGridManager : MonoBehaviour
         return result;
     }
 
+    public List<Vector3Int> GetViableNeighbourCellsForBossMovement(Vector3Int currentCellCoords)
+    {
+        List<Vector3Int> possibleNeighbourCoordinates = new List<Vector3Int>();
+
+        CheckNeighbourViabilityForBossAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(1, 0, 0));
+        CheckNeighbourViabilityForBossAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(-1, 0, 0));
+        CheckNeighbourViabilityForBossAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(0, 1, 0));
+        CheckNeighbourViabilityForBossAndAdd(ref possibleNeighbourCoordinates, currentCellCoords, new Vector3Int(0, -1, 0));
+
+        return possibleNeighbourCoordinates;
+    }
+
     public List<Vector3Int> GetViableNeighbourCellsForMovement(Vector3Int currentCellCoords)
     {
         List<Vector3Int> possibleNeighbourCoordinates = new List<Vector3Int>();
@@ -543,6 +579,14 @@ public class GameGridManager : MonoBehaviour
         return possibleNeighbourCoordinates;
     }
 
+    public void GenerateAllPossibleBossNeighbours()
+    {
+        foreach (var node in gridCoordinates)
+        {
+            bossNeighbourDict.Add(node.Key, GetViableNeighbourCellsForBossMovement(node.Key));
+        }
+    }
+
     public void GenerateAllPossibleNeighbours()
     {
         foreach (var node in gridCoordinates)
@@ -559,9 +603,9 @@ public class GameGridManager : MonoBehaviour
         }
     }
 
-    public List<Node> GetNeighbourNodes(Node node, Dictionary<Vector3Int, Node> openSet, Dictionary<Vector3Int, Node> closedSet)
+    public List<Node> GetNeighbourNodes(Node node, Dictionary<Vector3Int, Node> openSet, Dictionary<Vector3Int, Node> closedSet, bool shouldUseBossNeighbours)
     {
-        List<Vector3Int> possibleNeighbourCoordinates = neighbourDict[node.coordinates];
+        List<Vector3Int> possibleNeighbourCoordinates = GetNeighbourCache(shouldUseBossNeighbours, node.coordinates);
 
         List<Node> neighbourNodes = new List<Node>();
         foreach (Vector3Int neighbour in possibleNeighbourCoordinates)
@@ -572,6 +616,40 @@ public class GameGridManager : MonoBehaviour
 
         return neighbourNodes;
     }
+
+    public List<Vector3Int> GetNeighbourCache(bool isBoss, Vector3Int centerPosition)
+    {
+        return isBoss ? bossNeighbourDict[centerPosition] : neighbourDict[centerPosition];
+    }
+
+    // BOSS MOVEMENT (boss is sized 3x3 tiles)
+    public void CheckNeighbourViabilityForBossAndAdd(ref List<Vector3Int> coordinatesList, Vector3Int currentNode, Vector3Int direction)
+    {
+        if (IsNeighbourViableForBoss(currentNode, direction))
+        {
+            coordinatesList.Add(currentNode + direction);
+        }
+    }
+
+    public bool IsNeighbourViableForBoss(Vector3Int node, Vector3Int direction)
+    {
+        Vector3Int orthogonalDirection = new Vector3Int(direction.y, direction.x, 0);
+
+        Vector3Int centerFront = node + direction;
+        Vector3Int side1Front = centerFront + orthogonalDirection;
+        Vector3Int side2Front = centerFront - orthogonalDirection;
+
+        bool isCenterFrontViable = IsNeighbourViableForBossBody(centerFront, centerFront + direction);
+        bool isSide1FrontViable = IsNeighbourViableForBossBody(side1Front, side1Front + direction);
+        bool isSide2FrontViable = IsNeighbourViableForBossBody(side2Front, side2Front + direction);
+
+        bool noCoverSide1 = IsNeighbourViableForBossBody(centerFront, side1Front);
+        bool noCoverSide2 = IsNeighbourViableForBossBody(centerFront, side2Front);
+
+        return isCenterFrontViable && isSide1FrontViable && isSide2FrontViable && noCoverSide1 && noCoverSide2;
+    }
+
+    // End of boss movement
 
     public void CheckNeighbourViabilityAndAdd(ref List<Vector3Int> coordinatesList, Vector3Int currentNode, Vector3Int direction)
     {
@@ -593,16 +671,25 @@ public class GameGridManager : MonoBehaviour
         else return cellExists;
     }
 
+    public bool IsNeighbourViableForBossBody(Vector3Int node, Vector3Int neighbour)
+    {
+        CoverData possibleCover = new CoverData(node, neighbour);
+        bool containsCoverData = covers.ContainsKey(possibleCover);
+        bool cellExists = gridCoordinates.ContainsKey(neighbour);
+        
+        return !containsCoverData && cellExists;
+    }
+
     public Cover GetCoverFromCells(Vector3Int coord, Vector3Int nextCoord)
     {
         CoverData coverData = new CoverData(coord, nextCoord);
         Cover possibleCover = null;
         try { possibleCover = covers[coverData]; }
-        catch {}
+        catch { }
         return possibleCover;
     }
 
-    public IEnumerator ProcessUnitRangeQuery(int maxSteps, Vector3Int currentCell, int queryId)
+    public IEnumerator ProcessUnitRangeQuery(int maxSteps, Vector3Int currentCell, int queryId, bool isBoss)
     {
         Dictionary<Vector3Int, int> currentBorder = new Dictionary<Vector3Int, int>
         {
@@ -616,7 +703,7 @@ public class GameGridManager : MonoBehaviour
             Dictionary<Vector3Int, int> nextBorder = new Dictionary<Vector3Int, int>();
             foreach (Vector3Int currentBorderCell in currentBorder.Keys)
             {
-                List<Vector3Int> possibleNextBorders = neighbourDict[currentBorderCell];
+                List<Vector3Int> possibleNextBorders = GetNeighbourCache(isBoss, currentBorderCell);
 
                 foreach (Vector3Int possibleNeighbour in possibleNextBorders)
                 {
@@ -664,13 +751,13 @@ public class GameGridManager : MonoBehaviour
         (currentQueries[queryId] as AsyncRangeQuery).cellsInRange = cellsInRangeWithoutUnits;
     }
 
-    public IEnumerator StartUnitRangeQuery(int maxSteps, Vector3Int startingCell, int queryId)
+    public IEnumerator StartUnitRangeQuery(int maxSteps, Vector3Int startingCell, int queryId, bool isBoss)
     {
-        yield return StartCoroutine(ProcessUnitRangeQuery(maxSteps, startingCell, queryId));
+        yield return StartCoroutine(ProcessUnitRangeQuery(maxSteps, startingCell, queryId, isBoss));
         currentQueries[queryId].hasFinished = true;
     }
 
-    public AsyncRangeQuery QueryUnitRange(int maxSteps, Vector3Int startingCell)
+    public AsyncRangeQuery QueryUnitRange(int maxSteps, Vector3Int startingCell, bool isBoss)
     {
         foreach (GameGridCell cell in gridCoordinates.Values)
         {
@@ -681,7 +768,7 @@ public class GameGridManager : MonoBehaviour
 
         AsyncRangeQuery rangeQuery = new AsyncRangeQuery(queryId, this);
         currentQueries.Add(queryId, rangeQuery);
-        StartCoroutine(StartUnitRangeQuery(maxSteps, startingCell, queryId));
+        StartCoroutine(StartUnitRangeQuery(maxSteps, startingCell, queryId, isBoss));
         return rangeQuery;
     }
 
@@ -937,15 +1024,17 @@ public class GameGridManager : MonoBehaviour
 
         float currentStartTime = Time.realtimeSinceStartup;
 
+        bool isBoss = thisUnit.attributes is BossAttributes;
+
         foreach (MagicMine possibleMine in otherMines)
         {
-            List<Vector3Int> possibleDirections = neighbourDict[possibleMine.coordinates];
+            List<Vector3Int> possibleDirections = GetNeighbourCache(isBoss, possibleMine.coordinates);
             foreach (Vector3Int possibleDirection in possibleDirections)
             {
                 int possiblePathQueryId = GetAvailableQueryId();
                 AsyncPathQuery possiblePathQuery = new AsyncPathQuery(possiblePathQueryId, this);
                 currentQueries.Add(possiblePathQueryId, possiblePathQuery);
-                StartCoroutine(ProcessShortestPathQuery(thisUnit.GetCoordinates(), possibleDirection, possiblePathQueryId));
+                StartCoroutine(ProcessShortestPathQuery(thisUnit.GetCoordinates(), possibleDirection, possiblePathQueryId, isBoss));
                 while (!possiblePathQuery.hasFinished)
                 {
                     yield return null;
@@ -974,15 +1063,17 @@ public class GameGridManager : MonoBehaviour
 
         float currentStartTime = Time.realtimeSinceStartup;
 
+        bool isBoss = thisUnit.attributes is BossAttributes;
+
         foreach (Unit possibleTargetUnit in otherUnits)
         {
-            List<Vector3Int> possibleDirections = neighbourDict[possibleTargetUnit.GetCoordinates()];
+            List<Vector3Int> possibleDirections = GetNeighbourCache(false, possibleTargetUnit.GetCoordinates());
             foreach (Vector3Int possibleDirection in possibleDirections)
             {
                 int possiblePathQueryId = GetAvailableQueryId();
                 AsyncPathQuery possiblePathQuery = new AsyncPathQuery(possiblePathQueryId, this);
                 currentQueries.Add(possiblePathQueryId, possiblePathQuery);
-                StartCoroutine(ProcessShortestPathQuery(thisUnit.GetCoordinates(), possibleDirection, possiblePathQueryId));
+                StartCoroutine(ProcessShortestPathQuery(thisUnit.GetCoordinates(), possibleDirection, possiblePathQueryId, isBoss));
                 while (!possiblePathQuery.hasFinished)
                 {
                     yield return null;
@@ -1010,6 +1101,8 @@ public class GameGridManager : MonoBehaviour
         Dictionary<Vector3Int[], int> possiblePaths = new Dictionary<Vector3Int[], int>();
         AsyncPathQuery query = currentQueries[queryId] as AsyncPathQuery;
 
+        bool isBoss = thisUnit.attributes is BossAttributes;
+
         foreach (Unit possibleTargetUnit in otherUnits)
         {
             foreach (CoverData cover in covers.Keys)
@@ -1018,7 +1111,7 @@ public class GameGridManager : MonoBehaviour
                 {
                     if (possiblePositionToCover == thisUnit.GetCoordinates()) continue;
 
-                    AsyncPathQuery pathToPositionQuery = StartShortestPathQuery(thisUnit.GetCoordinates(), possiblePositionToCover);
+                    AsyncPathQuery pathToPositionQuery = StartShortestPathQuery(thisUnit.GetCoordinates(), possiblePositionToCover, isBoss);
 
                     while (!pathToPositionQuery.hasFinished)
                     {
@@ -1029,7 +1122,7 @@ public class GameGridManager : MonoBehaviour
 
                     pathToPositionQuery.End();
 
-                    AsyncPathQuery pathFromCoverToEnemyQuery = StartShortestPathQuery(possiblePositionToCover, possibleTargetUnit.GetCoordinates());
+                    AsyncPathQuery pathFromCoverToEnemyQuery = StartShortestPathQuery(possiblePositionToCover, possibleTargetUnit.GetCoordinates(), isBoss);
 
                     while (!pathFromCoverToEnemyQuery.hasFinished)
                     {
