@@ -285,6 +285,7 @@ public class GameGridManager : MonoBehaviour
     public void BuildCoversFromData()
     {
         Dictionary<string, Cover> coverElementsCache = new Dictionary<string, Cover>();
+        covers = new CoverInformation(new CoverEqualityComparer());
         for (int i = 0; i < savedData.coversData.Count; i++)
         {
             CoverData coverInfo = savedData.coversData[i];
@@ -585,14 +586,9 @@ public class GameGridManager : MonoBehaviour
         CoverData possibleCover = new CoverData(node, neighbour);
         bool containsCoverData = covers.ContainsKey(possibleCover);
         bool cellExists = gridCoordinates.ContainsKey(neighbour);
-        bool containsCoverDataInverted = covers.ContainsKey(possibleCover.GetInverted());
         if (containsCoverData)
         {
             return covers[possibleCover] is LowCover && cellExists;
-        }
-        else if (containsCoverDataInverted)
-        {
-            return covers[possibleCover.GetInverted()] is LowCover && cellExists;
         }
         else return cellExists;
     }
@@ -602,7 +598,7 @@ public class GameGridManager : MonoBehaviour
         CoverData coverData = new CoverData(coord, nextCoord);
         Cover possibleCover = null;
         try { possibleCover = covers[coverData]; }
-        catch { try { possibleCover = covers[coverData.GetInverted()]; } catch { } }
+        catch {}
         return possibleCover;
     }
 
@@ -1159,7 +1155,10 @@ public class GameGridManager : MonoBehaviour
 public class GridCoordinates : SerializableDictionaryBase<Vector3Int, GameGridCell> { }
 
 [System.Serializable]
-public class CoverInformation : SerializableDictionaryBase<CoverData, Cover> { }
+public class CoverInformation : Dictionary<CoverData, Cover>
+{
+    public CoverInformation(IEqualityComparer<CoverData> equalityComparer) : base(equalityComparer) { }
+}
 
 public class CoverIndicatorInformation : List<(Vector3Int cellCoordinates, CoverIndicator indicator)> { }
 

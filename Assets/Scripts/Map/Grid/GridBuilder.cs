@@ -69,7 +69,7 @@ public class GridBuilder : MonoBehaviour
             DestroyImmediate(gameGridManager.coversRootTransform.GetChild(0).gameObject);
         }
 
-        covers = new CoverInformation();
+        covers = new CoverInformation(new CoverEqualityComparer());
     }
 
     public void CleanGrid()
@@ -84,24 +84,20 @@ public class GridBuilder : MonoBehaviour
 
     public void AddCover(Vector3 position, CoverData cellMovement)
     {
-        CoverData invertedCellMovement = cellMovement.GetInverted();
-        bool containsInCurrentDirection = covers.ContainsKey(cellMovement);
-        bool containsInInvertedDirection = covers.ContainsKey(invertedCellMovement);
-        if (!containsInCurrentDirection && !containsInInvertedDirection)
+        if (!covers.ContainsKey(cellMovement))
         {
             CreateCover(position, cellMovement, baseLowCover);
         }
         else
         {
-            CoverData indexedDirection = (containsInCurrentDirection) ? cellMovement : invertedCellMovement;
-            Cover cover = covers[indexedDirection];
+            Cover cover = covers[cellMovement];
             bool isCurrentCoverLow = cover is LowCover;
-            covers.Remove(indexedDirection);
+            covers.Remove(cellMovement);
             DestroyImmediate(cover.gameObject);
 
             if (isCurrentCoverLow)
             {
-                CreateCover(position, indexedDirection, baseHighCover);
+                CreateCover(position, cellMovement, baseHighCover);
             }
         }
     }
