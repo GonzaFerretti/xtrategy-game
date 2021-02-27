@@ -14,7 +14,7 @@ public class AttackTypeWitchDoctor : AttackType
         Unit unitToInteract = attackingUnit.owner.GetGridReference().GetUnitAtCoordinates(coordinatesToAttack);
 
         attackingUnit.anim.Play("attack");
-        attackingUnit.PlaySound(attackingUnit.unitAttributes.attackSound);
+        attackingUnit.PlaySound(attackingUnit.attributes.mainAttack.attackSound);
         attackingUnit.model.transform.forward = (unitToInteract.transform.position - attackingUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
@@ -24,18 +24,18 @@ public class AttackTypeWitchDoctor : AttackType
         attackingUnit.attackState = CurrentActionState.ended;
     }
 
-    public override void AttackAction(Unit attackingUnit, Unit attackedUnit)
+    public override void AttackAction(Unit attackingUnit, Unit attackedUnit, AttackAttributes attributesToUse = null)
     {
         if (attackedUnit.owner != attackingUnit.owner)
         {
-            attackedUnit.TakeDamage(CalculateFinalDamage(attackingUnit, false), attackingUnit.GetCoordinates(), true);
+            attackedUnit.TakeDamage(CalculateFinalDamage(attackingUnit, false,attributesToUse), attackingUnit.GetCoordinates(), true);
             Buff poisonBuff = attackingUnit.grid.gameManager.saveManager.buffTypeBank.GetBuffType("poison");
             poisonBuff = Instantiate(poisonBuff);
             poisonBuff.charges = turns;
             attackedUnit.TryAddBuff(poisonBuff, false);
         }
         else if (attackedUnit.IsDamaged())
-            attackedUnit.Heal(CalculateFinalDamage(attackingUnit, true));
+            attackedUnit.Heal(CalculateFinalDamage(attackingUnit, true, attributesToUse));
     }
 
     public override bool CheckPossibleTarget(PlayerController controller)
@@ -47,8 +47,10 @@ public class AttackTypeWitchDoctor : AttackType
             Vector3Int unitPosition = unitSelected.GetCoordinates();
             if (controller.currentlySelectedUnit.possibleAttacks.Contains(unitPosition))
             {
-                if (unitSelected.owner == controller && !unitSelected.IsDamaged()) return false;
+                bool isAllyUnit = unitSelected.owner == controller;
+                if (isAllyUnit && !unitSelected.IsDamaged()) return false;
                 controller.currentlySelectedUnit.attackState = CurrentActionState.inProgress;
+                controller.GetGridReference().EnableCellIndicator(unitPosition, isAllyUnit ? GridIndicatorMode.possibleHeal : GridIndicatorMode.poison);
                 controller.StartCoroutine(ExecuteAttack(unitPosition, controller.currentlySelectedUnit));
                 return true;
             }
@@ -66,12 +68,12 @@ public class AttackTypeWitchDoctor : AttackType
             {
                 if (unit.owner != controller)
                 {
-                    grid.EnableCellIndicator(coordinates, GridIndicatorMode.poison);
+                    grid.EnableCellIndicator(coordinates, GridIndicatorMode.poison, true);
                 }
                 else
                 {
                     if (unit.IsDamaged())
-                        grid.EnableCellIndicator(coordinates, GridIndicatorMode.possibleHeal);
+                        grid.EnableCellIndicator(coordinates, GridIndicatorMode.possibleHeal, true);
                     else grid.DisableCellIndicator(coordinates);
                 }
             }

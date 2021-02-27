@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ControllerState : ScriptableObject
 {
+    public delegate void ControllerExitDelegate(GridIndicatorMode mode, Vector3Int position);
+    public ControllerExitDelegate controllerExitDelegate;
     public string stateName;
     protected BaseController controller;
     [SerializeField] ControllerStateTransition[] transitions;

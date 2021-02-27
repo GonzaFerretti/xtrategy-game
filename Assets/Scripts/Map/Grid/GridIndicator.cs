@@ -5,20 +5,25 @@ using UnityEngine;
 public class GridIndicator : MonoBehaviour
 {
     [SerializeField] GridIndicatorMaterials availableMaterials;
-
+    bool isLocked = false;
     [SerializeField] Renderer rend;
 
-    public void Disable()
+    public void Disable(bool forceUnlock = false)
     {
-        rend.material = availableMaterials.GetMaterial(GridIndicatorMode.disabled);
+        if (!isLocked || forceUnlock)
+        {
+            rend.material = availableMaterials.GetMaterial(GridIndicatorMode.disabled);
+            isLocked = false;
+        }
     }
 
-    public void Enable(GridIndicatorMode mode)
+    public void Enable(GridIndicatorMode mode, bool shouldLock = false)
     {
         Material material = availableMaterials.GetMaterial(mode);
-        if (material)
+        if (material && !isLocked)
         {
             rend.material = material;
+            isLocked = shouldLock;
         }
     }
 }

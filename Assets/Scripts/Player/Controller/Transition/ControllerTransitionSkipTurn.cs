@@ -14,7 +14,7 @@ public class ControllerTransitionSkipTurn : ControllerStateTransition
     {
         base.Transition(controller);
         (controller as PlayerController).SetButtonState("skipTurn", false);
-        controller.GetGridReference().DisableAllCellIndicators();
+        controller.GetGridReference().DisableAllCellIndicators(true);
         controller.GetGridReference().gameManager.EndPlayerTurn();
         if (controller.currentlySelectedUnit)
         {

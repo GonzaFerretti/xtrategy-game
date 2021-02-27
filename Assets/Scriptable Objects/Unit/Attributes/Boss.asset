@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de6c4e415136e654fa1f86986bc371ed, type: 3}
+  m_Name: Boss
+  m_EditorClassIdentifier: 
+  maxHp: 30
+  movementRange: 5
+  movementBoost: 0
+  isImmuneToExplosives: 1
+  aiBehaviour: {fileID: 11400000, guid: 405842435f27a5242be84b1d0bd7fe99, type: 2}
+  mainAttack: {fileID: 11400000, guid: 8d37521703a28bf4aaf62f47cc887307, type: 2}
+  defaultPrefab: {fileID: 4460135487434194344, guid: 32daf9776448bfe4eaf0635c89830b76,
+    type: 3}
+  secondAttack: {fileID: 11400000, guid: dedbe848afc60554cbf596bc77326237, type: 2}
+  thirdAttack: {fileID: 11400000, guid: eefdbcadd3dc9564eb6b5687a33a8b11, type: 2}

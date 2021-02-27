@@ -121,7 +121,7 @@ public class SaveManager : MonoBehaviour
                 hasMoved = unit.moveState == CurrentActionState.ended,
                 hpLeft = unit.currentHp,
                 owner = unit.owner.name,
-                unitId = unitTypeBank.GetUnitId(unit.unitAttributes),
+                unitId = unitTypeBank.GetUnitId(unit.attributes),
                 position = unit.GetCoordinates(),
                 activeBuffs = GetSavedBuffInfoFromUnit(unit)
             };

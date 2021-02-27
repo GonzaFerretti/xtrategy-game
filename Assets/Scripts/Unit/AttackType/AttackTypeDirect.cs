@@ -10,7 +10,7 @@ public class AttackTypeDirect : AttackType
         Unit enemyToAttack = attackingUnit.owner.GetGridReference().GetUnitAtCoordinates(coordinatesToAttack);
 
         attackingUnit.anim.Play("attack");
-        attackingUnit.PlaySound(attackingUnit.unitAttributes.attackSound);
+        attackingUnit.PlaySound(attackingUnit.attributes.mainAttack.attackSound);
         attackingUnit.model.transform.forward = (enemyToAttack.transform.position - attackingUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
@@ -19,9 +19,13 @@ public class AttackTypeDirect : AttackType
         attackingUnit.attackState = CurrentActionState.ended;
     }
 
-    public override void AttackAction(Unit attackingUnit, Unit attackedUnit)
+    public override void AttackAction(Unit attackingUnit, Unit attackedUnit, AttackAttributes attributesToUse = null)
     {
-        attackedUnit.TakeDamage(CalculateFinalDamage(attackingUnit, false), attackingUnit.GetCoordinates(), true);
+        if (!attributesToUse)
+        {
+            attributesToUse = attackingUnit.attributes.mainAttack;
+        }
+        attackedUnit.TakeDamage(CalculateFinalDamage(attackingUnit, false, attributesToUse), attackingUnit.GetCoordinates(), true);
     }
 
     public override bool CheckPossibleTarget(PlayerController controller)
@@ -35,6 +39,7 @@ public class AttackTypeDirect : AttackType
             if (controller.currentlySelectedUnit.possibleAttacks.Contains(unitPosition))
             {
                 controller.currentlySelectedUnit.attackState = CurrentActionState.inProgress;
+                controller.GetGridReference().EnableCellIndicator(unitPosition, GridIndicatorMode.possibleAttack, true);
                 controller.StartCoroutine(ExecuteAttack(unitPosition,controller.currentlySelectedUnit));
                 return true;
             }

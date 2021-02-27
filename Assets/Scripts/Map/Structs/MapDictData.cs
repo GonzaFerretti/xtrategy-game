@@ -14,6 +14,7 @@ public class MapDictData : ScriptableObject
     [Header("Cells")]
     public List<Vector3Int> cellsCoordinates;
     public List<string> cellsPrefabNames;
+    public bool hasBoss;
 
     [Header("Items")]
     public List<ItemData> itemsToSpawn;
