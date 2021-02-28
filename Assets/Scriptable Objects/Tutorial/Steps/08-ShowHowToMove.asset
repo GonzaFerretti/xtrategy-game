@@ -15,10 +15,11 @@ MonoBehaviour:
   shouldBlockEntireInterface: 0
   tutorialManager: {fileID: 0}
   disabledUiElements: []
-  secondsDuration: 2
+  secondsDuration: 4
   infoPromptConfig:
     promptText: Tap on the tile to move closer to the enemy!
     percentPosition:
       X: 0.25
       Y: 0.5
     arrowDirection: 7
+  endOnInteraction: 0

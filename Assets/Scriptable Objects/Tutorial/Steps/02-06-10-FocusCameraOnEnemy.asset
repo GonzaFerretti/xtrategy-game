@@ -16,3 +16,4 @@ MonoBehaviour:
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   objectNameToFocus: tutorialEnemy
+  waitAfterFinishing: 1
