@@ -16,3 +16,5 @@ MonoBehaviour:
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   interactionIdentifier: unitSelection
+  cleanInteractionsOnExit: 1
+  cleanInteractionsOnEnter: 0

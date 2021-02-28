@@ -16,7 +16,10 @@ public class GameManager : MonoBehaviour
     SoundManager soundManager;
     public bool hasUsedPower = false;
     public CameraController camController;
+
+    [Header("Tutorial")]
     public bool isTutorial = false;
+    public TutorialEnemyFlags enemyFlags;
 
     public TutorialEventDelegate OnTutorialEvent;
 
@@ -79,7 +82,10 @@ public class GameManager : MonoBehaviour
             case TutorialElementType.cover:
                 {
                     var coverData = tutorialSpawnData.coverData;
-                    go = grid.CreateSingleCover(coverData.coverData, coverData.coverPrefab).gameObject;
+                    go = grid.CreateSingleCover(coverData.coverData, coverData.coverPrefabName).gameObject;
+
+                    grid.GenerateAllPossibleNeighbours();
+
                     break;
                 }
             case TutorialElementType.item:
@@ -124,7 +130,7 @@ public class GameManager : MonoBehaviour
             case TutorialElementType.unit:
                 {
                     var unit = objectToDestroy.GetComponent<Unit>();
-                    unit.CleanDestroy();
+                    unit.CleanDestroy(true);
                     break;
                 }
         }
@@ -512,8 +518,8 @@ public class GameManager : MonoBehaviour
         if (playersRemaining.Count > 1)
         {
             playersRemaining.Remove(playersRemaining[0]);
-            StartPlayerTurn();
-            if (isTutorial && playersRemaining[0] is AIController) EndPlayerTurn();
+            StartPlayerTurn(shouldSkipStart: playersRemaining[0] is AIController && !enemyFlags.canEnemyHaveTurn);
+            EndPlayerTurn();
         }
         else
         {
@@ -528,9 +534,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void StartPlayerTurn(bool isResumingAfterSave = false)
+    void StartPlayerTurn(bool isResumingAfterSave = false, bool shouldSkipStart = false)
     {
         currentPlayer = playersRemaining[0];
+
+        if (shouldSkipStart) return;
+
         currentPlayer.StartTurn(!isResumingAfterSave);
     }
 
@@ -540,7 +549,7 @@ public class GameManager : MonoBehaviour
         foreach (BaseController player in players)
         {
             allUnits.AddRange(player.unitsControlled);
-            if (player.unitsControlled.Count == 0)
+            if (player.unitsControlled.Count == 0 && !isTutorial)
             {
                 players.Remove(player);
                 break;
@@ -554,4 +563,12 @@ public class GameManager : MonoBehaviour
         BaseController loserPlayer = players.OrderBy(player => player.GetAmountOfUnitsLeft()).Last();
         loserPlayer.DestroyPlayer();
     }
+}
+
+[System.Serializable]
+public struct TutorialEnemyFlags
+{
+    public bool canEnemyAttack;
+    public bool canEnemyMove;
+    public bool canEnemyHaveTurn;
 }

@@ -5,15 +5,18 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Tutorial/Tutorial Step/Spawn Element")]
 public class TSSpawnTutorialElement : TutorialStep
 {
+    [Header("Item spawn settings")]
     [SerializeField] ScriptableObject spawnDataSource;
-    [SerializeField] Vector3Int coordinates;
-    [SerializeField] TutorialElementType type;
     [SerializeField] string newElementName;
+    [Header("Optionals")]
+    [SerializeField] Vector3Int coordinates;
     [SerializeField] bool isAllyOwned;
 
     public override void OnEnter()
     {
         TutorialElementsSpawnData spawnData = (spawnDataSource as ITutorialElementSpawnData).GetTutorialSpawnData();
+
+        var type = GetSourceType();
 
         spawnData.coordinates = coordinates;
 
@@ -28,16 +31,25 @@ public class TSSpawnTutorialElement : TutorialStep
         QuickExit();
     }
 
-    public override void OnExit()
+    TutorialElementType GetSourceType()
     {
+        if (spawnDataSource is ItemData) return TutorialElementType.item;
+        else if (spawnDataSource is TutorialCoverData) return TutorialElementType.cover;
+        else if (spawnDataSource is UnitAttributes) return TutorialElementType.unit;
+
+        Debug.LogError("Wrong spawn item type!");
+        return TutorialElementType.error;
     }
 }
+
+
 
 public enum TutorialElementType
 {
     item,
     cover,
     unit,
+    error,
 }
 
 public struct SpawnedTutorialElementData

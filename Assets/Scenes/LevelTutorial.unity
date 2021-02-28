@@ -6839,6 +6839,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tutorialSteps:
+  - {fileID: 11400000, guid: 62418c3e018c3b94c81ba0196f367d6c, type: 2}
   - {fileID: 11400000, guid: 7b7fadae161a39e4aac898704b4257dc, type: 2}
   - {fileID: 11400000, guid: 517e1a8c56ad05b4486f95f9468428cf, type: 2}
   - {fileID: 11400000, guid: 960384641c2fa46499644b5c754e125b, type: 2}
@@ -6854,6 +6855,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 477ed36e36a66c641baeaff9e828e516, type: 2}
   - {fileID: 11400000, guid: 89ed4f782e2d97a4088be66ff47c1da0, type: 2}
   - {fileID: 11400000, guid: 03772458cecf28e4da745449585392a3, type: 2}
+  - {fileID: 11400000, guid: 9079cf6501b61c74d8590fa27706cc17, type: 2}
   - {fileID: 11400000, guid: 844090c1f4fced94788277dd5cc41dfa, type: 2}
   - {fileID: 11400000, guid: 75711cfbd0c58344f9aa5c887ee7e887, type: 2}
   - {fileID: 11400000, guid: 30df24d0a05d38b46a4eb25bcc4fd293, type: 2}
@@ -6868,6 +6870,23 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e4a29de8fb185b143814204d9fbbd278, type: 2}
   - {fileID: 11400000, guid: 78923ca270375cd4988651ba6b839b32, type: 2}
   - {fileID: 11400000, guid: d11b9a6194bff99459ee352ebf9fb67a, type: 2}
+  - {fileID: 11400000, guid: 03772458cecf28e4da745449585392a3, type: 2}
+  - {fileID: 11400000, guid: a7c1dbbc9c0f8be449a367e2f9fa07f3, type: 2}
+  - {fileID: 11400000, guid: 844090c1f4fced94788277dd5cc41dfa, type: 2}
+  - {fileID: 11400000, guid: 62278355732a4be49ae2e68edbec6319, type: 2}
+  - {fileID: 11400000, guid: 9341e599f081448439962c82fd20f03a, type: 2}
+  - {fileID: 11400000, guid: 95ff32b243352b44ba0fc839486ad9c1, type: 2}
+  - {fileID: 11400000, guid: b0f928f36aafc8a44b368204b882e9ea, type: 2}
+  - {fileID: 11400000, guid: e23ca3b96bcc0764d82ba1499eb3a7ae, type: 2}
+  - {fileID: 11400000, guid: 4b08f2d4299da174d876a90466110489, type: 2}
+  - {fileID: 11400000, guid: 844090c1f4fced94788277dd5cc41dfa, type: 2}
+  - {fileID: 11400000, guid: bfcfc7878bc6e9f4da6548fae11a67c2, type: 2}
+  - {fileID: 11400000, guid: b61da00b82046e5428a117489cbbcb61, type: 2}
+  - {fileID: 11400000, guid: 7c752959c5255a640bb5476b7b573907, type: 2}
+  - {fileID: 11400000, guid: 3d4165dde8f40904eb205922a9f5d09b, type: 2}
+  - {fileID: 11400000, guid: 806554dcab1aff443865757dfd2646ab, type: 2}
+  - {fileID: 11400000, guid: 16b62dbe4344c004bb1b6d2cb1802390, type: 2}
+  - {fileID: 11400000, guid: 03772458cecf28e4da745449585392a3, type: 2}
   HudManager: {fileID: 0}
   tutorialUnit: {fileID: 1843321895}
 --- !u!4 &1657499658

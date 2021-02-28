@@ -65,6 +65,7 @@ public class PlayerController : BaseController
     public override void StartTurn(bool shouldRestart = false)
     {
         base.StartTurn(shouldRestart);
+        gridManager.gameManager.TriggerTutorialEvent("playerTurnStart");
         if (GetCurrentStateName() == "waitForTurn")
         {
             currentState.ForceFirstTransition();

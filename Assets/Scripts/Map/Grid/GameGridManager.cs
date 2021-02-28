@@ -20,6 +20,8 @@ public class GameGridManager : MonoBehaviour
     public Dictionary<Vector3Int, List<Vector3Int>> bossNeighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
     public Dictionary<Vector3Int, List<Vector3Int>> mineNeighbourDict = new Dictionary<Vector3Int, List<Vector3Int>>();
 
+    Dictionary<string, Cover> coverElementsCache = new Dictionary<string, Cover>();
+
     Dictionary<Vector3Int, Unit> unitPositionDict = new Dictionary<Vector3Int, Unit>();
 
     Dictionary<Vector3Int, ItemPickup> pickupItemsDict = new Dictionary<Vector3Int, ItemPickup>();
@@ -333,32 +335,24 @@ public class GameGridManager : MonoBehaviour
 
     public void BuildCoversFromData()
     {
-        Dictionary<string, Cover> coverElementsCache = new Dictionary<string, Cover>();
+        coverElementsCache = elementsDatabase.GetElementCacheByType<Cover>();
+
         covers = new CoverInformation(new CoverEqualityComparer());
         for (int i = 0; i < savedData.coversData.Count; i++)
         {
-            CoverData coverInfo = savedData.coversData[i];
             string prefabName = savedData.coversPrefabNames[i];
-            Cover coverToInstantiate;
-            if (coverElementsCache.ContainsKey(prefabName))
-            {
-                coverToInstantiate = coverElementsCache[prefabName];
-            }
-            else
-            {
-                coverToInstantiate = elementsDatabase.GetElementByType<Cover>(prefabName);
-                coverElementsCache.Add(prefabName, coverToInstantiate);
-            }
-
-            CreateSingleCover(coverInfo, coverToInstantiate);
+            
+            CoverData coverInfo = savedData.coversData[i];
+            CreateSingleCover(coverInfo, prefabName);
         }
     }
 
-    public Cover CreateSingleCover(CoverData coverInfo, Cover coverToInstantiate)
+    public Cover CreateSingleCover(CoverData coverInfo, string coverPrefabName)
     {
         Vector3 position = (GetWorldPositionFromCoords(coverInfo.side1) + GetWorldPositionFromCoords(coverInfo.side2)) / 2;
 
-        Cover cover = Instantiate(coverToInstantiate);
+        Cover coverPrefab = coverElementsCache[coverPrefabName];
+        Cover cover = Instantiate(coverPrefab);
         cover.SetGridManagerReference(this);
         cover.transform.position = position;
         cover.transform.parent = coversRootTransform;
@@ -374,6 +368,12 @@ public class GameGridManager : MonoBehaviour
         {
             cover.transform.localEulerAngles = new Vector3(0, 0, 0);
         }
+
+        foreach (var unit in gameManager.allUnits)
+        {
+            unit.UpdateCoverData();
+        }
+
         covers.Add(coverInfo, cover);
 
         return cover;
@@ -623,6 +623,7 @@ public class GameGridManager : MonoBehaviour
 
     public void GenerateAllPossibleNeighbours()
     {
+        neighbourDict.Clear();
         foreach (var node in gridCoordinates)
         {
             neighbourDict.Add(node.Key, GetViableNeighbourCellsForMovement(node.Key));

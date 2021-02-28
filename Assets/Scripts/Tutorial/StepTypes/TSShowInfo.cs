@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Tutorial/Tutorial Step/Show Info Prompt")]
 public class TSShowInfo : TutorialStep
 {
+    [Header("Info prompt settings")]
     [SerializeField] float secondsDuration;
     [SerializeField] TutorialStepInfoPromptConfig infoPromptConfig;
     float endTimestamp;
@@ -45,6 +46,7 @@ public class TSShowInfo : TutorialStep
 [System.Serializable]
 public struct TutorialStepInfoPromptConfig
 {
+    [MultilineAttribute]
     public string promptText;
     public Vector2Percent percentPosition;
     public TSPromptArrowDirection arrowDirection;

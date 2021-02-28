@@ -84,6 +84,16 @@ public class TutorialManager : MonoBehaviour
     {
         interactionCache.Clear();
     }
+
+    public void CleanSpawnedElements()
+    {
+        while (spawnedTutorialElementsData.Count > 0)
+        {
+            if (spawnedTutorialElementsData[0].element)
+                GetGM().DestroyTutorialElement(spawnedTutorialElementsData[0].element, spawnedTutorialElementsData[0].type);
+            spawnedTutorialElementsData.RemoveAt(0);
+        }
+    }
 }
 
 public class WaitForStepExit : CustomYieldInstruction

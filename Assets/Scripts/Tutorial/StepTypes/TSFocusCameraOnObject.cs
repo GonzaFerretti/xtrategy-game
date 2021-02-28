@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Tutorial/Tutorial Step/Focus Camera On Object")]
 public class TSFocusCameraOnObject : TutorialStep
 {
+    [Header("Focus Camera Settings")]
+
     [SerializeField] string objectNameToFocus;
     [SerializeField] float waitAfterFinishing;
 

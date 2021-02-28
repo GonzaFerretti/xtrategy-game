@@ -13,6 +13,11 @@ public class AIController : BaseController
         StartCoroutine(ExecuteUnitBehaviours());
     }
 
+    TutorialEnemyFlags GetInteractionFlags()
+    {
+        return gridManager.gameManager.enemyFlags;
+    }
+
     IEnumerator ExecuteUnitBehaviours()
     {
         yield return new WaitForSeconds(1.5f);
@@ -76,7 +81,7 @@ public class AIController : BaseController
         {
             foreach (Vector3Int possibleAttackPosition in attacksInRange)
             {
-                if (ShouldTargetUnit(unit,targetType))
+                if (ShouldTargetUnit(unit, targetType))
                 {
                     if (unit.GetCoordinates() == possibleAttackPosition)
                     {
@@ -92,7 +97,7 @@ public class AIController : BaseController
     bool ShouldTargetUnit(Unit unit, TargetType targetType)
     {
         return targetType == TargetType.AllUnits
-            ||  (targetType == TargetType.AllyOnly && unitsControlled.Contains(unit))
+            || (targetType == TargetType.AllyOnly && unitsControlled.Contains(unit))
             || (targetType == TargetType.EnemyOnly && !unitsControlled.Contains(unit));
     }
 
@@ -150,6 +155,12 @@ public class AIController : BaseController
 
     public IEnumerator AttemptInteractWithLowestHPTarget(Unit actingUnit, int id, TargetType targetType = TargetType.EnemyOnly, AttackAttributes attackToUse = null, bool shouldChangeAttackState = true)
     {
+        if (!GetInteractionFlags().canEnemyAttack)
+        {
+            currentActions[id].endedSuccesfully = false;
+            yield break;
+        }
+
         AsyncRangeQuery attackQuery = actingUnit.StartAttackRangeQuery(attackToUse);
 
         if (currentlySelectedUnit.attackState == CurrentActionState.ended && shouldChangeAttackState)
@@ -187,6 +198,12 @@ public class AIController : BaseController
 
     public IEnumerator AttemptToDetonateMine(Unit actingUnit, int id)
     {
+        if (!GetInteractionFlags().canEnemyAttack)
+        {
+            currentActions[id].endedSuccesfully = false;
+            yield break;
+        }
+
         AsyncRangeQuery attackQuery = actingUnit.StartAttackRangeQuery();
 
         if (currentlySelectedUnit.attackState == CurrentActionState.ended)
@@ -206,7 +223,7 @@ public class AIController : BaseController
             MagicMine unitInRangeOfMine = gridManager.GetMineWithEnemyNearby(attackQuery.cellsInRange, actingUnit.owner);
             if (unitInRangeOfMine)
             {
-                gridManager.DetonateMine(unitInRangeOfMine.coordinates,actingUnit);
+                gridManager.DetonateMine(unitInRangeOfMine.coordinates, actingUnit);
                 currentActions[id].endedSuccesfully = true;
             }
             else
@@ -224,6 +241,9 @@ public class AIController : BaseController
 
     public IEnumerator MoveTowardsClosestTarget(Unit actingUnit, List<Unit> unitsToInteract)
     {
+        if (!GetInteractionFlags().canEnemyMove)
+            yield break;
+
         if (!currentlySelectedUnit) yield break;
         if (currentlySelectedUnit.moveState == CurrentActionState.ended)
         {
@@ -256,6 +276,9 @@ public class AIController : BaseController
 
     public IEnumerator MoveTowardsClosestMine(Unit actingUnit)
     {
+        if (!GetInteractionFlags().canEnemyMove)
+            yield break;
+
         if (!currentlySelectedUnit) yield break;
         if (currentlySelectedUnit.moveState == CurrentActionState.ended)
         {
@@ -288,6 +311,9 @@ public class AIController : BaseController
 
     public IEnumerator MoveTowardsCoverCloseToEnemy(Unit actingUnit, int id)
     {
+        if (!GetInteractionFlags().canEnemyMove)
+            yield break;
+
         if (!currentlySelectedUnit)
         {
             currentActions[id].endedSuccesfully = false;
@@ -340,7 +366,7 @@ public enum TargetType
     AllUnits
 }
 
-public struct AISavedData 
+public struct AISavedData
 {
     public int lastAttackTurn;
 }

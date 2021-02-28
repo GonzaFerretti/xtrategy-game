@@ -47,6 +47,14 @@ MonoBehaviour:
   playersRemaining: []
   allUnits: []
   hud: {fileID: 0}
+  saveManager: {fileID: 0}
+  hasUsedPower: 0
+  camController: {fileID: 0}
+  isTutorial: 0
+  enemyFlags:
+    canEnemyAttack: 1
+    canEnemyMove: 1
+    canEnemyHaveTurn: 1
   currentPlayer: {fileID: 0}
   grid: {fileID: 0}
   totalTurns: 9999

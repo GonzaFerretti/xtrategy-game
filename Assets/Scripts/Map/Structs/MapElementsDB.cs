@@ -21,6 +21,20 @@ public class MapElementsDB : ScriptableObject
         return valueToReturn;
     }
 
+    public Dictionary<string,T> GetElementCacheByType<T>()
+    {
+        Dictionary<string, T> elementList = new Dictionary<string, T>();
+        foreach (GameObject go in prefabs)
+        {
+            T possibleElement = default;
+            if (go.TryGetComponent<T>(out possibleElement))
+            {
+                elementList.Add(go.name,possibleElement);
+            }
+        }
+        return elementList;
+    }
+
     public GameObject GetElement(string name)
     {
         GameObject objectToReturn = null;

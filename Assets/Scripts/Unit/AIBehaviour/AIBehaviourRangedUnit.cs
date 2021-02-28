@@ -5,7 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Unit/AiBehaviour/Ranged")]
 public class AIBehaviourRangedUnit : AIBehaviour
 {
-    // I should use a WaitForActionAttempt(IEnumerator) coroutine instead of doing these horrible repetitions.
     public override IEnumerator ExecuteBehaviour(AIController controller, Unit actingUnit)
     {
         if (actingUnit.currentCovers.Count > 0)
@@ -36,6 +35,11 @@ public class AIBehaviourRangedUnit : AIBehaviour
             {
                 AsyncAIActionResult SecondAattackAttemptFromCover = controller.GenerateNewAIActionResult();
                 yield return controller.StartCoroutine(controller.AttemptInteractWithLowestHPTarget(actingUnit, SecondAattackAttemptFromCover.id));
+            }
+            else
+            {
+                AsyncAIActionResult AttackAttemptWithoutCover = controller.GenerateNewAIActionResult();
+                yield return controller.StartCoroutine(controller.AttemptInteractWithLowestHPTarget(actingUnit, AttackAttemptWithoutCover.id));
             }
             if (!actingUnit) yield break;
         }

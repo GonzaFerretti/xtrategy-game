@@ -9,12 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e5321a1a7e5d18468ee76befbc57409, type: 3}
-  m_Name: 25-WaitForItemUse
+  m_Script: {fileID: 11500000, guid: 6f34da6a5273ae84da787fe7b3bfe8e7, type: 3}
+  m_Name: 32-SpawnLowCover
   m_EditorClassIdentifier: 
   shouldBlockEntireInterface: 0
   tutorialManager: {fileID: 0}
   disabledUiElements: []
-  interactionIdentifier: itemUse
-  cleanInteractionsOnExit: 0
-  cleanInteractionsOnEnter: 1
+  spawnDataSource: {fileID: 11400000, guid: 418319d9bac2e4a45bfc3c0cbe03c68e, type: 2}
+  coordinates: {x: 0, y: 0, z: 0}
+  type: 1
+  newElementName: lowCover
+  isAllyOwned: 0

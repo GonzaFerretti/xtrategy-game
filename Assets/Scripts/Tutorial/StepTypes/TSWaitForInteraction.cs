@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Tutorial/Tutorial Step/Wait for Interaction")]
 public class TSWaitForInteraction : TutorialStep
 {
+    [Header("Interaction Settings")]
+
     [SerializeField] string interactionIdentifier;
     [SerializeField] bool cleanInteractionsOnExit;
     [SerializeField] bool cleanInteractionsOnEnter;

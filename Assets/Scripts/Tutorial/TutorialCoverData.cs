@@ -6,7 +6,7 @@ using UnityEngine;
 public class TutorialCoverData : ScriptableObject, ITutorialElementSpawnData
 {
     public CoverData coverData;
-    public Cover coverPrefab;
+    public string coverPrefabName;
 
     public TutorialElementsSpawnData GetTutorialSpawnData()
     {

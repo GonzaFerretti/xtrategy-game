@@ -154,11 +154,14 @@ public class Unit : GameGridElement
         }
     }
 
-    public void CleanDestroy()
+    public void CleanDestroy(bool destroyModelImmediately = false)
     {
         Destroy(hpBar.gameObject);
-        owner.RemoveUnit(this);
-        owner.StartCoroutine(DestroyBody(model));
+        owner.RemoveUnit(this); 
+        if (!destroyModelImmediately)
+            owner.StartCoroutine(DestroyBody(model));
+        else
+            Destroy(model);
         Destroy(this);
     }
 

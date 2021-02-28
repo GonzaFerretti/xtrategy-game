@@ -9,12 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e5321a1a7e5d18468ee76befbc57409, type: 3}
-  m_Name: 25-WaitForItemUse
+  m_Script: {fileID: 11500000, guid: 4cbcc2823d4be0a4e88464ec8d89e64c, type: 3}
+  m_Name: 40-AllowOnlyEnemyAttack
   m_EditorClassIdentifier: 
   shouldBlockEntireInterface: 0
   tutorialManager: {fileID: 0}
   disabledUiElements: []
-  interactionIdentifier: itemUse
-  cleanInteractionsOnExit: 0
-  cleanInteractionsOnEnter: 1
+  flags:
+    canEnemyAttack: 0
+    canEnemyMove: 1
+    canEnemyHaveTurn: 1

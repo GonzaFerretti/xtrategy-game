@@ -21,5 +21,6 @@ public class ControllerTransitionSkipTurn : ControllerStateTransition
             controller.currentlySelectedUnit.Deselect();
             controller.currentlySelectedUnit = null;
         }
+        controller.GetGridReference().gameManager.TriggerTutorialEvent("skipTurn");
     }
 }
