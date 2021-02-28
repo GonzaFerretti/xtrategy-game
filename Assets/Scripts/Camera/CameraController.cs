@@ -41,16 +41,20 @@ public class CameraController : MonoBehaviour
 
     public void SetFollowTarget(Transform target)
     {
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, float.MaxValue, 1 << LayerMask.NameToLayer("GroundBase")))
+        Plane plane = new Plane(Vector3.up, target.position);
+        Ray ray = new Ray(transform.position, transform.forward);
+
+        if (plane.Raycast(ray, out float intersection))
         {
             if (currentFollowEvent != null) InterruptTargetFollow();
-            Vector3 hitPoint = hit.transform.position;
+            Vector3 hitPoint = ray.GetPoint(intersection);
             currentFollowEvent = new FollowEvent(target);
             StartCoroutine(FollowTarget(hitPoint));
         }
         else
         {
-            OnCameraTargetFollowEnd.Invoke();
+            if (OnCameraTargetFollowEnd != null)
+                OnCameraTargetFollowEnd.Invoke();
         }
     }
 

@@ -46,7 +46,7 @@ public class LoadingScreen : MonoBehaviour
             yield return null;
         } while (!gm);
 
-        StartCoroutine(gm.InitiateGame(this));
+        gm.StartCoroutine(gm.InitiateGame(this));
         while (inLevelSetupProgress < 1)
         {
             UpdateBar(baseLevelLoadShownPercentage + inLevelSetupProgress * (1-baseLevelLoadShownPercentage));

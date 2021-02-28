@@ -16,6 +16,7 @@ public class AttackTypeDirect : AttackType
         attackingUnit.anim.SetTrigger("endCurrentAnim");
         attackingUnit.TryConsumeBuff("attackBoost");
         AttackAction(attackingUnit, enemyToAttack);
+        attackingUnit.grid.gameManager.TriggerTutorialEvent("attackTargetSelect");
         attackingUnit.attackState = CurrentActionState.ended;
     }
 

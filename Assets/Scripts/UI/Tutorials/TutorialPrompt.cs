@@ -12,6 +12,7 @@ public class TutorialPrompt : MonoBehaviour
     public void Init(TutorialStepInfoPromptConfig promptData)
     {
         text.SetText(promptData.promptText);
+        if (promptData.arrowDirection == TSPromptArrowDirection.none) return;
         foreach (var arrow in arrows)
         {
             if (arrow.direction == promptData.arrowDirection)

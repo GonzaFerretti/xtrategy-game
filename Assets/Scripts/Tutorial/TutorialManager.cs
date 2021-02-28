@@ -28,8 +28,9 @@ public class TutorialManager : MonoBehaviour
 
     public void StartTutorial()
     {
-        tutorialUnit = FindObjectOfType<Unit>();
+        spawnedTutorialElements = new List<SpawnedTutorialElementData>();
         HudManager = FindObjectOfType<HUDManager>();
+        GetGM().OnTutorialEvent += OnInteraction;
         foreach (var step in tutorialSteps)
         {
             step.tutorialManager = this;
@@ -42,6 +43,7 @@ public class TutorialManager : MonoBehaviour
         while (currentIndex < tutorialSteps.Length)
         {
             TutorialStep currentStep = tutorialSteps[currentIndex];
+            Debug.Log(currentStep.name);
             if (currentStep.shouldBlockEntireInterface) SetInterfaceLock(true);
             DisableUIElements(currentStep.disabledUiElements);
             currentStep.OnEnter();
@@ -50,6 +52,7 @@ public class TutorialManager : MonoBehaviour
             if (currentStep.shouldBlockEntireInterface) SetInterfaceLock(false);
             currentIndex++;
         }
+        Debug.Log("Finished!");
     }
 
     void SetInterfaceLock(bool newStatus)

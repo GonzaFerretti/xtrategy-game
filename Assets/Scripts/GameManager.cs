@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public delegate void TutorialEventDelegate(string identifier);
+
     public List<BaseController> players;
     public List<BaseController> playersRemaining;
     public List<Unit> allUnits;
@@ -14,6 +16,8 @@ public class GameManager : MonoBehaviour
     SoundManager soundManager;
     public bool hasUsedPower = false;
     public CameraController camController;
+
+    public TutorialEventDelegate OnTutorialEvent;
 
     public BaseController currentPlayer;
     [SerializeField] GameGridManager grid;
@@ -54,6 +58,14 @@ public class GameManager : MonoBehaviour
             saveManager.ResetStagedData();
         }
         loadingScreen.inLevelSetupProgress = 1;
+        yield return null;
+        CheckTutorial();
+    }
+
+    public void TriggerTutorialEvent(string identifier)
+    {
+        if (OnTutorialEvent != null)
+            OnTutorialEvent.Invoke(identifier);
     }
 
     public GameObject SpawnTutorialElement(TutorialElementsSpawnData tutorialSpawnData, TutorialElementType type)
@@ -311,7 +323,6 @@ public class GameManager : MonoBehaviour
         ExecuteControllerStarts();
         CheckLoser();
         StartPlayerTurn(saveManager ? saveManager.isLoadingFromSave : false);
-        CheckTutorial();
     }
 
     void CheckTutorial()

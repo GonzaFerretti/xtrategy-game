@@ -54,4 +54,5 @@ public enum TSPromptArrowDirection
     topright,
     left,
     right,
+    none,
 }

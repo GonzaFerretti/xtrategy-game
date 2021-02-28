@@ -6,6 +6,7 @@ using UnityEngine;
 public class TSFocusCameraOnObject : TutorialStep
 {
     [SerializeField] string objectNameToFocus;
+    [SerializeField] float waitAfterFinishing;
 
     public override void OnEnter()
     {
@@ -13,7 +14,7 @@ public class TSFocusCameraOnObject : TutorialStep
 
         if (objectToFocus)
         {
-            tutorialManager.GetCameraController().OnCameraTargetFollowEnd += QuickExit;
+            tutorialManager.GetCameraController().OnCameraTargetFollowEnd += OnFocusEnd;
             tutorialManager.GetCameraController().SetFollowTarget(objectToFocus.transform);
             tutorialManager.GetCameraController().lockUserMovement = true;
         }
@@ -25,6 +26,17 @@ public class TSFocusCameraOnObject : TutorialStep
     {
         tutorialManager.GetCameraController().OnCameraTargetFollowEnd -= QuickExit;
         tutorialManager.GetCameraController().lockUserMovement = false;
+    }
+
+    public void OnFocusEnd()
+    {
+        tutorialManager.StartCoroutine(WaitAfterFinishing());
+    }
+
+    public IEnumerator WaitAfterFinishing()
+    {
+        yield return new WaitForSeconds(waitAfterFinishing);
+        QuickExit();
     }
 
     public override bool ShouldExit()

@@ -414,6 +414,7 @@ public class Unit : GameGridElement
 
         yield return MoveAlongPath(path);
         grid.DisableCellIndicators(possibleMovements);
+        grid.gameManager.TriggerTutorialEvent("unitMove");
     }
 
     public IEnumerator MoveAlongPath(Vector3Int[] givenPath)

@@ -19,6 +19,7 @@ public class ControllerStateNoUnitSelected : ControllerState
             if (!controller.OwnsUnit(unitSelected)) return;
             controller.currentlySelectedUnit = unitSelected;
             controller.currentlySelectedUnit.Select();
+            controller.GetGridReference().gameManager.TriggerTutorialEvent("unitSelection");
         }
     }
 }
