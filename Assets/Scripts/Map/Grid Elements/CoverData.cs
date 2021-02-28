@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
-public struct CoverData
+public class CoverData
 {
     public Vector3Int side1;
     public Vector3Int side2;
@@ -14,6 +14,12 @@ public struct CoverData
 
     public static bool operator ==(CoverData lhs, CoverData rhs)
     {
+        bool lhsNull = object.ReferenceEquals(lhs, null);
+        bool rhsNull = object.ReferenceEquals(rhs, null);
+        if (lhsNull && rhsNull)
+            return true;
+        else if (lhsNull || rhsNull)
+            return false;
         return ((lhs.side1 == rhs.side1) && (lhs.side2 == rhs.side2)) || ((lhs.side1 == rhs.side2) && (lhs.side2 == rhs.side1));
     }
 
@@ -32,14 +38,7 @@ public class CoverEqualityComparer : IEqualityComparer<CoverData>
 {
     public bool Equals(CoverData c1, CoverData c2)
     {
-        if (c1 == null && c2 == null)
-            return true;
-        else if (c1 == null || c2 == null)
-            return false;
-        else if (c1 == c2)
-            return true;
-        else
-            return false;
+        return c1 == c2;
     }
 
     public int GetHashCode(CoverData c)

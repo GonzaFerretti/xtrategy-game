@@ -76,6 +76,30 @@ public class GameGridManager : MonoBehaviour
         }
     }
 
+    public void DestroyCover(Cover cover)
+    {
+        if (covers.ContainsKey(cover.coverData))
+        {
+            CoverData coverData = cover.coverData;
+            covers.Remove(coverData);
+            Destroy(cover.gameObject);
+
+            GenerateAllPossibleNeighbours();
+
+            Unit unitOnSide1;
+            Unit unitOnSide2;
+
+            if (unitOnSide1 = GetUnitAtCoordinates(coverData.side1))
+            {
+                unitOnSide1.UpdateCoverData();
+            }
+            if (unitOnSide2 = GetUnitAtCoordinates(coverData.side2))
+            {
+                unitOnSide2.UpdateCoverData();
+            }
+        }
+    }
+
     public void RemoveUnusedCell(Vector3Int center, bool removeNeighbours = false)
     {
         GameGridCell cell = GetCellAtCoordinate(center);
@@ -96,7 +120,7 @@ public class GameGridManager : MonoBehaviour
         }
     }
 
-    public void SetupSingleItem(ItemData itemData, Vector3Int coordinates)
+    public ItemPickup SetupSingleItem(ItemData itemData, Vector3Int coordinates)
     {
         var newItemPickup = Instantiate(itemPickupPrefab);
         pickupItemsDict.Add(coordinates, newItemPickup);
@@ -105,6 +129,8 @@ public class GameGridManager : MonoBehaviour
         newItemPickup.transform.parent = itemPickupsRootTransform;
         newItemPickup.transform.localRotation = Quaternion.identity;
         newItemPickup.UpdateItem(itemData, coordinates);
+
+        return newItemPickup;
     }
 
     public void InitCoverIndicator(Vector3 coverPosition, Cover cover)
@@ -313,7 +339,6 @@ public class GameGridManager : MonoBehaviour
         {
             CoverData coverInfo = savedData.coversData[i];
             string prefabName = savedData.coversPrefabNames[i];
-            Vector3 position = (GetWorldPositionFromCoords(coverInfo.side1) + GetWorldPositionFromCoords(coverInfo.side2)) / 2;
             Cover coverToInstantiate;
             if (coverElementsCache.ContainsKey(prefabName))
             {
@@ -324,24 +349,34 @@ public class GameGridManager : MonoBehaviour
                 coverToInstantiate = elementsDatabase.GetElementByType<Cover>(prefabName);
                 coverElementsCache.Add(prefabName, coverToInstantiate);
             }
-            Cover cover = Instantiate(coverToInstantiate);
-            cover.SetGridManagerReference(this);
-            cover.transform.position = position;
-            cover.transform.parent = coversRootTransform;
-            cover.coverData = coverInfo;
 
-            InitCoverIndicator(position, cover);
-
-            if (!coverInfo.IsCellMovementDirectionInXAxis())
-            {
-                cover.transform.localEulerAngles = new Vector3(0, 90, 0);
-            }
-            else
-            {
-                cover.transform.localEulerAngles = new Vector3(0, 0, 0);
-            }
-            covers.Add(coverInfo, cover);
+            CreateSingleCover(coverInfo, coverToInstantiate);
         }
+    }
+
+    public Cover CreateSingleCover(CoverData coverInfo, Cover coverToInstantiate)
+    {
+        Vector3 position = (GetWorldPositionFromCoords(coverInfo.side1) + GetWorldPositionFromCoords(coverInfo.side2)) / 2;
+
+        Cover cover = Instantiate(coverToInstantiate);
+        cover.SetGridManagerReference(this);
+        cover.transform.position = position;
+        cover.transform.parent = coversRootTransform;
+        cover.coverData = coverInfo;
+
+        InitCoverIndicator(position, cover);
+
+        if (!coverInfo.IsCellMovementDirectionInXAxis())
+        {
+            cover.transform.localEulerAngles = new Vector3(0, 90, 0);
+        }
+        else
+        {
+            cover.transform.localEulerAngles = new Vector3(0, 0, 0);
+        }
+        covers.Add(coverInfo, cover);
+
+        return cover;
     }
 
     public GameGridCell GetCellAtCoordinate(Vector3Int coord)
@@ -367,7 +402,6 @@ public class GameGridManager : MonoBehaviour
         Node startNode = new Node(startCoordinates);
         Node targetNode = new Node(destinationCoordinates);
         openSet.Add(startCoordinates, startNode);
-        float startTime = Time.realtimeSinceStartup;
         while (openSet.Count > 0)
         {
             Node node = openSet.Values.ElementAt(0);
@@ -676,7 +710,7 @@ public class GameGridManager : MonoBehaviour
         CoverData possibleCover = new CoverData(node, neighbour);
         bool containsCoverData = covers.ContainsKey(possibleCover);
         bool cellExists = gridCoordinates.ContainsKey(neighbour);
-        
+
         return !containsCoverData && cellExists;
     }
 
@@ -1060,8 +1094,6 @@ public class GameGridManager : MonoBehaviour
     public IEnumerator GetBestPathToGetToClosestUnit(Unit thisUnit, List<Unit> otherUnits, int queryId)
     {
         List<Vector3Int[]> possiblePaths = new List<Vector3Int[]>();
-
-        float currentStartTime = Time.realtimeSinceStartup;
 
         bool isBoss = thisUnit.attributes is BossAttributes;
 

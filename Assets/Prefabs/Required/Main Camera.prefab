@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitionTime: 0.25
-  cam: {fileID: 2146210180028333342}
+  mainCam: {fileID: 2146210180028333342}
   moveSpeed: 1
   maxZoom: 8.2
   selectZoom: 5
@@ -202,3 +202,8 @@ MonoBehaviour:
   zoomSensitivity: 0.016666668
   minZoomMovementMultiplier: 0.4
   maxZoomMovementMultiplier: 1
+  lockUserMovement: 0
+  minX: 0
+  maxX: 0
+  minZ: 0
+  maxZ: 0

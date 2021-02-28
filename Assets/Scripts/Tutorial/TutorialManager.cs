@@ -6,14 +6,29 @@ public class TutorialManager : MonoBehaviour
 {
     [SerializeField] TutorialStep[] tutorialSteps;
 
+    public List<SpawnedTutorialElementData> spawnedTutorialElements;
+
     [HideInInspector] public HUDManager HudManager;
+
+    public Unit tutorialUnit;
 
     List<string> buttonPressStates = new List<string>();
 
     int currentIndex = 0;
 
+    public CameraController GetCameraController()
+    {
+        return GetGM().camController;
+    }
+
+    public GameManager GetGM()
+    {
+        return HudManager.gm;
+    }
+
     public void StartTutorial()
     {
+        tutorialUnit = FindObjectOfType<Unit>();
         HudManager = FindObjectOfType<HUDManager>();
         foreach (var step in tutorialSteps)
         {

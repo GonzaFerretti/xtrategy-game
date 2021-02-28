@@ -17,7 +17,7 @@ public class TouchEventSwipe : TouchEvent
         {
             if (controller.eventTriggerLinks.ContainsKey(eName))
             {
-                controller.eventTriggerLinks[eName](firstTouch.deltaPosition, 0);
+                controller.eventTriggerLinks[eName](firstTouch.deltaPosition, 0,controller);
             }
         }
         else

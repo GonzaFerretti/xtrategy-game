@@ -30,7 +30,7 @@ public class AIController : BaseController
             currentlySelectedUnit = unit;
             if (currentlySelectedUnit.HasActionsLeft())
             {
-                Camera.main.GetComponent<CameraController>().SetFollowTarget(unit.transform);
+                GetCameraController().SetFollowTarget(unit.transform);
                 yield return StartCoroutine(unit.attributes.aiBehaviour.ExecuteBehaviour(this, unit));
                 if (unitsControlled.Count < startingUnitAmount)
                 {

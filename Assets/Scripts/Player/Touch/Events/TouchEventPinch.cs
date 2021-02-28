@@ -24,7 +24,7 @@ public class TouchEventPinch : TouchEvent
                 else
                 {
                     float dist = lastMagnitude - (firstTouch.position - secondTouch.position).magnitude;
-                    controller.eventTriggerLinks[eName](Vector2.zero, dist);
+                    controller.eventTriggerLinks[eName](Vector2.zero, dist,controller);
                     lastMagnitude = (firstTouch.position - secondTouch.position).magnitude;
                 }
             }

@@ -15,10 +15,15 @@ public class ItemPickup : MonoBehaviour
     public Vector3Int coordinates;
     public ItemData itemData;
 
-    // TO DO MAKE AN EDITOR SCRIPT THAT BAKES A FINITE AMOUNT OF POINTS OF THIS CURVE INSTEAD OF CALCULATING IT!
+    public void OnDelete()
+    {
+
+    }
 
     void SetHoverHeight()
     {
+        // TO DO MAKE AN EDITOR SCRIPT THAT BAKES A FINITE AMOUNT OF POINTS OF THIS CURVE INSTEAD OF CALCULATING IT!
+
         float time = Time.realtimeSinceStartup;
         float normalizedFunction = Mathf.Cos(time * speed + Mathf.PI) / 2 + 0.5f;
         

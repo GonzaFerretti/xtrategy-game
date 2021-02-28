@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class TouchInputController : MonoBehaviour
 {
-    public delegate void TouchEventDelegate(Vector2 direction, float magnitude);
+    public delegate void TouchEventDelegate(Vector2 direction, float magnitude, TouchInputController controller);
     [SerializeField] TouchEvent currentTouchEvent;
     public Dictionary<string, TouchEventDelegate> eventTriggerLinks = new Dictionary<string, TouchEventDelegate>();
     [SerializeField] List<TouchAction> touchActions;
+    [SerializeField] PlayerController playerController;
 
     public List<TouchEvent> possibleEvents = new List<TouchEvent>();
+
+    public CameraController GetCameraController()
+    {
+        return playerController.GetGridReference().gameManager.camController;
+    }
 
     public void SubscribeToTouchEvent(TouchAction actionToRegister)
     {

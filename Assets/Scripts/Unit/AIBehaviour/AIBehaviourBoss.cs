@@ -31,8 +31,6 @@ public class AIBehaviourBoss : AIBehaviour
             AsyncAIActionResult thirdAttack = controller.GenerateNewAIActionResult();
             yield return controller.StartCoroutine(controller.AttemptInteractWithLowestHPTarget(actingUnit, thirdAttack.id, attackToUse: bossData.thirdAttack));
 
-            Debug.Log("First attack: " + firstAttack.endedSuccesfully + " Second attack: " + secondAttack.endedSuccesfully + " Third attack: " + thirdAttack.endedSuccesfully);
-
             AISavedData newSavedData = new AISavedData()
             {
                 lastAttackTurn = grid.gameManager.GetTurnNumber()

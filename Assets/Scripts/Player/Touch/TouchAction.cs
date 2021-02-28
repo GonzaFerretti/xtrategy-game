@@ -6,5 +6,5 @@ public abstract class TouchAction : ScriptableObject
 {
     public TouchEvent triggerEvent;
     public PlayerController player;
-    public abstract void Action(Vector2 direction, float magnitude);
+    public abstract void Action(Vector2 direction, float magnitude, TouchInputController controller);
 }

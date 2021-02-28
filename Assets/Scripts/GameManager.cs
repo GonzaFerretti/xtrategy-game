@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public SaveManager saveManager;
     SoundManager soundManager;
     public bool hasUsedPower = false;
+    public CameraController camController;
 
     public BaseController currentPlayer;
     [SerializeField] GameGridManager grid;
@@ -53,6 +54,62 @@ public class GameManager : MonoBehaviour
             saveManager.ResetStagedData();
         }
         loadingScreen.inLevelSetupProgress = 1;
+    }
+
+    public GameObject SpawnTutorialElement(TutorialElementsSpawnData tutorialSpawnData, TutorialElementType type)
+    {
+        Vector3Int coordinates = tutorialSpawnData.coordinates;
+        GameObject go = null;
+
+        switch (type)
+        {
+            case TutorialElementType.cover:
+                {
+                    var coverData = tutorialSpawnData.coverData;
+                    go = grid.CreateSingleCover(coverData.coverData, coverData.coverPrefab).gameObject;
+                    break;
+                }
+            case TutorialElementType.item:
+                {
+                    go = grid.SetupSingleItem(tutorialSpawnData.itemData, coordinates).gameObject;
+                    break;
+                }
+            case TutorialElementType.unit:
+                {
+                    Unit newUnit = CreateSingleUnit(tutorialSpawnData.unitData);
+                    newUnit.UpdateCell(coordinates);
+
+                    go = newUnit.gameObject;
+                    break;
+                }
+        }
+
+        return go;
+    }
+
+    public void DestroyTutorialElement(GameObject objectToDestroy, TutorialElementType type)
+    {
+        switch (type)
+        {
+            case TutorialElementType.cover:
+                {
+                    var cover = objectToDestroy.GetComponent<Cover>();
+                    grid.DestroyCover(cover);
+                    break;
+                }
+            case TutorialElementType.item:
+                {
+                    var itemPickup = objectToDestroy.GetComponent<ItemPickup>();
+                    grid.DestroyItemPickup(itemPickup);
+                    break;
+                }
+            case TutorialElementType.unit:
+                {
+                    var unit = objectToDestroy.GetComponent<Unit>();
+                    unit.CleanDestroy();
+                    break;
+                }
+        }
     }
 
     public int GetTurnNumber()
@@ -101,7 +158,7 @@ public class GameManager : MonoBehaviour
         Buff shieldBuff = saveManager.buffTypeBank.GetBuffType("shield");
         do
         {
-            hasBuffedOne = playerUnits[UnityEngine.Random.Range(0, playerUnits.Count - 1)].TryAddBuff(shieldBuff,false);
+            hasBuffedOne = playerUnits[UnityEngine.Random.Range(0, playerUnits.Count - 1)].TryAddBuff(shieldBuff, false);
             currentIndex++;
         } while (!hasBuffedOne || currentIndex < playerUnits.Count);
     }
@@ -223,14 +280,21 @@ public class GameManager : MonoBehaviour
         foreach (var unitInfo in saveData.units)
         {
             UnitAttributes unitType = saveManager.unitTypeBank.GetUnitType(unitInfo.unitId);
-            Unit unit = Instantiate(unitType.defaultPrefab).GetComponent<Unit>();
-            unit.InitUnit(grid, soundManager, unitInfo);
-            allUnits.Add(unit);
+            CreateSingleUnit(unitType, unitInfo);
         }
+    }
+
+    private Unit CreateSingleUnit(UnitAttributes unitType, UnitSaveInfo unitInfo = null)
+    {
+        Unit unit = Instantiate(unitType.defaultPrefab).GetComponent<Unit>();
+        unit.InitUnit(grid, soundManager, unitInfo);
+        allUnits.Add(unit);
+        return unit;
     }
 
     public void ExecutePreSetupMethods()
     {
+        camController = Camera.main.GetComponent<CameraController>();
         CheckGridManagerReferences();
         GetHudReference();
         hud.Init();

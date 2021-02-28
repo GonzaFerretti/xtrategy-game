@@ -138,12 +138,9 @@ public class Unit : GameGridElement
             currentHp = (isCoverInTheWay) ? currentHp - (baseDamage - 1) : currentHp - baseDamage;
             if (currentHp <= 0)
             {
-                Destroy(hpBar.gameObject);
                 soundManager.Play(sounds.GetSoundClip("death"));
                 anim.Play("death");
-                owner.RemoveUnit(this);
-                owner.StartCoroutine(DestroyBody(model));
-                Destroy(this);
+                CleanDestroy();
             }
             else
             {
@@ -155,6 +152,14 @@ public class Unit : GameGridElement
                 UpdateHpBar();
             }
         }
+    }
+
+    public void CleanDestroy()
+    {
+        Destroy(hpBar.gameObject);
+        owner.RemoveUnit(this);
+        owner.StartCoroutine(DestroyBody(model));
+        Destroy(this);
     }
 
     public bool HasBuff(string identifier)
@@ -249,9 +254,11 @@ public class Unit : GameGridElement
             currentCell = grid.GetCellAtCoordinate(desiredCoord);
             grid.RemoveUnusedCell(desiredCoord, attributes is BossAttributes);
         }
-        if (!currentCell) UpdateCell();
-        transform.position = currentCell.transform.position;
-        currentCovers = grid.GetCoversFromCoord(GetCoordinates());
+        else
+        {
+            UpdateCell(grid.GetRandomUnusedCell().GetCoordinates());
+        }
+        
     }
 
     void SetupAfterLoad(UnitSaveInfo savedInfo)
@@ -274,16 +281,18 @@ public class Unit : GameGridElement
         moveState = (savedInfo.hasMoved) ? CurrentActionState.ended : CurrentActionState.notStarted;
     }
 
-    void UpdateCell(Vector3Int coordinates)
+    public void UpdateCell(Vector3Int coordinates)
     {
         currentCell = grid.GetCellAtCoordinate(coordinates);
         grid.UpdateUnitPositionCache(this, coordinates);
+        UpdateCoverData();
+        transform.position = grid.GetWorldPositionFromCoords(coordinates);
     }
 
-    void UpdateCell()
+    public void UpdateCoverData()
     {
-        currentCell = grid.GetRandomUnusedCell();
-        grid.UpdateUnitPositionCache(this, currentCell.GetCoordinates());
+        currentCovers = new List<Cover>();
+        currentCovers = grid.GetCoversFromCoord(GetCoordinates());
     }
 
     void InitModel()
@@ -333,7 +342,7 @@ public class Unit : GameGridElement
 
     public virtual void Select()
     {
-        Camera.main.GetComponent<CameraController>().SetFollowTarget(transform);
+        owner.GetCameraController().SetFollowTarget(transform);
         if (moveState == CurrentActionState.ended) return;
         grid.EnableCellIndicator(GetCoordinates(), GridIndicatorMode.selectedUnit);
         grid.SetAllCoverIndicators(true);
@@ -428,10 +437,11 @@ public class Unit : GameGridElement
                 }
             }
             lastPosition = transform.position;
-            Camera.main.GetComponent<CameraController>().SetFollowTarget(transform);
+            owner.GetCameraController().SetFollowTarget(transform);
             yield return new WaitForSeconds(0.25f);
         }
         possibleMovements = new List<Vector3Int>();
+        
         UpdateCell(currentCoordinates);
 
         if (owner is PlayerController && !(owner as PlayerController).HasItem() && grid.CheckItemAtCoordinate(out ItemPickup outItem, currentCoordinates))
@@ -439,8 +449,6 @@ public class Unit : GameGridElement
             (owner as PlayerController).UpdateCurrentItem(outItem.itemData);
             grid.DestroyItemPickup(outItem);
         }
-
-        currentCovers = grid.GetCoversFromCoord(GetCoordinates());
 
         anim.SetTrigger("endCurrentAnim");
         TryConsumeBuff("movement");

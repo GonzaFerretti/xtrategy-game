@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Unit/UnitAttributes")] [System.Serializable]
-public class UnitAttributes : ScriptableObject
+public class UnitAttributes : ScriptableObject, ITutorialElementSpawnData
 {
     public int maxHp;
     public int movementRange;
@@ -12,4 +12,9 @@ public class UnitAttributes : ScriptableObject
     public AIBehaviour aiBehaviour;
     public AttackAttributes mainAttack;
     public GameObject defaultPrefab;
+
+    public TutorialElementsSpawnData GetTutorialSpawnData()
+    {
+        return new TutorialElementsSpawnData() { unitData = this };
+    }
 }

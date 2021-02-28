@@ -81,6 +81,7 @@ public class BaseController : MonoBehaviour
     public void RemoveUnit(Unit unit, bool updateUnitList = true)
     {
         unitsControlled.Remove(unit);
+
         if (updateUnitList) gridManager.gameManager.UpdateUnitList();
     }
 
@@ -166,5 +167,10 @@ public class BaseController : MonoBehaviour
     public void MoveUnit(Vector3Int target)
     {
         StartCoroutine(currentlySelectedUnit.MoveByDestinationCoords(target));
+    }
+
+    public CameraController GetCameraController()
+    {
+        return gridManager.gameManager.camController;
     }
 }

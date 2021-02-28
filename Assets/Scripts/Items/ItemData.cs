@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(menuName = "Item")] [System.Serializable]
-public class ItemData : ScriptableObject
+public class ItemData : ScriptableObject, ITutorialElementSpawnData
 {
     public string displayName;
 
@@ -18,5 +18,10 @@ public class ItemData : ScriptableObject
     public virtual bool OnUse(Unit user)
     {
         return user.TryAddBuff(buff,buff.charges != -1);
+    }
+
+    public TutorialElementsSpawnData GetTutorialSpawnData()
+    {
+        return new TutorialElementsSpawnData() { itemData = this};
     }
 }

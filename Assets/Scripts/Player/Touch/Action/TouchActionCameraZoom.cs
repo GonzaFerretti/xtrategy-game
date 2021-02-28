@@ -5,8 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Touch Input/Action/Camera Zoom")]
 public class TouchActionCameraZoom : TouchAction
 {
-    public override void Action(Vector2 direction, float magnitude)
+    public override void Action(Vector2 direction, float magnitude, TouchInputController controller)
     {
-        Camera.main.GetComponent<CameraController>().ScrollZoom(magnitude);
+        controller.GetCameraController().ScrollZoom(magnitude);
     }
 }

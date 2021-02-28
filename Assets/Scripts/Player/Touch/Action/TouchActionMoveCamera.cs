@@ -5,8 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Touch Input/Action/Move Camera")]
 public class TouchActionMoveCamera : TouchAction
 {
-    public override void Action(Vector2 direction, float magnitude)
+    public override void Action(Vector2 direction, float magnitude, TouchInputController controller)
     {
-        Camera.main.GetComponent<CameraController>().MoveCamera(-direction);
+        controller.GetCameraController().MoveCameraByVector(-direction);
     }
 }

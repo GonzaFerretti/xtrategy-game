@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    public delegate void CameraUpdateDelegate(CameraController cam);
+    public delegate void CameraTargetFollowEndDelegate();
+
     [SerializeField] float transitionTime;
-    [SerializeField] Camera cam;
+    public Camera mainCam;
     [SerializeField] float moveSpeed;
     [SerializeField] float maxZoom;
     [SerializeField] float selectZoom;
@@ -15,6 +18,10 @@ public class CameraController : MonoBehaviour
     [SerializeField] float maxZoomMovementMultiplier;
     FollowEvent currentFollowEvent = null;
 
+    public CameraUpdateDelegate OnCameraPositionChanged;
+    public CameraTargetFollowEndDelegate OnCameraTargetFollowEnd;
+
+    public bool lockUserMovement = false;
 
     [SerializeField] float minX;
     [SerializeField] float maxX;
@@ -34,12 +41,16 @@ public class CameraController : MonoBehaviour
 
     public void SetFollowTarget(Transform target)
     {
-        if (Physics.Raycast(transform.position,transform.forward, out RaycastHit hit, float.MaxValue, 1 << LayerMask.NameToLayer("GroundBase")))
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, float.MaxValue, 1 << LayerMask.NameToLayer("GroundBase")))
         {
             if (currentFollowEvent != null) InterruptTargetFollow();
             Vector3 hitPoint = hit.transform.position;
             currentFollowEvent = new FollowEvent(target);
             StartCoroutine(FollowTarget(hitPoint));
+        }
+        else
+        {
+            OnCameraTargetFollowEnd.Invoke();
         }
     }
 
@@ -48,12 +59,18 @@ public class CameraController : MonoBehaviour
         currentFollowEvent.shouldStop = true;
     }
 
-    public void MoveCamera(Vector2 movementVector)
+    public void MoveCameraByVector(Vector2 movementVector)
     {
-        if (currentFollowEvent != null) InterruptTargetFollow();
-        float currentZoomPercentage = Mathf.InverseLerp(minZoom,maxZoom, cam.orthographicSize);
-        float zoomMultiplier = Mathf.Lerp(minZoomMovementMultiplier, maxZoomMovementMultiplier, currentZoomPercentage);
-        transform.position = LimitVectorToBoundaries(transform.position + new Vector3(movementVector.x,0, movementVector.y) * Time.deltaTime * moveSpeed * zoomMultiplier);
+        if (!lockUserMovement)
+        {
+            if (currentFollowEvent != null) InterruptTargetFollow();
+            float currentZoomPercentage = Mathf.InverseLerp(minZoom, maxZoom, mainCam.orthographicSize);
+            float zoomMultiplier = Mathf.Lerp(minZoomMovementMultiplier, maxZoomMovementMultiplier, currentZoomPercentage);
+
+            Vector3 desiredPosition = transform.position + new Vector3(movementVector.x, 0, movementVector.y) * Time.deltaTime * moveSpeed * zoomMultiplier;
+
+            MoveCamera(desiredPosition);
+        }
     }
 
     Vector3 LimitVectorToBoundaries(Vector3 baseVector)
@@ -65,7 +82,7 @@ public class CameraController : MonoBehaviour
     {
         float startTime = Time.time;
         Vector3 offset = groundPos - transform.position;
-        Vector3 startPos = new Vector3(groundPos.x, cam.orthographicSize, groundPos.z);
+        Vector3 startPos = new Vector3(groundPos.x, mainCam.orthographicSize, groundPos.z);
         float currentTime = 0;
 
         while (currentTime < transitionTime)
@@ -77,17 +94,34 @@ public class CameraController : MonoBehaviour
             }
             Vector3 targetPosition = new Vector3(currentFollowEvent.target.position.x, selectZoom, currentFollowEvent.target.position.z);
             Vector3 currentPosition = Vector3.Lerp(startPos, targetPosition, currentTime / transitionTime);
-            transform.position = LimitVectorToBoundaries(new Vector3(currentPosition.x - offset.x, transform.position.y, currentPosition.z - offset.z));
-            cam.orthographicSize = currentPosition.y;
+
+            Vector3 desiredPosition = new Vector3(currentPosition.x - offset.x, transform.position.y, currentPosition.z - offset.z);
+
+            MoveCamera(desiredPosition);
+
+            mainCam.orthographicSize = currentPosition.y;
             currentTime = Time.time - startTime;
             yield return null;
         }
         currentFollowEvent = null;
+        if (OnCameraTargetFollowEnd != null)
+            OnCameraTargetFollowEnd.Invoke();
+    }
+
+    void MoveCamera(Vector3 desiredPosition)
+    {
+        Vector3 clampedPosition = LimitVectorToBoundaries(desiredPosition);
+
+        if (transform.position != clampedPosition)
+        {
+            OnCameraPositionChanged.Invoke(this);
+            transform.position = clampedPosition;
+        }
     }
 
     public void ScrollZoom(float inputDelta)
     {
-        if (currentFollowEvent != null) InterruptTargetFollow(); 
-        cam.orthographicSize = Mathf.Clamp(cam.orthographicSize + inputDelta * zoomSensitivity, minZoom, maxZoom);
+        if (currentFollowEvent != null) InterruptTargetFollow();
+        mainCam.orthographicSize = Mathf.Clamp(mainCam.orthographicSize + inputDelta * zoomSensitivity, minZoom, maxZoom);
     }
 }

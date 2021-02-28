@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class DiegeticPlaneUI : MonoBehaviour
 {
-    public virtual void Update()
+    public void UpdateFacingDirection(CameraController cam)
     {
-        transform.forward = Camera.main.transform.forward;
+        transform.forward = cam.mainCam.transform.forward;
+    }
+
+    public void Start()
+    {
+        FindObjectOfType<CameraController>().OnCameraPositionChanged += UpdateFacingDirection;
     }
 }

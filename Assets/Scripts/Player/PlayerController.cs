@@ -51,7 +51,7 @@ public class PlayerController : BaseController
     public bool GetObjectUnderMouse(out GameObject hitObject, int layerMaskOfObject)
     {
         hitObject = null;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = GetCameraController().mainCam.ScreenPointToRay(Input.mousePosition);
         //Debug.DrawLine(ray.origin, ray.origin + ray.direction * 500f, Color.red, 5);
         bool hasHitObject = Physics.Raycast(ray, out RaycastHit hit, 500f, layerMaskOfObject);
         if (hasHitObject)
@@ -161,7 +161,7 @@ public class PlayerController : BaseController
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
             Vector2 movementVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            Camera.main.GetComponent<CameraController>().MoveCamera(movementVector);
+            GetCameraController().MoveCameraByVector(movementVector);
         }
     }
 
@@ -170,7 +170,7 @@ public class PlayerController : BaseController
     {
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
         {
-            Camera.main.GetComponent<CameraController>().ScrollZoom(-Input.GetAxis("Mouse ScrollWheel"));
+            GetCameraController().ScrollZoom(-Input.GetAxis("Mouse ScrollWheel"));
         }
     }
 
