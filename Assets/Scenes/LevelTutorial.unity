@@ -6839,6 +6839,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tutorialSteps:
+  - {fileID: 11400000, guid: 7b7fadae161a39e4aac898704b4257dc, type: 2}
   - {fileID: 11400000, guid: 517e1a8c56ad05b4486f95f9468428cf, type: 2}
   - {fileID: 11400000, guid: 960384641c2fa46499644b5c754e125b, type: 2}
   - {fileID: 11400000, guid: 844090c1f4fced94788277dd5cc41dfa, type: 2}
@@ -6852,6 +6853,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 49b8665160db37c42bf90059dec52199, type: 2}
   - {fileID: 11400000, guid: 477ed36e36a66c641baeaff9e828e516, type: 2}
   - {fileID: 11400000, guid: 89ed4f782e2d97a4088be66ff47c1da0, type: 2}
+  - {fileID: 11400000, guid: 03772458cecf28e4da745449585392a3, type: 2}
+  - {fileID: 11400000, guid: 844090c1f4fced94788277dd5cc41dfa, type: 2}
+  - {fileID: 11400000, guid: 75711cfbd0c58344f9aa5c887ee7e887, type: 2}
+  - {fileID: 11400000, guid: 30df24d0a05d38b46a4eb25bcc4fd293, type: 2}
+  - {fileID: 11400000, guid: 1c15381192bee094ab513bc408915324, type: 2}
+  - {fileID: 11400000, guid: 492fad6e35aeca145a2572c49d0dc184, type: 2}
+  - {fileID: 11400000, guid: cbe64e7aa1f594840bb5aef77582e72a, type: 2}
+  - {fileID: 11400000, guid: 47d32fe26d58a2547bb70bc16be7f830, type: 2}
+  - {fileID: 11400000, guid: 922b8558075e6a444a404580a99145d0, type: 2}
+  - {fileID: 11400000, guid: fc0e03164dcbc3d46b1b91ee4da34dd0, type: 2}
+  - {fileID: 11400000, guid: d126b3f4a1de838438bcd354f77990fb, type: 2}
+  - {fileID: 11400000, guid: 5f55644cc82554e49a80643b95dc9873, type: 2}
+  - {fileID: 11400000, guid: e4a29de8fb185b143814204d9fbbd278, type: 2}
+  - {fileID: 11400000, guid: 78923ca270375cd4988651ba6b839b32, type: 2}
+  - {fileID: 11400000, guid: d11b9a6194bff99459ee352ebf9fb67a, type: 2}
   HudManager: {fileID: 0}
   tutorialUnit: {fileID: 1843321895}
 --- !u!4 &1657499658
@@ -7208,6 +7224,16 @@ PrefabInstance:
       propertyPath: owner
       value: 
       objectReference: {fileID: 1860347971}
+    - target: {fileID: 241448454624865457, guid: 99406b8408547a84e83a8f8036062b51,
+        type: 3}
+      propertyPath: desiredStartingPos.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 241448454624865457, guid: 99406b8408547a84e83a8f8036062b51,
+        type: 3}
+      propertyPath: desiredStartingPos.y
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 241448454624865459, guid: 99406b8408547a84e83a8f8036062b51,
         type: 3}
       propertyPath: m_LocalPosition.x

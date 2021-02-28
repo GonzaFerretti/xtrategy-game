@@ -9,11 +9,11 @@ public class TSWipeScene : TutorialStep
 
     public override void OnEnter()
     {
-        List<SpawnedTutorialElementData> tutorialElements = tutorialManager.spawnedTutorialElements;
+        List<SpawnedTutorialElementData> tutorialElements = tutorialManager.spawnedTutorialElementsData;
         while (tutorialElements.Count > 0)
         {
             tutorialManager.GetGM().DestroyTutorialElement(tutorialElements[0].element, tutorialElements[0].type);
-            tutorialManager.spawnedTutorialElements.RemoveAt(0);
+            tutorialManager.spawnedTutorialElementsData.RemoveAt(0);
         }
 
         tutorialManager.tutorialUnit.UpdateCell(newPositionForAllyUnit);

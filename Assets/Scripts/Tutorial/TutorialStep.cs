@@ -6,7 +6,7 @@ public abstract class TutorialStep : ScriptableObject
 {
     public bool shouldBlockEntireInterface;
 
-    [HideInInspector] protected bool shouldExit;
+    [HideInInspector] protected bool shouldExit = false;
 
     [HideInInspector] public TutorialManager tutorialManager;
 

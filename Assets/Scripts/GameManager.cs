@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     SoundManager soundManager;
     public bool hasUsedPower = false;
     public CameraController camController;
+    public bool isTutorial = false;
 
     public TutorialEventDelegate OnTutorialEvent;
 
@@ -88,8 +89,13 @@ public class GameManager : MonoBehaviour
                 }
             case TutorialElementType.unit:
                 {
-                    Unit newUnit = CreateSingleUnit(tutorialSpawnData.unitData);
+                    UnitOwnership ownership = tutorialSpawnData.isPlayerOwned ? UnitOwnership.player : UnitOwnership.ai;
+                    Unit newUnit = CreateSingleUnit(tutorialSpawnData.unitData, ownership:ownership);
                     newUnit.UpdateCell(coordinates);
+                    allUnits.Add(newUnit);
+
+                    CheckUnitOwnerReferences();
+                    SetUnitMaterials();
 
                     go = newUnit.gameObject;
                     break;
@@ -296,9 +302,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private Unit CreateSingleUnit(UnitAttributes unitType, UnitSaveInfo unitInfo = null)
+    public enum UnitOwnership
+    {
+        player,
+        ai,
+        none,
+    }
+
+    private Unit CreateSingleUnit(UnitAttributes unitType, UnitSaveInfo unitInfo = null, UnitOwnership ownership = UnitOwnership.none)
     {
         Unit unit = Instantiate(unitType.defaultPrefab).GetComponent<Unit>();
+
+        // I know this is lazy, but I know I'll only ever use this for the tutorial.
+        if (ownership != UnitOwnership.none)
+        {
+            string ownerName = (ownership == UnitOwnership.player) ? "PlayerController" : "AIController";
+            unit.owner = GameObject.Find(ownerName).GetComponent<BaseController>();
+        }
+
         unit.InitUnit(grid, soundManager, unitInfo);
         allUnits.Add(unit);
         return unit;
@@ -331,6 +352,7 @@ public class GameManager : MonoBehaviour
         if (tutorialManager)
         {
             tutorialManager.StartTutorial();
+            isTutorial = true;
         }
     }
 
@@ -465,7 +487,7 @@ public class GameManager : MonoBehaviour
 
     public void CheckLoser()
     {
-        if (players.Count > 1) return;
+        if (players.Count > 1 || isTutorial) return;
         if (players[0] is PlayerController)
         {
             int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
@@ -491,6 +513,7 @@ public class GameManager : MonoBehaviour
         {
             playersRemaining.Remove(playersRemaining[0]);
             StartPlayerTurn();
+            if (isTutorial && playersRemaining[0] is AIController) EndPlayerTurn();
         }
         else
         {

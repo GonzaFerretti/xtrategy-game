@@ -256,16 +256,18 @@ public class Unit : GameGridElement
         }
         else
         {
-            UpdateCell(grid.GetRandomUnusedCell().GetCoordinates());
+            currentCell = grid.GetRandomUnusedCell();
         }
         
+        UpdateCell(GetCoordinates());
     }
 
     void SetupAfterLoad(UnitSaveInfo savedInfo)
     {
         if (savedInfo == null) return;
         currentHp = savedInfo.hpLeft;
-        owner = GameObject.Find(savedInfo.owner).GetComponent<BaseController>();
+        if (!owner) 
+            owner = GameObject.Find(savedInfo.owner).GetComponent<BaseController>();
         foreach (var savedBuff in savedInfo.activeBuffs)
         {
             Buff buff = grid.gameManager.saveManager.buffTypeBank.GetBuffType(savedBuff.identifier);
@@ -448,6 +450,7 @@ public class Unit : GameGridElement
         if (owner is PlayerController && !(owner as PlayerController).HasItem() && grid.CheckItemAtCoordinate(out ItemPickup outItem, currentCoordinates))
         {
             (owner as PlayerController).UpdateCurrentItem(outItem.itemData);
+            grid.gameManager.TriggerTutorialEvent("itemObtained");
             grid.DestroyItemPickup(outItem);
         }
 

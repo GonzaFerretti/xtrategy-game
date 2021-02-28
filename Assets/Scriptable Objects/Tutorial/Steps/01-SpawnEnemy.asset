@@ -19,3 +19,4 @@ MonoBehaviour:
   coordinates: {x: 3, y: 5, z: 0}
   type: 2
   newElementName: tutorialEnemy
+  isAllyOwned: 0

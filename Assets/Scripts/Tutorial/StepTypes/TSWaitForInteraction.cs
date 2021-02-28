@@ -6,15 +6,19 @@ using UnityEngine;
 public class TSWaitForInteraction : TutorialStep
 {
     [SerializeField] string interactionIdentifier;
+    [SerializeField] bool cleanInteractionsOnExit;
+    [SerializeField] bool cleanInteractionsOnEnter;
 
     public override void OnEnter()
     {
-        tutorialManager.ClearInteractions();
+        if (cleanInteractionsOnEnter)
+            tutorialManager.ClearInteractions();
     }
 
     public override void OnExit()
     {
-        tutorialManager.ClearInteractions();
+        if (cleanInteractionsOnExit)
+            tutorialManager.ClearInteractions();
     }
 
     public override bool ShouldExit()

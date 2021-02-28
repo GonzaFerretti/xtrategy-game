@@ -13,6 +13,7 @@ public struct TutorialElementsSpawnData
     public UnitAttributes unitData;
     public ItemData itemData;
     public Vector3Int coordinates;
+    public bool isPlayerOwned;
 }
 
 

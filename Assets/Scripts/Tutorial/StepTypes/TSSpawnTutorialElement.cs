@@ -9,6 +9,7 @@ public class TSSpawnTutorialElement : TutorialStep
     [SerializeField] Vector3Int coordinates;
     [SerializeField] TutorialElementType type;
     [SerializeField] string newElementName;
+    [SerializeField] bool isAllyOwned;
 
     public override void OnEnter()
     {
@@ -16,11 +17,13 @@ public class TSSpawnTutorialElement : TutorialStep
 
         spawnData.coordinates = coordinates;
 
+        spawnData.isPlayerOwned = isAllyOwned;
+
         GameObject newElement = tutorialManager.GetGM().SpawnTutorialElement(spawnData, type);
 
         newElement.name = newElementName;
 
-        tutorialManager.spawnedTutorialElements.Add(new SpawnedTutorialElementData { element = newElement, type = type });
+        tutorialManager.spawnedTutorialElementsData.Add(new SpawnedTutorialElementData { element = newElement, type = type });
 
         QuickExit();
     }

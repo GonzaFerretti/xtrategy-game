@@ -42,6 +42,7 @@ public class PlayerController : BaseController
         { 
             currentItem = null;
             itemUI.SetUsability(false);
+            gridManager.gameManager.TriggerTutorialEvent("itemUse");
         }
         else
         {

@@ -6,13 +6,13 @@ public class TutorialManager : MonoBehaviour
 {
     [SerializeField] TutorialStep[] tutorialSteps;
 
-    public List<SpawnedTutorialElementData> spawnedTutorialElements;
+    public List<SpawnedTutorialElementData> spawnedTutorialElementsData;
 
     [HideInInspector] public HUDManager HudManager;
 
     public Unit tutorialUnit;
 
-    List<string> buttonPressStates = new List<string>();
+    List<string> interactionCache = new List<string>();
 
     int currentIndex = 0;
 
@@ -28,12 +28,13 @@ public class TutorialManager : MonoBehaviour
 
     public void StartTutorial()
     {
-        spawnedTutorialElements = new List<SpawnedTutorialElementData>();
+        spawnedTutorialElementsData = new List<SpawnedTutorialElementData>();
         HudManager = FindObjectOfType<HUDManager>();
         GetGM().OnTutorialEvent += OnInteraction;
-        foreach (var step in tutorialSteps)
+        for (int i = 0; i < tutorialSteps.Length; i++)
         {
-            step.tutorialManager = this;
+            tutorialSteps[i] = Instantiate(tutorialSteps[i]);
+            tutorialSteps[i].tutorialManager = this;
         }
         StartCoroutine(CycleThroughSteps());
     }
@@ -67,21 +68,21 @@ public class TutorialManager : MonoBehaviour
 
     public void OnInteraction(string identifier)
     {
-        if (!buttonPressStates.Contains(identifier))
-            buttonPressStates.Add(identifier);
+        if (!interactionCache.Contains(identifier))
+            interactionCache.Add(identifier);
     }
 
     public bool CheckInteraction(string identifier, bool shouldConsume = true)
     {
-        bool wasActivated = buttonPressStates.Contains(identifier);
+        bool wasActivated = interactionCache.Contains(identifier);
         if (wasActivated && shouldConsume)
-            buttonPressStates.Remove(identifier);
+            interactionCache.Remove(identifier);
         return wasActivated;
     }
 
     public void ClearInteractions()
     {
-        buttonPressStates.Clear();
+        interactionCache.Clear();
     }
 }
 
