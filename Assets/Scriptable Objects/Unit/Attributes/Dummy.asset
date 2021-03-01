@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b523493f5b01c4088b388fe729cab4, type: 3}
+  m_Name: Dummy
+  m_EditorClassIdentifier: 
+  maxHp: 999
+  movementRange: 0
+  movementBoost: 0
+  isImmuneToExplosives: 0
+  aiBehaviour: {fileID: 11400000, guid: f7ed7888e75d7a74a9adce2ac213f3bb, type: 2}
+  mainAttack: {fileID: 11400000, guid: 709a7f0242a490c43a984a43e68bc84f, type: 2}
+  defaultPrefab: {fileID: 241448454624865456, guid: 92ab01cf00f3c5c4894d13308932d176,
+    type: 3}

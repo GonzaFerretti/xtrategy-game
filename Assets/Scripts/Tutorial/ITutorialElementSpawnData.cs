@@ -14,6 +14,7 @@ public struct TutorialElementsSpawnData
     public ItemData itemData;
     public Vector3Int coordinates;
     public bool isPlayerOwned;
+    public bool forceFaceCamera;
 }
 
 

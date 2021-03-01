@@ -11,6 +11,7 @@ public class TSSpawnTutorialElement : TutorialStep
     [Header("Optionals")]
     [SerializeField] Vector3Int coordinates;
     [SerializeField] bool isAllyOwned;
+    [SerializeField] bool forceFaceCamera = false;
 
     public override void OnEnter()
     {
@@ -21,6 +22,7 @@ public class TSSpawnTutorialElement : TutorialStep
         spawnData.coordinates = coordinates;
 
         spawnData.isPlayerOwned = isAllyOwned;
+        spawnData.forceFaceCamera = forceFaceCamera;
 
         GameObject newElement = tutorialManager.GetGM().SpawnTutorialElement(spawnData, type);
 

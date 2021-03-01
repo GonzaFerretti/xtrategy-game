@@ -9,6 +9,7 @@ public class TSShowcaseUnit : TutorialStep
     [SerializeField] UnitAttributes unitPrefab;
     [SerializeField] string newElementName;
     [SerializeField] Vector3Int coordinates;
+    [SerializeField] bool forceFaceCamera = true;
 
     [Header("Focus config")]
     [SerializeField] float deadTimeAfterFocus;
@@ -27,6 +28,7 @@ public class TSShowcaseUnit : TutorialStep
 
         spawnData.coordinates = coordinates;
         spawnData.isPlayerOwned = false;
+        spawnData.forceFaceCamera = forceFaceCamera;
 
         GameObject newElement = tutorialManager.GetGM().SpawnTutorialElement(spawnData, TutorialElementType.unit);
 

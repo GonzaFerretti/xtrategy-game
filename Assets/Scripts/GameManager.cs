@@ -104,6 +104,18 @@ public class GameManager : MonoBehaviour
                     SetUnitMaterials();
 
                     go = newUnit.gameObject;
+
+                    if (tutorialSpawnData.forceFaceCamera)
+                    {
+                        Vector3 camPos = camController.transform.position;
+                        Vector3 unitPos = newUnit.transform.position;
+
+                        Vector3 groundPos = new Vector3(camPos.x, unitPos.y, camPos.z);
+                        Vector3 dir = (groundPos - unitPos).normalized;
+
+                        newUnit.transform.forward = dir;
+                    }
+
                     break;
                 }
         }
