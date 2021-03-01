@@ -40,9 +40,4 @@ public class TSFocusCameraOnObject : TutorialStep
         yield return new WaitForSeconds(waitAfterFinishing);
         QuickExit();
     }
-
-    public override bool ShouldExit()
-    {
-        return base.ShouldExit();
-    }
 }

@@ -9,17 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60a0f31b4bc08c64ea45b1e26420f9f7, type: 3}
-  m_Name: 41-ShowPlayerSkipTurnButton
+  m_Script: {fileID: 11500000, guid: 8d272b9a0bbbdbc48a14f6738d8a98b2, type: 3}
+  m_Name: -ShowcaseSoldier
   m_EditorClassIdentifier: 
   shouldBlockEntireInterface: 0
   tutorialManager: {fileID: 0}
   disabledUiElements: []
-  secondsDuration: 3
+  unitPrefab: {fileID: 11400000, guid: 9c8989348f466374a95d624127af1d01, type: 2}
+  newElementName: soldier
+  coordinates: {x: 1, y: 1, z: 0}
+  deadTimeAfterFocus: 0.5
+  promptDuration: 3
   infoPromptConfig:
-    promptText: Tap this button to skip to the enemy turn!
+    promptText: The Soldier has a melee attack and good range.
     percentPosition:
-      X: 0.739
-      Y: 0.749
+      X: 0.35
+      Y: 0.5
     arrowDirection: 7
-  endOnInteraction: 1

@@ -22,4 +22,4 @@ MonoBehaviour:
       X: 0.25
       Y: 0.5
     arrowDirection: 7
-  endOnInteraction: 0
+  endOnInteraction: 1
