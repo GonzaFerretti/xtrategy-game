@@ -1210,7 +1210,7 @@ public class GameGridManager : MonoBehaviour
         foreach (Vector3Int[] existingPath in possiblePaths)
         {
             int steps = existingPath.Length;
-            if (steps < stepsToClosestUnit)
+            if (steps < stepsToClosestUnit && steps != 0)
             {
                 stepsToClosestUnit = steps;
                 closestPath = existingPath;
