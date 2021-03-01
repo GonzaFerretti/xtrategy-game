@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4788364906558945133}
   - component: {fileID: 4788364906558945134}
+  - component: {fileID: 4487336734661002725}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Untagged
@@ -55,3 +56,24 @@ MonoBehaviour:
   currentState: {fileID: 11400000, guid: 47460bbf9f6ec2144b744420d16adffa, type: 2}
   unitsControlled: []
   playerColor: {r: 0, g: 0.30588236, b: 1, a: 1}
+  currentItem: {fileID: 0}
+--- !u!114 &4487336734661002725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4788364906558945135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be0eb88ace5f53542a8c3db52fbe047e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentTouchEvent: {fileID: 0}
+  touchActions:
+  - {fileID: 11400000, guid: f9fa5ad403674c04d8737bdbc7f42ecb, type: 2}
+  - {fileID: 11400000, guid: bf9a54e89af1df140bbbc539027409e9, type: 2}
+  playerController: {fileID: 4788364906558945134}
+  possibleEvents:
+  - {fileID: 11400000, guid: 24faeb6e0b786284a93fafebc7a21bfd, type: 2}
+  - {fileID: 11400000, guid: 45929c3d22bf7e1418168a38c33d220f, type: 2}

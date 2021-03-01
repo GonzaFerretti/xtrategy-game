@@ -36192,31 +36192,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1031160345}
   m_Mesh: {fileID: 5060444177187149915, guid: 77f7f529af728e8489b1e725795fa791, type: 3}
---- !u!1 &1034018743 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4788364906558945135, guid: 419d3b07bd1db014aae5c50d6ea42fe9,
-    type: 3}
-  m_PrefabInstance: {fileID: 1860347970}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1034018744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1034018743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be0eb88ace5f53542a8c3db52fbe047e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentTouchEvent: {fileID: 0}
-  touchActions:
-  - {fileID: 11400000, guid: f9fa5ad403674c04d8737bdbc7f42ecb, type: 2}
-  - {fileID: 11400000, guid: bf9a54e89af1df140bbbc539027409e9, type: 2}
-  possibleEvents:
-  - {fileID: 11400000, guid: 24faeb6e0b786284a93fafebc7a21bfd, type: 2}
-  - {fileID: 11400000, guid: 45929c3d22bf7e1418168a38c33d220f, type: 2}
 --- !u!4 &1035224367 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3382640925051958261, guid: 89042c2a50a5375448dbf067a5c51345,
@@ -59313,7 +59288,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1860347970}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1034018743}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ea956b28d0eeec49bba1ab92fb3cceb, type: 3}
