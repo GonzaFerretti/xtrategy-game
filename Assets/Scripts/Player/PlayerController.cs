@@ -8,6 +8,13 @@ public class PlayerController : BaseController
     public ItemData currentItem;
     ItemButtonTrigger itemUI;
 
+    bool areInteractionsLocked;
+
+    public void UpdateInteractionLock(bool newStatus)
+    {
+        areInteractionsLocked = newStatus;
+    }
+
     public void SetItemButtonReference(ItemButtonTrigger reference)
     {
         itemUI = reference;
@@ -52,6 +59,7 @@ public class PlayerController : BaseController
     public bool GetObjectUnderMouse(out GameObject hitObject, int layerMaskOfObject)
     {
         hitObject = null;
+        if (areInteractionsLocked) return false;
         Ray ray = GetCameraController().mainCam.ScreenPointToRay(Input.mousePosition);
         //Debug.DrawLine(ray.origin, ray.origin + ray.direction * 500f, Color.red, 5);
         bool hasHitObject = Physics.Raycast(ray, out RaycastHit hit, 500f, layerMaskOfObject);
@@ -66,10 +74,6 @@ public class PlayerController : BaseController
     {
         base.StartTurn(shouldRestart);
         gridManager.gameManager.TriggerTutorialEvent("playerTurnStart");
-        if (GetCurrentStateName() == "waitForTurn")
-        {
-            currentState.ForceFirstTransition();
-        }
     }
 
     public bool GetButtonState(string identifier, bool shouldConsume)

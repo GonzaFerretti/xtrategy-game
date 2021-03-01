@@ -7,6 +7,7 @@ public class ControllerTransitionTurnStart : ControllerStateTransition
 {
     public override bool CheckCondition(BaseController controller)
     {
-        return false;
+        if (!controller.GetGridReference() || !controller.GetGridReference().gameManager) return false;
+        return controller.GetGridReference().gameManager.currentPlayer == controller;
     }
 }

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de6c4e415136e654fa1f86986bc371ed, type: 3}
-  m_Name: Boss
+  m_Name: Tank Boss
   m_EditorClassIdentifier: 
   maxHp: 30
   movementRange: 5
@@ -18,7 +18,7 @@ MonoBehaviour:
   isImmuneToExplosives: 1
   aiBehaviour: {fileID: 11400000, guid: 405842435f27a5242be84b1d0bd7fe99, type: 2}
   mainAttack: {fileID: 11400000, guid: 8d37521703a28bf4aaf62f47cc887307, type: 2}
-  defaultPrefab: {fileID: 4460135487434194344, guid: 32daf9776448bfe4eaf0635c89830b76,
+  defaultPrefab: {fileID: 1791840391203606223, guid: 8cc3f9f5869a63947a19eb9aba2e4f97,
     type: 3}
   secondAttack: {fileID: 11400000, guid: dedbe848afc60554cbf596bc77326237, type: 2}
   thirdAttack: {fileID: 11400000, guid: eefdbcadd3dc9564eb6b5687a33a8b11, type: 2}

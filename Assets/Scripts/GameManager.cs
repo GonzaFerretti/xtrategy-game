@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public delegate void TutorialEventDelegate(string identifier);
+    public delegate void InterfaceLockDelegate(bool newState);
 
     public List<BaseController> players;
     public List<BaseController> playersRemaining;
@@ -20,8 +21,8 @@ public class GameManager : MonoBehaviour
     [Header("Tutorial")]
     public bool isTutorial = false;
     public TutorialEnemyFlags enemyFlags;
-
     public TutorialEventDelegate OnTutorialEvent;
+    public InterfaceLockDelegate OnInterfaceLock;
 
     public BaseController currentPlayer;
     [SerializeField] GameGridManager grid;
@@ -531,7 +532,6 @@ public class GameManager : MonoBehaviour
         {
             playersRemaining.Remove(playersRemaining[0]);
             StartPlayerTurn(shouldSkipStart: playersRemaining[0] is AIController && !enemyFlags.canEnemyHaveTurn);
-            EndPlayerTurn();
         }
         else
         {

@@ -10,6 +10,8 @@ public class TouchInputController : MonoBehaviour
     [SerializeField] List<TouchAction> touchActions;
     [SerializeField] PlayerController playerController;
 
+    bool areInteractionsLocked = false;
+
     public List<TouchEvent> possibleEvents = new List<TouchEvent>();
 
     public CameraController GetCameraController()
@@ -39,13 +41,21 @@ public class TouchInputController : MonoBehaviour
         }
     }
 
+    public void UpdateInteractionLock(bool newStatus)
+    {
+        areInteractionsLocked = newStatus;
+        EndCurrentEvent();
+    }
+
     public void Start()
     {
+        //playerController.GetGridReference().gameManager.OnInterfaceLock += UpdateInteractionLock;
         SubscribeAllTouchActions();
     }
 
     public void Update()
     {
+        if (areInteractionsLocked) return;
         if (currentTouchEvent == null)
         {
             if (Input.touchCount > 0 && Input.touchCount <= 2)
