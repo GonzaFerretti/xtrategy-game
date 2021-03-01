@@ -16,6 +16,14 @@ public class DiegeticPlaneUI : MonoBehaviour
 
     public void OnDestroy()
     {
-        FindObjectOfType<CameraController>().OnCameraPositionChanged -= UpdateFacingDirection;
+        var camController = FindObjectOfType<CameraController>();
+        try
+        {
+            if (camController)
+            {
+                camController.OnCameraPositionChanged -= UpdateFacingDirection;
+            }
+        }
+        catch { }
     }
 }

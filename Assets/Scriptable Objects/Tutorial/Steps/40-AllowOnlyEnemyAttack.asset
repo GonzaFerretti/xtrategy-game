@@ -16,6 +16,6 @@ MonoBehaviour:
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   flags:
-    canEnemyAttack: 0
-    canEnemyMove: 1
+    canEnemyAttack: 1
+    canEnemyMove: 0
     canEnemyHaveTurn: 1

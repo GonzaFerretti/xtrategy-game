@@ -119,6 +119,5 @@ public class HUDManager : MonoBehaviour
     public void RemoveCurrentPrompt()
     {
         Destroy(currentPrompt.gameObject);
-        currentPrompt = null;
     }
 }

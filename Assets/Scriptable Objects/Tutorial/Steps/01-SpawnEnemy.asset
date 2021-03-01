@@ -16,7 +16,6 @@ MonoBehaviour:
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   spawnDataSource: {fileID: 11400000, guid: 9c8989348f466374a95d624127af1d01, type: 2}
-  coordinates: {x: 3, y: 5, z: 0}
-  type: 2
   newElementName: tutorialEnemy
+  coordinates: {x: 3, y: 3, z: 0}
   isAllyOwned: 0
