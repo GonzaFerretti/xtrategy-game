@@ -2104,7 +2104,7 @@ GameObject:
   - component: {fileID: 5919201220387518454}
   - component: {fileID: 4372777430206978700}
   m_Layer: 10
-  m_Name: SoldadoRojo
+  m_Name: SoldierModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
