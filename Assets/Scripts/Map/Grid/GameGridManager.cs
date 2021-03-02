@@ -1,10 +1,8 @@
 ﻿using RotaryHeart.Lib.SerializableDictionary;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameGridManager : MonoBehaviour
 {
@@ -32,6 +30,9 @@ public class GameGridManager : MonoBehaviour
     [SerializeField] MagicMine minePrefab;
 
     [SerializeField] ExplosionEffect explosionPrefab;
+
+    [SerializeField] GameObject explosionVFXprefab;
+    [SerializeField] float explosionVFXduration;
 
     [SerializeField] ItemPickup itemPickupPrefab;
 
@@ -481,6 +482,7 @@ public class GameGridManager : MonoBehaviour
         if (mineTriggerTiles.ContainsKey(mineCoords))
         {
             MagicMine mine = mineTriggerTiles[mineCoords];
+            CreateVisualExplosion(mineCoords);
             foreach (var triggerTile in mine.triggerTiles)
             {
                 TriggerExplosion(triggerTile, mineCoords, true, detonatingUnit);
@@ -493,6 +495,20 @@ public class GameGridManager : MonoBehaviour
 
             DestroyMine(mine);
         }
+    }
+
+    public void CreateVisualExplosion(Vector3Int explosionCenter)
+    {
+        GameObject newVFX = Instantiate(explosionVFXprefab);
+        newVFX.transform.position = GetWorldPositionFromCoords(explosionCenter);
+        StartCoroutine(DelayedDestroyExplosion(newVFX));
+    }
+
+    IEnumerator DelayedDestroyExplosion(GameObject explosion)
+    {
+        yield return new WaitForSeconds(explosionVFXduration);
+
+        if (explosion) Destroy(explosion);
     }
 
     public void DestroyMine(Vector3Int coords)

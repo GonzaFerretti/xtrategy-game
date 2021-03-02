@@ -232,7 +232,7 @@ public class Unit : GameGridElement
         grid = gridReference;
         SetupAfterLoad(savedInfo);
         InitModel();
-        SetupInitialPosition(savedInfo != null);
+        if (savedInfo == null) SetupInitialPosition();
         typeText.text = attributes.name;
         UpdateHpBar();
     }
@@ -249,9 +249,9 @@ public class Unit : GameGridElement
         StartCoroutine(healIcon.ShowIcon());
     }
 
-    void SetupInitialPosition(bool isLoading)
+    void SetupInitialPosition()
     {
-        if (desiredStartingPos != new Vector2Int(-1, -1) && !isLoading)
+        if (desiredStartingPos != new Vector2Int(-1, -1))
         {
             var desiredCoord = new Vector3Int(desiredStartingPos.x, desiredStartingPos.y, 0);
             currentCell = grid.GetCellAtCoordinate(desiredCoord);

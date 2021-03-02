@@ -162,36 +162,12 @@ MonoBehaviour:
     type: 3}
   explosionPrefab: {fileID: 6336729613740813091, guid: 27cf3bee1052ea04caea490871df9c85,
     type: 3}
+  explosionVFXprefab: {fileID: 100012, guid: a905d8e5159ffeb46baa8d2a7624717f, type: 3}
+  explosionVFXduration: 1
   itemPickupPrefab: {fileID: 8750455126255859265, guid: cf88fd49a7bc4764897b6beaa6b8ad73,
     type: 3}
   itemPickupHeight: 0.125
   gridCoordinates:
-    reorderableList:
-      canAdd: 1
-      canRemove: 1
-      draggable: 1
-      expandable: 1
-      multipleSelection: 1
-      isExpanded: 0
-      label:
-        m_Text: Keys
-        m_Image: {fileID: 0}
-        m_Tooltip: 
-      headerHeight: 18
-      footerHeight: 13
-      slideEasing: 0.15
-      verticalSpacing: 2
-      showDefaultBackground: 1
-      elementDisplayType: 0
-      elementNameProperty: 
-      elementNameOverride: 
-      elementIcon: {fileID: 0}
-    reqReferences: {fileID: 0}
-    isExpanded: 0
-    _keyValues: []
-    _keys: []
-    _values: []
-  covers:
     reorderableList:
       canAdd: 1
       canRemove: 1
@@ -242,32 +218,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameGridManager: {fileID: 6409168009872196243}
   gridCoordinates:
-    reorderableList:
-      canAdd: 1
-      canRemove: 1
-      draggable: 1
-      expandable: 1
-      multipleSelection: 1
-      isExpanded: 0
-      label:
-        m_Text: Keys
-        m_Image: {fileID: 0}
-        m_Tooltip: 
-      headerHeight: 18
-      footerHeight: 13
-      slideEasing: 0.15
-      verticalSpacing: 2
-      showDefaultBackground: 1
-      elementDisplayType: 0
-      elementNameProperty: 
-      elementNameOverride: 
-      elementIcon: {fileID: 0}
-    reqReferences: {fileID: 0}
-    isExpanded: 0
-    _keyValues: []
-    _keys: []
-    _values: []
-  covers:
     reorderableList:
       canAdd: 1
       canRemove: 1
