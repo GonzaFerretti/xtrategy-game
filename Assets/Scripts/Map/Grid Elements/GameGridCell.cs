@@ -6,14 +6,8 @@ using UnityEngine;
 [System.Serializable]
 public class GameGridCell : GameGridElement
 {
-    [SerializeField] Vector3Int coordinates;
-
     public void SetCoordinates(Vector3Int coords)
     {
         coordinates = coords;
-    }
-    public Vector3Int GetCoordinates()
-    {
-        return coordinates;
     }
 }

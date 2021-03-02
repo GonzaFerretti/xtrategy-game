@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -47,6 +48,7 @@ public class TutorialManager : MonoBehaviour
             Debug.Log(currentStep.name);
             if (currentStep.shouldBlockEntireInterface) SetInterfaceLock(true);
             DisableUIElements(currentStep.disabledUiElements);
+            GetGM().GetPlayer().tilesInteractionWhiteList.Clear();
             currentStep.OnEnter();
             yield return new WaitForStepExit(currentStep);
             currentStep.OnExit();
@@ -54,7 +56,8 @@ public class TutorialManager : MonoBehaviour
 
             currentIndex++;
         }
-        Debug.Log("Finished!");
+
+        SceneManager.LoadScene("Inicial");
     }
 
     bool shouldKeepTheInterfaceLocked(TutorialStep currentStep)

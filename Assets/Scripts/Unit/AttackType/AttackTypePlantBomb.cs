@@ -20,9 +20,9 @@ public class AttackTypePlantBomb : AttackType
     public override bool CheckPossibleTarget(PlayerController controller)
     {
         controller.CheckUnitUISwitch();
-        if (controller.GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("GroundBase")))
+        if (controller.GetObjectUnderMouse(out GameGridCell cell, 1 << LayerMask.NameToLayer("GroundBase"),true))
         {
-            Vector3Int target = objectSelected.transform.parent.GetComponent<GameGridCell>().GetCoordinates();
+            Vector3Int target = cell.GetCoordinates();
 
             if (!controller.currentlySelectedUnit.possibleAttacks.Contains(target)) return false;
 

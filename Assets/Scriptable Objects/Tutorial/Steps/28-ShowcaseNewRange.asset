@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a0f31b4bc08c64ea45b1e26420f9f7, type: 3}
   m_Name: 28-ShowcaseNewRange
   m_EditorClassIdentifier: 
-  shouldBlockEntireInterface: 0
+  shouldBlockEntireInterface: 1
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   secondsDuration: 4

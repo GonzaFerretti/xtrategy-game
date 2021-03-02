@@ -22,9 +22,8 @@ public class ControllerStateSelectItemTarget : ControllerState
 
     bool CheckItemUse()
     {
-        if ((controller as PlayerController).GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("Unit")))
+        if ((controller as PlayerController).GetObjectUnderMouse(out Unit unitSelected, 1 << LayerMask.NameToLayer("Unit")))
         {
-            Unit unitSelected = objectSelected.GetComponent<Unit>();
             if (!controller.OwnsUnit(unitSelected)) return false;
             (controller as PlayerController).UseItem(unitSelected);
             return true;

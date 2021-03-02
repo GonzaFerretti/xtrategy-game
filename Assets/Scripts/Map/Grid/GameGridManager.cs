@@ -84,6 +84,9 @@ public class GameGridManager : MonoBehaviour
         {
             CoverData coverData = cover.coverData;
             covers.Remove(coverData);
+
+            Vector3Int sideCoordinates = coverData.side1;
+
             Destroy(cover.gameObject);
 
             GenerateAllPossibleNeighbours();
@@ -244,7 +247,7 @@ public class GameGridManager : MonoBehaviour
     {
         foreach (var indicatorData in coverIndicators)
         {
-            if (coords == indicatorData.cellCoordinates) indicatorData.indicator.gameObject.SetActive(state);
+            if (coords == indicatorData.cellCoordinates && indicatorData.indicator) indicatorData.indicator.gameObject.SetActive(state);
         }
     }
 
@@ -252,7 +255,8 @@ public class GameGridManager : MonoBehaviour
     {
         foreach (var indicatorData in coverIndicators)
         {
-            indicatorData.indicator.gameObject.SetActive(state);
+            if (indicatorData.indicator)
+                indicatorData.indicator.gameObject.SetActive(state);
         }
     }
 

@@ -27,9 +27,9 @@ public class ControllerStateUnitSelected : ControllerState
     bool CheckUnitMovement()
     {
         (controller as PlayerController).CheckUnitUISwitch();
-        if ((controller as PlayerController).GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("GroundBase")))
+        if ((controller as PlayerController).GetObjectUnderMouse(out GameGridCell cell, 1 << LayerMask.NameToLayer("GroundBase"),true))
         {
-            Vector3Int target = objectSelected.transform.parent.GetComponent<GameGridCell>().GetCoordinates();
+            Vector3Int target = cell.GetCoordinates();
             if (!controller.currentlySelectedUnit) return false;
             if (controller.currentlySelectedUnit.possibleMovements.Contains(target))
             {

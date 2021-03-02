@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d272b9a0bbbdbc48a14f6738d8a98b2, type: 3}
   m_Name: -ShowcaseRifleman
   m_EditorClassIdentifier: 
-  shouldBlockEntireInterface: 0
+  shouldBlockEntireInterface: 1
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   unitPrefab: {fileID: 11400000, guid: e2f632ac56ff34044aec6ef8d9a9937a, type: 2}
   newElementName: rifleman
   coordinates: {x: 2, y: 1, z: 0}
+  forceFaceCamera: 1
   deadTimeAfterFocus: 0.5
   promptDuration: 3
   infoPromptConfig:

@@ -18,3 +18,5 @@ MonoBehaviour:
   interactionIdentifier: unitMove
   cleanInteractionsOnExit: 1
   cleanInteractionsOnEnter: 0
+  allowedTiles:
+  - {x: 3, y: 4, z: 0}

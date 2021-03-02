@@ -24,9 +24,9 @@ public class AttackTypeDisarmBomb : AttackType
     {
         controller.CheckUnitUISwitch();
 
-        if (controller.GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("Mine")))
+        if (controller.GetObjectUnderMouse(out MagicMine mineSelected, 1 << LayerMask.NameToLayer("Mine")))
         {
-            Vector3Int target = objectSelected.GetComponent<MagicMine>().coordinates;
+            Vector3Int target = mineSelected.coordinates;
 
             controller.currentlySelectedUnit.attackState = CurrentActionState.inProgress;
             controller.GetGridReference().EnableCellIndicator(target, GridIndicatorMode.possibleDisarm);

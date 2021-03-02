@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MagicMine : MonoBehaviour
+public class MagicMine : GameGridElement
 {
     public BaseController owner;
-    [HideInInspector] public Vector3Int coordinates;
 
     [HideInInspector] public int stepDamage = 0;
 

@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d272b9a0bbbdbc48a14f6738d8a98b2, type: 3}
   m_Name: -ShowcaseSuicider
   m_EditorClassIdentifier: 
-  shouldBlockEntireInterface: 0
+  shouldBlockEntireInterface: 1
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   unitPrefab: {fileID: 11400000, guid: 5a9bd6188906d4a4ead6b8e486b8e66c, type: 2}
   newElementName: suicider
   coordinates: {x: 5, y: 3, z: 0}
+  forceFaceCamera: 1
   deadTimeAfterFocus: 0.5
   promptDuration: 3
   infoPromptConfig:

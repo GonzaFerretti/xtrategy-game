@@ -32,9 +32,8 @@ public class AttackTypeDirect : AttackType
     public override bool CheckPossibleTarget(PlayerController controller)
     {
         controller.CheckUnitUISwitch();
-        if (controller.GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("Unit")))
+        if (controller.GetObjectUnderMouse(out Unit unitSelected, 1 << LayerMask.NameToLayer("Unit")))
         {
-            Unit unitSelected = objectSelected.GetComponent<Unit>();
             if (unitSelected == controller.currentlySelectedUnit) return false;
             Vector3Int unitPosition = unitSelected.GetCoordinates();
             if (controller.currentlySelectedUnit.possibleAttacks.Contains(unitPosition))

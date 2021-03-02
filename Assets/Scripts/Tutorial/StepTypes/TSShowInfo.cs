@@ -9,7 +9,6 @@ public class TSShowInfo : TutorialStep
     [SerializeField] float secondsDuration;
     [SerializeField] TutorialStepInfoPromptConfig infoPromptConfig;
     float endTimestamp;
-    [SerializeField] bool endOnInteraction;
 
     public override void OnEnter()
     {
@@ -18,28 +17,16 @@ public class TSShowInfo : TutorialStep
         endTimestamp = Time.time + secondsDuration;
 
         tutorialManager.HudManager.ShowPrompt(infoPromptConfig);
-
-        if (endOnInteraction)
-        {
-            tutorialManager.GetGM().OnTutorialEvent += OnInteraction;
-        }
     }
 
     public override bool ShouldExit()
     {
-        return Time.time > endTimestamp || base.ShouldExit();
-    }
-
-    public void OnInteraction(string interaction)
-    {
-        Debug.Log("Exited " + name + " from delegate");
-        QuickExit();
+        return Time.time > endTimestamp;
     }
 
     public override void OnExit()
     {
         tutorialManager.HudManager.RemoveCurrentPrompt();
-        tutorialManager.GetGM().OnTutorialEvent -= OnInteraction;
     }
 }
 

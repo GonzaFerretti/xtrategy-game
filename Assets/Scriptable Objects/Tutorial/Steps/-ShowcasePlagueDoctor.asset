@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d272b9a0bbbdbc48a14f6738d8a98b2, type: 3}
   m_Name: -ShowcasePlagueDoctor
   m_EditorClassIdentifier: 
-  shouldBlockEntireInterface: 0
+  shouldBlockEntireInterface: 1
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   unitPrefab: {fileID: 11400000, guid: f2e20f8018231374193b5bd9cec66b76, type: 2}
   newElementName: plaguedoctor
   coordinates: {x: 4, y: 1, z: 0}
+  forceFaceCamera: 1
   deadTimeAfterFocus: 0.5
   promptDuration: 3
   infoPromptConfig:

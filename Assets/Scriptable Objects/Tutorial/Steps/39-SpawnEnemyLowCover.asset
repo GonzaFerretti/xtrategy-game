@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f34da6a5273ae84da787fe7b3bfe8e7, type: 3}
   m_Name: 39-SpawnEnemyLowCover
   m_EditorClassIdentifier: 
-  shouldBlockEntireInterface: 0
+  shouldBlockEntireInterface: 1
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   spawnDataSource: {fileID: 11400000, guid: e2f632ac56ff34044aec6ef8d9a9937a, type: 2}
   newElementName: lowCoverEnemy
   coordinates: {x: 5, y: 3, z: 0}
   isAllyOwned: 0
+  forceFaceCamera: 0

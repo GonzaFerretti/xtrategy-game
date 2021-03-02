@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e5321a1a7e5d18468ee76befbc57409, type: 3}
   m_Name: 43-WaitForPlayerTurnStart
   m_EditorClassIdentifier: 
-  shouldBlockEntireInterface: 0
+  shouldBlockEntireInterface: 1
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   interactionIdentifier: playerTurnStart
   cleanInteractionsOnExit: 1
   cleanInteractionsOnEnter: 1
+  allowedTiles: []

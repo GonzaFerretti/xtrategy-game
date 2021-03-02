@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9ffeebc922891848bd3554fc024ae6a, type: 3}
   m_Name: 14-Wipe
   m_EditorClassIdentifier: 
-  shouldBlockEntireInterface: 0
+  shouldBlockEntireInterface: 1
   tutorialManager: {fileID: 0}
   disabledUiElements: []
-  newPositionForAllyUnit: {x: 3, y: 1, z: 0}

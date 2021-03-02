@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f34da6a5273ae84da787fe7b3bfe8e7, type: 3}
   m_Name: 01-SpawnEnemy
   m_EditorClassIdentifier: 
-  shouldBlockEntireInterface: 0
+  shouldBlockEntireInterface: 1
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   spawnDataSource: {fileID: 11400000, guid: a791df85460fe0d47bfb84c777f8cb7a, type: 2}

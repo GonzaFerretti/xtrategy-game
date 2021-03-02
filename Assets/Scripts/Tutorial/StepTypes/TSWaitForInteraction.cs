@@ -11,10 +11,14 @@ public class TSWaitForInteraction : TutorialStep
     [SerializeField] bool cleanInteractionsOnExit;
     [SerializeField] bool cleanInteractionsOnEnter;
 
+    [SerializeField] List<Vector3Int> allowedTiles;
+
     public override void OnEnter()
     {
         if (cleanInteractionsOnEnter)
             tutorialManager.ClearInteractions();
+
+        tutorialManager.GetGM().GetPlayer().tilesInteractionWhiteList = allowedTiles;
     }
 
     public override void OnExit()

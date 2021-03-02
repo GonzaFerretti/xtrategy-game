@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f34da6a5273ae84da787fe7b3bfe8e7, type: 3}
   m_Name: 22-SpawnAnotherAlly
   m_EditorClassIdentifier: 
-  shouldBlockEntireInterface: 0
+  shouldBlockEntireInterface: 1
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   spawnDataSource: {fileID: 11400000, guid: 9c8989348f466374a95d624127af1d01, type: 2}
-  coordinates: {x: 1, y: 3, z: 0}
-  type: 2
   newElementName: allyUnit
+  coordinates: {x: 1, y: 3, z: 0}
   isAllyOwned: 1
+  forceFaceCamera: 0

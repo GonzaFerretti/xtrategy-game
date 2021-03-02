@@ -16,3 +16,7 @@ MonoBehaviour:
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   interactionIdentifier: attackTargetSelect
+  cleanInteractionsOnExit: 0
+  cleanInteractionsOnEnter: 0
+  allowedTiles:
+  - {x: 3, y: 3, z: 0}

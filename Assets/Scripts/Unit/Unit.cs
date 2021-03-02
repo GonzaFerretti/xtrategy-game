@@ -107,7 +107,7 @@ public class Unit : GameGridElement
         return attributes.mainAttack.attackType.CalculateFinalDamage(this, shouldUseMultiplier);
     }
 
-    public Vector3Int GetCoordinates()
+    public override Vector3Int GetCoordinates()
     {
         return currentCell.GetCoordinates();
     }
@@ -319,7 +319,9 @@ public class Unit : GameGridElement
         {
             yield return null;
         }
-        Renderer meshRen = model.transform.GetChild(1).GetComponent<Renderer>();
+        if (attributes is BossAttributes) yield break;
+
+        Renderer meshRen = model.transform.GetChild(0).GetComponent<Renderer>();
         Material baseMaterial = meshRen.material;
         Material modifiedMaterial = Instantiate<Material>(baseMaterial);
         modifiedMaterial.SetColor("_Color", teamColor);

@@ -10,6 +10,8 @@ public class PlayerController : BaseController
 
     bool areInteractionsLocked;
 
+    public List<Vector3Int> tilesInteractionWhiteList = new List<Vector3Int>();
+
     public void UpdateInteractionLock(bool newStatus)
     {
         areInteractionsLocked = newStatus;
@@ -56,18 +58,28 @@ public class PlayerController : BaseController
             // IMPLEMENT ANY FAILURE CONDITIONS HERE!
         }
     }
-    public bool GetObjectUnderMouse(out GameObject hitObject, int layerMaskOfObject)
+    public bool GetObjectUnderMouse<T>(out T hitObject, int layerMaskOfObject, bool shouldCheckParent = false) where T : GameGridElement
     {
-        hitObject = null;
+        hitObject = default(T);
+        GameObject hitGameObject = null;
         if (areInteractionsLocked) return false;
+
         Ray ray = GetCameraController().mainCam.ScreenPointToRay(Input.mousePosition);
         //Debug.DrawLine(ray.origin, ray.origin + ray.direction * 500f, Color.red, 5);
         bool hasHitObject = Physics.Raycast(ray, out RaycastHit hit, 500f, layerMaskOfObject);
         if (hasHitObject)
         {
-            hitObject = hit.transform.gameObject;
+            hitGameObject = shouldCheckParent ? hit.transform.parent.gameObject : hit.transform.gameObject;
+            if (hitGameObject.TryGetComponent<T>(out hitObject))
+            {
+                if (tilesInteractionWhiteList.Count == 0) return true;
+
+                Vector3Int coordinates = hitObject.GetCoordinates();
+
+                return tilesInteractionWhiteList.Contains(coordinates);
+            }
         }
-        return hasHitObject;
+        return false;
     }
 
     public override void StartTurn(bool shouldRestart = false)
@@ -172,6 +184,8 @@ public class PlayerController : BaseController
     // REMOVE LATER
     public void CheckMovementAxis()
     {
+        if (areInteractionsLocked) return;
+
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
             Vector2 movementVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -182,6 +196,8 @@ public class PlayerController : BaseController
     // REMOVE LATER
     public void CheckZoom()
     {
+        if (areInteractionsLocked) return;
+
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
         {
             GetCameraController().ScrollZoom(-Input.GetAxis("Mouse ScrollWheel"));
@@ -190,16 +206,15 @@ public class PlayerController : BaseController
 
     public bool CheckUnitDeselect()
     {
-        if (GetObjectUnderMouse(out GameObject objectSelected, 1 << LayerMask.NameToLayer("Unit")))
+        if (GetObjectUnderMouse(out Unit unitSelected, 1 << LayerMask.NameToLayer("Unit")))
         {
-            Unit unitSelected = objectSelected.GetComponent<Unit>();
             if (!OwnsUnit(unitSelected)) return false;
             currentlySelectedUnit.Deselect();
             currentlySelectedUnit = null;
             StartCoroutine(WaitForUnitSwitch(unitSelected));
             return true;
         }
-        else if (!areInteractionsLocked)
+        else if (!areInteractionsLocked && tilesInteractionWhiteList.Count == 0)
         {
             if (!EventSystem.current.currentSelectedGameObject)
             {

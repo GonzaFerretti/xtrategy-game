@@ -554,9 +554,11 @@ public class GameManager : MonoBehaviour
     {
         currentPlayer = playersRemaining[0];
 
-        if (shouldSkipStart) return;
-
-        currentPlayer.StartTurn(!isResumingAfterSave);
+        if (shouldSkipStart)
+        {
+            EndPlayerTurn();
+        }
+        else currentPlayer.StartTurn(!isResumingAfterSave);
     }
 
     public void UpdateUnitList()

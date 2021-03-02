@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c35bd95611e8d76438aef463405d390c, type: 3}
   m_Name: 02-06-10-FocusCameraOnEnemy
   m_EditorClassIdentifier: 
-  shouldBlockEntireInterface: 0
+  shouldBlockEntireInterface: 1
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   objectNameToFocus: tutorialEnemy

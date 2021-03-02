@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f34da6a5273ae84da787fe7b3bfe8e7, type: 3}
   m_Name: 16-SpawnObject
   m_EditorClassIdentifier: 
-  shouldBlockEntireInterface: 0
+  shouldBlockEntireInterface: 1
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   spawnDataSource: {fileID: 11400000, guid: a10fcae5c77c2a94ba735bf8f325293f, type: 2}
-  coordinates: {x: 1, y: 1, z: 0}
-  type: 0
   newElementName: tutorialItem
+  coordinates: {x: 1, y: 1, z: 0}
   isAllyOwned: 0
+  forceFaceCamera: 0
