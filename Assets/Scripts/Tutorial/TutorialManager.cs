@@ -50,15 +50,28 @@ public class TutorialManager : MonoBehaviour
             currentStep.OnEnter();
             yield return new WaitForStepExit(currentStep);
             currentStep.OnExit();
-            if (currentStep.shouldBlockEntireInterface) SetInterfaceLock(false);
+            if (shouldKeepTheInterfaceLocked(currentStep)) SetInterfaceLock(false);
+
             currentIndex++;
         }
         Debug.Log("Finished!");
     }
 
+    bool shouldKeepTheInterfaceLocked(TutorialStep currentStep)
+    {
+        int nextIndex = currentIndex + 1;
+        bool currentIsBlocked = currentStep.shouldBlockEntireInterface;
+        bool shouldKeepItBlocked = (nextIndex < tutorialSteps.Length && !tutorialSteps[nextIndex].shouldBlockEntireInterface && currentIsBlocked)
+            || (nextIndex >= tutorialSteps.Length && currentIsBlocked);
+        return shouldKeepItBlocked;
+    }
+
     void SetInterfaceLock(bool newStatus)
     {
-
+        if (GetGM().OnInterfaceLock != null)
+        {
+            GetGM().OnInterfaceLock.Invoke(newStatus);
+        }
     }
 
     void DisableUIElements(List<string> elementIdentifiers)

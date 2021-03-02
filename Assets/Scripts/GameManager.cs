@@ -425,6 +425,10 @@ public class GameManager : MonoBehaviour
         foreach (BaseController player in players)
         {
             player.SetGridReference(grid);
+            if (player is PlayerController)
+            {
+                (player as PlayerController).BindInterfaceLock(this);
+            }
         }
     }
 

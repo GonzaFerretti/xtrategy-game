@@ -54,7 +54,7 @@ public class AIController : BaseController
         {
             attackToUse = interactingUnit.attributes.mainAttack;
         }
-        interactingUnit.anim.Play("attack");
+        interactingUnit.anim.Play("Attack");
         interactingUnit.PlaySound(interactingUnit.attributes.mainAttack.attackSound);
         interactingUnit.model.transform.forward = (interactedUnit.transform.position - interactingUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);

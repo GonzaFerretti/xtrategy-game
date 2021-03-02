@@ -76,8 +76,16 @@ public class PlayerController : BaseController
         gridManager.gameManager.TriggerTutorialEvent("playerTurnStart");
     }
 
+    public void BindInterfaceLock(GameManager gm)
+    {
+        gm.OnInterfaceLock += UpdateInteractionLock;
+        GetComponent<TouchInputController>().BindInterfaceLock(gm);
+    }
+
     public bool GetButtonState(string identifier, bool shouldConsume)
     {
+        if (areInteractionsLocked) return false;
+
         if (buttonPressStates.ContainsKey(identifier))
         {
             bool initialState = buttonPressStates[identifier];
@@ -191,7 +199,7 @@ public class PlayerController : BaseController
             StartCoroutine(WaitForUnitSwitch(unitSelected));
             return true;
         }
-        else
+        else if (!areInteractionsLocked)
         {
             if (!EventSystem.current.currentSelectedGameObject)
             {
@@ -202,6 +210,8 @@ public class PlayerController : BaseController
             }
             return false;
         }
+
+        return false;
     }
 
     public void OnHoverGrid(GridIndicatorMode possibleCellsMode, GridIndicatorMode selectedCellsMode, List<Vector3Int> listToCheck)

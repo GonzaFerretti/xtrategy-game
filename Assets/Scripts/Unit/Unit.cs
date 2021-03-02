@@ -139,7 +139,7 @@ public class Unit : GameGridElement
             if (currentHp <= 0)
             {
                 soundManager.Play(sounds.GetSoundClip("death"));
-                anim.Play("death");
+                anim.Play("Death");
                 CleanDestroy();
             }
             else
@@ -147,7 +147,7 @@ public class Unit : GameGridElement
                 Unit attackingUnit = grid.GetUnitAtCoordinates(damageSourcePosition);
                 if (attackingUnit != null)
                     model.transform.forward = (attackingUnit.transform.position - transform.position).normalized;
-                anim.Play("hit");
+                anim.Play("Hit");
                 soundManager.Play(sounds.GetSoundClip("hit"));
                 UpdateHpBar();
             }
@@ -426,7 +426,7 @@ public class Unit : GameGridElement
     {
         moveState = CurrentActionState.inProgress;
         currentCovers = new List<Cover>();
-        anim.Play("move");
+        anim.Play("Move");
         Vector3 lastPosition = transform.position;
         Vector3Int currentCoordinates = GetCoordinates();
         for (int i = 0; i < givenPath.Length; i++)

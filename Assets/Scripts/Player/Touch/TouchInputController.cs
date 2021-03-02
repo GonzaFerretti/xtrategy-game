@@ -49,8 +49,12 @@ public class TouchInputController : MonoBehaviour
 
     public void Start()
     {
-        //playerController.GetGridReference().gameManager.OnInterfaceLock += UpdateInteractionLock;
         SubscribeAllTouchActions();
+    }
+
+    public void BindInterfaceLock(GameManager gm)
+    {
+        gm.OnInterfaceLock += UpdateInteractionLock;
     }
 
     public void Update()

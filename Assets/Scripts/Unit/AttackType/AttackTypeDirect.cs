@@ -9,7 +9,7 @@ public class AttackTypeDirect : AttackType
     {
         Unit enemyToAttack = attackingUnit.owner.GetGridReference().GetUnitAtCoordinates(coordinatesToAttack);
 
-        attackingUnit.anim.Play("attack");
+        attackingUnit.anim.Play("Attack");
         attackingUnit.PlaySound(attackingUnit.attributes.mainAttack.attackSound);
         attackingUnit.model.transform.forward = (enemyToAttack.transform.position - attackingUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);

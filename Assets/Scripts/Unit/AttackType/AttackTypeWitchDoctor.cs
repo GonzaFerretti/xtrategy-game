@@ -13,7 +13,6 @@ public class AttackTypeWitchDoctor : AttackType
     {
         Unit unitToInteract = attackingUnit.owner.GetGridReference().GetUnitAtCoordinates(coordinatesToAttack);
 
-        attackingUnit.anim.Play("attack");
         attackingUnit.PlaySound(attackingUnit.attributes.mainAttack.attackSound);
         attackingUnit.model.transform.forward = (unitToInteract.transform.position - attackingUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);
@@ -29,13 +28,18 @@ public class AttackTypeWitchDoctor : AttackType
         if (attackedUnit.owner != attackingUnit.owner)
         {
             attackedUnit.TakeDamage(CalculateFinalDamage(attackingUnit, false,attributesToUse), attackingUnit.GetCoordinates(), true);
+
+            attackingUnit.anim.Play("Attack");
             Buff poisonBuff = attackingUnit.grid.gameManager.saveManager.buffTypeBank.GetBuffType("poison");
             poisonBuff = Instantiate(poisonBuff);
             poisonBuff.charges = turns;
             attackedUnit.TryAddBuff(poisonBuff, false);
         }
         else if (attackedUnit.IsDamaged())
+        {
             attackedUnit.Heal(CalculateFinalDamage(attackingUnit, true, attributesToUse));
+            attackingUnit.anim.Play("Heal");
+        }
     }
 
     public override bool CheckPossibleTarget(PlayerController controller)

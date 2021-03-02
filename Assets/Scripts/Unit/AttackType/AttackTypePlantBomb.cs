@@ -7,7 +7,7 @@ public class AttackTypePlantBomb : AttackType
 {
     public override IEnumerator ExecuteAttack(Vector3Int coordinatesToAttack, Unit attackingUnit)
     {
-        attackingUnit.anim.Play("attack");
+        attackingUnit.anim.Play("Attack");
         attackingUnit.PlaySound(attackingUnit.attributes.mainAttack.attackSound);
 
         yield return new WaitForSeconds(1);
