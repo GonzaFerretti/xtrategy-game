@@ -147,7 +147,7 @@ public class Unit : GameGridElement
                 Unit attackingUnit = grid.GetUnitAtCoordinates(damageSourcePosition);
                 if (attackingUnit != null)
                     model.transform.forward = (attackingUnit.transform.position - transform.position).normalized;
-                anim.Play("Hit");
+                anim.Play(isCoverInTheWay && !(attributes is BossAttributes) ? "Cover" : "Hit");
                 soundManager.Play(sounds.GetSoundClip("hit"));
                 UpdateHpBar();
             }

@@ -16,7 +16,7 @@ MonoBehaviour:
   tutorialManager: {fileID: 0}
   disabledUiElements: []
   interactionIdentifier: itemUse
-  cleanInteractionsOnExit: 0
-  cleanInteractionsOnEnter: 1
+  cleanInteractionsOnExit: 1
+  cleanInteractionsOnEnter: 0
   allowedTiles:
   - {x: 1, y: 3, z: 0}
