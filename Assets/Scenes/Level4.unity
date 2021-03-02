@@ -258,6 +258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: HighCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 7, y: 8, z: 0}
     side2: {x: 7, y: 9, z: 0}
@@ -3143,6 +3144,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: LowCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 6, y: 12, z: 0}
     side2: {x: 6, y: 11, z: 0}
@@ -5098,6 +5100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: WoodFenceLCover
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 6, y: 15, z: 0}
     side2: {x: 6, y: 14, z: 0}
@@ -5489,6 +5492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: WoodFenceLCover
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 13, y: 14, z: 0}
     side2: {x: 13, y: 15, z: 0}
@@ -8549,6 +8553,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: WoodFenceLCover
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 7, y: 13, z: 0}
     side2: {x: 7, y: 12, z: 0}
@@ -10103,6 +10108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: WoodFenceLCover
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 3, y: 8, z: 0}
     side2: {x: 3, y: 7, z: 0}
@@ -12194,6 +12200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: WoodFenceLCover
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 13, y: 10, z: 0}
     side2: {x: 12, y: 10, z: 0}
@@ -12893,6 +12900,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: HighCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 5, y: 12, z: 0}
     side2: {x: 5, y: 11, z: 0}
@@ -13666,6 +13674,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: HighCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 13, y: 10, z: 0}
     side2: {x: 13, y: 9, z: 0}
@@ -14116,6 +14125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: LowCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 8, y: 15, z: 0}
     side2: {x: 7, y: 15, z: 0}
@@ -15776,6 +15786,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: WoodFenceLCover
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 7, y: 14, z: 0}
     side2: {x: 7, y: 15, z: 0}
@@ -18457,6 +18468,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: WoodFenceLCover
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 9, y: 13, z: 0}
     side2: {x: 9, y: 12, z: 0}
@@ -19502,22 +19514,22 @@ PrefabInstance:
     - target: {fileID: 6409168009872196253, guid: 89042c2a50a5375448dbf067a5c51345,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6409168009872196253, guid: 89042c2a50a5375448dbf067a5c51345,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.38982758
+      value: 0.3518416
       objectReference: {fileID: 0}
     - target: {fileID: 6409168009872196253, guid: 89042c2a50a5375448dbf067a5c51345,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6409168009872196253, guid: 89042c2a50a5375448dbf067a5c51345,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.92088795
+      value: 0.9360596
       objectReference: {fileID: 0}
     - target: {fileID: 6409168009872196253, guid: 89042c2a50a5375448dbf067a5c51345,
         type: 3}
@@ -19532,7 +19544,7 @@ PrefabInstance:
     - target: {fileID: 6409168009872196253, guid: 89042c2a50a5375448dbf067a5c51345,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 45.888
+      value: 41.2
       objectReference: {fileID: 0}
     - target: {fileID: 6409168009872196253, guid: 89042c2a50a5375448dbf067a5c51345,
         type: 3}
@@ -20989,6 +21001,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: WoodFenceLCover
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 8, y: 12, z: 0}
     side2: {x: 8, y: 13, z: 0}
@@ -22228,6 +22241,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: LowCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 3, y: 14, z: 0}
     side2: {x: 3, y: 13, z: 0}
@@ -24432,6 +24446,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: LowCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 10, y: 15, z: 0}
     side2: {x: 9, y: 15, z: 0}
@@ -26300,7 +26315,7 @@ PrefabInstance:
     - target: {fileID: 2146210180028333313, guid: 5462064c2d16ba4409f064187c19cde8,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.47255075
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2146210180028333313, guid: 5462064c2d16ba4409f064187c19cde8,
         type: 3}
@@ -26315,7 +26330,7 @@ PrefabInstance:
     - target: {fileID: 2146210180028333313, guid: 5462064c2d16ba4409f064187c19cde8,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8813035
+      value: 0.8660254
       objectReference: {fileID: 0}
     - target: {fileID: 2146210180028333313, guid: 5462064c2d16ba4409f064187c19cde8,
         type: 3}
@@ -26325,7 +26340,7 @@ PrefabInstance:
     - target: {fileID: 2146210180028333313, guid: 5462064c2d16ba4409f064187c19cde8,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 56.4
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 2146210180028333313, guid: 5462064c2d16ba4409f064187c19cde8,
         type: 3}
@@ -26780,6 +26795,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: LowCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 10, y: 5, z: 0}
     side2: {x: 11, y: 5, z: 0}
@@ -27748,6 +27764,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: HighCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 15, y: 11, z: 0}
     side2: {x: 15, y: 12, z: 0}
@@ -27797,6 +27814,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: WoodFenceLCover
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 10, y: 11, z: 0}
     side2: {x: 10, y: 12, z: 0}
@@ -28834,6 +28852,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: WoodFenceLCover
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 10, y: 15, z: 0}
     side2: {x: 10, y: 14, z: 0}
@@ -31353,6 +31372,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: WoodFenceLCover
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 5, y: 15, z: 0}
     side2: {x: 5, y: 14, z: 0}
@@ -32733,6 +32753,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: HighCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 14, y: 10, z: 0}
     side2: {x: 14, y: 9, z: 0}
@@ -33107,6 +33128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: WoodFenceLCover
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 12, y: 15, z: 0}
     side2: {x: 12, y: 14, z: 0}
@@ -35060,6 +35082,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: LowCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 2, y: 13, z: 0}
     side2: {x: 2, y: 12, z: 0}
@@ -39329,6 +39352,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: LowCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 10, y: 5, z: 0}
     side2: {x: 10, y: 6, z: 0}
@@ -39936,6 +39960,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: HighCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 2, y: 11, z: 0}
     side2: {x: 2, y: 10, z: 0}
@@ -40308,6 +40333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: LowCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 14, y: 12, z: 0}
     side2: {x: 14, y: 11, z: 0}
@@ -41454,6 +41480,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: HighCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 13, y: 6, z: 0}
     side2: {x: 14, y: 6, z: 0}
@@ -42076,6 +42103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: LowCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 2, y: 13, z: 0}
     side2: {x: 3, y: 13, z: 0}
@@ -43286,6 +43314,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: LowCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 13, y: 12, z: 0}
     side2: {x: 14, y: 12, z: 0}
@@ -43859,6 +43888,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: LowCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 3, y: 11, z: 0}
     side2: {x: 3, y: 10, z: 0}
@@ -43908,6 +43938,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: WoodFenceLCover
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 2, y: 8, z: 0}
     side2: {x: 2, y: 7, z: 0}
@@ -44650,6 +44681,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: LowCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 13, y: 5, z: 0}
     side2: {x: 14, y: 5, z: 0}
@@ -44699,6 +44731,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: LowCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 4, y: 11, z: 0}
     side2: {x: 3, y: 11, z: 0}
@@ -45455,6 +45488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: HighCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 11, y: 12, z: 0}
     side2: {x: 11, y: 11, z: 0}
@@ -46091,6 +46125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: WoodFenceLCover
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 11, y: 15, z: 0}
     side2: {x: 11, y: 14, z: 0}
@@ -47017,6 +47052,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: LowCoverBloc
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 11, y: 4, z: 0}
     side2: {x: 10, y: 4, z: 0}
@@ -50594,6 +50630,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1608723325}
   basePrefabName: WoodFenceLCover
+  coordinates: {x: 0, y: 0, z: 0}
   coverData:
     side1: {x: 8, y: 9, z: 0}
     side2: {x: 8, y: 8, z: 0}
