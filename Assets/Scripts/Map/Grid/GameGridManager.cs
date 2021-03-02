@@ -346,7 +346,7 @@ public class GameGridManager : MonoBehaviour
         for (int i = 0; i < savedData.coversData.Count; i++)
         {
             string prefabName = savedData.coversPrefabNames[i];
-            
+
             CoverData coverInfo = savedData.coversData[i];
             CreateSingleCover(coverInfo, prefabName);
         }
@@ -694,12 +694,16 @@ public class GameGridManager : MonoBehaviour
         Vector3Int side1Front = centerFront + orthogonalDirection;
         Vector3Int side2Front = centerFront - orthogonalDirection;
 
-        bool isCenterFrontViable = IsNeighbourViableForBossBody(centerFront, centerFront + direction);
-        bool isSide1FrontViable = IsNeighbourViableForBossBody(side1Front, side1Front + direction);
-        bool isSide2FrontViable = IsNeighbourViableForBossBody(side2Front, side2Front + direction);
+        Vector3Int finalCenterFront = centerFront + direction;
+        Vector3Int finalSide1Front = side1Front + direction;
+        Vector3Int finalSide2Front = side2Front + direction;
 
-        bool noCoverSide1 = IsNeighbourViableForBossBody(centerFront, side1Front);
-        bool noCoverSide2 = IsNeighbourViableForBossBody(centerFront, side2Front);
+        bool isCenterFrontViable = IsNeighbourViableForBossBody(centerFront, finalCenterFront);
+        bool isSide1FrontViable = IsNeighbourViableForBossBody(side1Front, finalSide1Front);
+        bool isSide2FrontViable = IsNeighbourViableForBossBody(side2Front, finalSide2Front);
+
+        bool noCoverSide1 = IsNeighbourViableForBossBody(finalCenterFront, finalSide1Front);
+        bool noCoverSide2 = IsNeighbourViableForBossBody(finalCenterFront, finalSide2Front);
 
         return isCenterFrontViable && isSide1FrontViable && isSide2FrontViable && noCoverSide1 && noCoverSide2;
     }
