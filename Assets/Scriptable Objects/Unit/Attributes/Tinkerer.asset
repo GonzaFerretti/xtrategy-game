@@ -12,17 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b523493f5b01c4088b388fe729cab4, type: 3}
   m_Name: Tinkerer
   m_EditorClassIdentifier: 
-  maxHp: 5000
+  maxHp: 10
   movementRange: 3
   movementBoost: 4
-  minAttackRange: 0
-  maxAttackRange: 6
-  damage: 3
-  damageBoost: 2
   isImmuneToExplosives: 0
   aiBehaviour: {fileID: 11400000, guid: 955396790cf66be40ab8c5aff1fb1df7, type: 2}
-  attackType: {fileID: 11400000, guid: dcaa85f6ab102af43b4f9f25406e808d, type: 2}
   mainAttack: {fileID: 11400000, guid: cc1f3f87e9cf0e94288e975bcce5071a, type: 2}
-  attackSound: {fileID: 11400000, guid: b9cbad414f78f0d41acfb51023668577, type: 2}
   defaultPrefab: {fileID: 4460135487434194344, guid: 9ea62f407651add4dbf2a33b7826c029,
     type: 3}

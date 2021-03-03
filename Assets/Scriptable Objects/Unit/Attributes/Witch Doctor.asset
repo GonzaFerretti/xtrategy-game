@@ -12,17 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b523493f5b01c4088b388fe729cab4, type: 3}
   m_Name: Witch Doctor
   m_EditorClassIdentifier: 
-  maxHp: 5
-  movementRange: 4
+  maxHp: 10
+  movementRange: 3
   movementBoost: 3
-  minAttackRange: 0
-  maxAttackRange: 4
-  damage: 1
-  damageBoost: 3
   isImmuneToExplosives: 0
   aiBehaviour: {fileID: 11400000, guid: 58b4c457f53d78e48992a5dbe43d823f, type: 2}
-  attackType: {fileID: 11400000, guid: 697286888b4774b448e522fc836ede83, type: 2}
   mainAttack: {fileID: 11400000, guid: 46692eee71be7bc489befed9f4aa3ac3, type: 2}
-  attackSound: {fileID: 11400000, guid: 8a684f153a37e6145921cc017e894c13, type: 2}
   defaultPrefab: {fileID: 2522641243445700097, guid: 6bc154b374bb0614f8215bf122ac59ba,
     type: 3}

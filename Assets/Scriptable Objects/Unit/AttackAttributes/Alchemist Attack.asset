@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ea448915fce514a99322697c8bd776, type: 3}
   m_Name: Alchemist Attack
   m_EditorClassIdentifier: Assembly-CSharp::AttackAttributes
-  minAttackRange: 0
-  maxAttackRange: 0
-  damage: 0
-  damageBoost: 0
+  minAttackRange: 1
+  maxAttackRange: 5
+  damage: 6
+  damageBoost: 2
   attackType: {fileID: 11400000, guid: 06703122216fd824689f7347a176ebae, type: 2}
   attackSound: {fileID: 11400000, guid: 5a074d92974e3fe459d96f55d559187d, type: 2}

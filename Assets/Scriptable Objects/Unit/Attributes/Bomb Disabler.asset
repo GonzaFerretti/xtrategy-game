@@ -12,17 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b523493f5b01c4088b388fe729cab4, type: 3}
   m_Name: Bomb Disabler
   m_EditorClassIdentifier: 
-  maxHp: 6
+  maxHp: 10
   movementRange: 4
   movementBoost: 3
-  minAttackRange: 0
-  maxAttackRange: 4
-  damage: 5
-  damageBoost: 5
   isImmuneToExplosives: 1
   aiBehaviour: {fileID: 11400000, guid: 7983b197629db0d40b253525ae042a86, type: 2}
-  attackType: {fileID: 11400000, guid: 97d2f3a42258b674db2098b4812d712c, type: 2}
   mainAttack: {fileID: 11400000, guid: 19e1d7d0fafddad4cb2337db4e54746d, type: 2}
-  attackSound: {fileID: 11400000, guid: b9cbad414f78f0d41acfb51023668577, type: 2}
   defaultPrefab: {fileID: 4460135487434194344, guid: 32daf9776448bfe4eaf0635c89830b76,
     type: 3}

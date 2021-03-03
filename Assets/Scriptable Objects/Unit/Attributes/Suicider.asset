@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b523493f5b01c4088b388fe729cab4, type: 3}
   m_Name: Suicider
   m_EditorClassIdentifier: 
-  maxHp: 4
+  maxHp: 6
   movementRange: 3
   movementBoost: 3
   isImmuneToExplosives: 1
