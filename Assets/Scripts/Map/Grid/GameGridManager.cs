@@ -473,7 +473,7 @@ public class GameGridManager : MonoBehaviour
 
         damage = currentlySteppedOnMine.stepDamage;
 
-        // DO VISUAL EXPLOSION VFX HERE!
+        CreateVisualExplosion(unitPosition);
 
         DestroyMine(currentlySteppedOnMine);
         return true;
