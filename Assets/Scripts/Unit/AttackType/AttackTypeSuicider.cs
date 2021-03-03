@@ -15,7 +15,7 @@ public class AttackTypeSuicider : AttackTypeDirect
 
         // Little reuse for the tank boss because I'm lazy
         bool shouldDoSuicideBomb = attributesToUse == attackingUnit.attributes.mainAttack;
-        grid.CreateVisualExplosion(center);
+        grid.CreateCosmeticExplosion(center);
 
         for (int x = center.x - explosionRange; x <= center.x + explosionRange; x++)
         {

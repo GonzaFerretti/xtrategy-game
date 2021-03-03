@@ -7,13 +7,14 @@ public class AttackTypeWitchDoctor : AttackType
 {
     [SerializeField] float healMultiplier;
 
+    [SerializeField] SoundClip healSound;
+
     [SerializeField] int turns;
 
     public override IEnumerator ExecuteAttack(Vector3Int coordinatesToAttack, Unit attackingUnit)
     {
         Unit unitToInteract = attackingUnit.owner.GetGridReference().GetUnitAtCoordinates(coordinatesToAttack);
 
-        attackingUnit.PlaySound(attackingUnit.attributes.mainAttack.attackSound);
         attackingUnit.model.transform.forward = (unitToInteract.transform.position - attackingUnit.transform.position).normalized;
         yield return new WaitForSeconds(1);
         attackingUnit.anim.SetTrigger("endCurrentAnim");
@@ -30,6 +31,8 @@ public class AttackTypeWitchDoctor : AttackType
             attackedUnit.TakeDamage(CalculateFinalDamage(attackingUnit, false, out DamageType type, attributesToUse), attackingUnit.GetCoordinates(), true, type);
 
             attackingUnit.anim.Play("Attack");
+
+            attackingUnit.PlaySound(attackingUnit.attributes.mainAttack.attackSound);
             Buff poisonBuff = attackingUnit.grid.gameManager.saveManager.buffTypeBank.GetBuffType("poison");
             poisonBuff = Instantiate(poisonBuff);
             poisonBuff.charges = turns;
@@ -39,6 +42,7 @@ public class AttackTypeWitchDoctor : AttackType
         {
             attackedUnit.Heal(CalculateFinalDamage(attackingUnit, true, out DamageType type, attributesToUse));
             attackingUnit.anim.Play("Heal");
+            attackingUnit.PlaySound(healSound);
         }
     }
 

@@ -193,6 +193,7 @@ MonoBehaviour:
     _keyValues: []
     _keys: []
     _values: []
+  explosionSound: {fileID: 11400000, guid: 4acd884a7b11f57418e446f0c96e7f71, type: 2}
   savedData: {fileID: 0}
   elementsDatabase: {fileID: 11400000, guid: 6ebd11e2af9456940b92dec658c18bfa, type: 2}
   gameManager: {fileID: 0}

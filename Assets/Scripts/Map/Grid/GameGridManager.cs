@@ -41,6 +41,9 @@ public class GameGridManager : MonoBehaviour
     public GridCoordinates gridCoordinates;
     public CoverInformation covers;
 
+    SoundManager sm;
+    [SerializeField] SoundClip explosionSound;
+
     [SerializeField] private Dictionary<int, AsyncQuery> currentQueries = new Dictionary<int, AsyncQuery>();
     [SerializeField] private Dictionary<Vector3Int, GridIndicator> gridIndicators = new Dictionary<Vector3Int, GridIndicator>();
     [SerializeField] private CoverIndicatorInformation coverIndicators = new CoverIndicatorInformation();
@@ -68,6 +71,7 @@ public class GameGridManager : MonoBehaviour
         GenerateAllPossibleMineNeighbours();
         if (savedData.hasBoss)
             GenerateAllPossibleBossNeighbours();
+        sm = FindObjectOfType<SoundManager>();
     }
 
     public void SetupNewItems()
@@ -473,7 +477,7 @@ public class GameGridManager : MonoBehaviour
 
         damage = currentlySteppedOnMine.stepDamage;
 
-        CreateVisualExplosion(unitPosition);
+        CreateCosmeticExplosion(unitPosition);
 
         DestroyMine(currentlySteppedOnMine);
         return true;
@@ -484,7 +488,7 @@ public class GameGridManager : MonoBehaviour
         if (mineTriggerTiles.ContainsKey(mineCoords))
         {
             MagicMine mine = mineTriggerTiles[mineCoords];
-            CreateVisualExplosion(mineCoords);
+            CreateCosmeticExplosion(mineCoords);
             foreach (var triggerTile in mine.triggerTiles)
             {
                 TriggerExplosion(triggerTile, mineCoords, true, detonatingUnit);
@@ -499,10 +503,12 @@ public class GameGridManager : MonoBehaviour
         }
     }
 
-    public void CreateVisualExplosion(Vector3Int explosionCenter)
+    public void CreateCosmeticExplosion(Vector3Int explosionCenter)
     {
         GameObject newVFX = Instantiate(explosionVFXprefab);
+        
         newVFX.transform.position = GetWorldPositionFromCoords(explosionCenter);
+        sm.Play(explosionSound);
         StartCoroutine(DelayedDestroyExplosion(newVFX));
     }
 
