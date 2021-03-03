@@ -473,6 +473,8 @@ public class GameGridManager : MonoBehaviour
 
         damage = currentlySteppedOnMine.stepDamage;
 
+        // DO VISUAL EXPLOSION VFX HERE!
+
         DestroyMine(currentlySteppedOnMine);
         return true;
     }
@@ -542,11 +544,14 @@ public class GameGridManager : MonoBehaviour
         explosion.transform.parent = cellIndicatorsRootTransform;
         explosion.transform.localRotation = Quaternion.identity;
         Unit unit = GetUnitAtCoordinates(explosionTile);
+
+        DamageType damageType = shouldDoBoostedDamage ? DamageType.boosted : DamageType.normal;
+
         if (unit)
         {
             if (!unit.attributes.isImmuneToExplosives && unit.owner != detonatorUnit.owner)
             {
-                unit.TakeDamage(detonatorUnit.CalculateFinalDamage(shouldDoBoostedDamage), centerTile, true);
+                unit.TakeDamage(detonatorUnit.CalculateFinalDamage(shouldDoBoostedDamage), centerTile, true, damageType);
             }
         }
     }

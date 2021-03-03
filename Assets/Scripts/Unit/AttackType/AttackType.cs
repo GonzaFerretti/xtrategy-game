@@ -16,13 +16,18 @@ public abstract class AttackType : ScriptableObject
 
     public abstract void CheckAdditionalCellIndicatorsConditions(IEnumerable<Vector3Int> indicatorsToCheck, GameGridManager grid, PlayerController controller);
 
-    public virtual int CalculateFinalDamage(Unit attackingUnit, bool shouldUseMultiplier, AttackAttributes attributesToUse = null)
+    public virtual int CalculateFinalDamage(Unit attackingUnit, bool shouldUseMultiplier, out DamageType damageType, AttackAttributes attributesToUse = null)
     {
         if (!attributesToUse)
         {
             attributesToUse = attackingUnit.attributes.mainAttack;
         }
         float multiplier = shouldUseMultiplier ? GetAttackMultiplier() : 1;
-        return Mathf.RoundToInt((attributesToUse.damage + (attackingUnit.HasBuff("attackBoost") ? attributesToUse.damageBoost : 0))*multiplier);
+
+        bool isBoosted = attackingUnit.HasBuff("attackBoost");
+
+        damageType = isBoosted ? DamageType.boosted : DamageType.normal;
+
+        return Mathf.RoundToInt((attributesToUse.damage + (isBoosted ? attributesToUse.damageBoost : 0))*multiplier);
     }
 }

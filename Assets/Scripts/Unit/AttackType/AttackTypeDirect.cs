@@ -26,7 +26,7 @@ public class AttackTypeDirect : AttackType
         {
             attributesToUse = attackingUnit.attributes.mainAttack;
         }
-        attackedUnit.TakeDamage(CalculateFinalDamage(attackingUnit, false, attributesToUse), attackingUnit.GetCoordinates(), true);
+        attackedUnit.TakeDamage(CalculateFinalDamage(attackingUnit, false, out DamageType damagetype, attributesToUse), attackingUnit.GetCoordinates(), true, damagetype);
     }
 
     public override bool CheckPossibleTarget(PlayerController controller)

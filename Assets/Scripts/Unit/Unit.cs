@@ -33,6 +33,8 @@ public class Unit : GameGridElement
     [SerializeField] SoundRepository sounds;
 
     [SerializeField] private UiHpBar hpBar;
+    [SerializeField] DamageIndicator damageIndicator;
+
     [SerializeField] FloatingIcon healIcon;
     [SerializeField] FloatingIcon poisonIcon;
     [SerializeField] TextMeshProUGUI typeText;
@@ -79,7 +81,7 @@ public class Unit : GameGridElement
                 // Here I would execute some kind of stragegy method of the Buff to process each charge use.
                 // However, there's only one buff that currently uses this and we won't program any other buff.
                 // eg. buff.OnTurnTick()
-                TakeDamage(1, Vector3Int.right, false);
+                TakeDamage(1, Vector3Int.right, false, DamageType.reduced);
                 shouldConsumeBuff = buff.charges == 0;
                 StartCoroutine(poisonIcon.ShowIcon());
                 activeBuffsUI[buff.identifier].UpdateAmount(buff.charges);
@@ -104,7 +106,7 @@ public class Unit : GameGridElement
 
     public int CalculateFinalDamage(bool shouldUseMultiplier = false)
     {
-        return attributes.mainAttack.attackType.CalculateFinalDamage(this, shouldUseMultiplier);
+        return attributes.mainAttack.attackType.CalculateFinalDamage(this, shouldUseMultiplier, out DamageType type);
     }
 
     public override Vector3Int GetCoordinates()
@@ -112,7 +114,7 @@ public class Unit : GameGridElement
         return currentCell.GetCoordinates();
     }
 
-    public void TakeDamage(int baseDamage, Vector3Int damageSourcePosition, bool isDamageDirectional)
+    public void TakeDamage(int baseDamage, Vector3Int damageSourcePosition, bool isDamageDirectional, DamageType type)
     {
         bool isCoverInTheWay = false;
         if (isDamageDirectional)
@@ -135,7 +137,11 @@ public class Unit : GameGridElement
         else
         {
             // We should probably swap this for a multiplier!!
-            currentHp = (isCoverInTheWay) ? currentHp - (baseDamage - 1) : currentHp - baseDamage;
+
+            int finalDamage = (isCoverInTheWay) ? (baseDamage - 1) : baseDamage;
+
+            currentHp -= finalDamage;
+
             if (currentHp <= 0)
             {
                 soundManager.Play(sounds.GetSoundClip("death"));
@@ -150,6 +156,10 @@ public class Unit : GameGridElement
                 anim.Play(isCoverInTheWay && !(attributes is BossAttributes) ? "Cover" : "Hit");
                 soundManager.Play(sounds.GetSoundClip("hit"));
                 UpdateHpBar();
+
+                DamageType finalDamageType = isCoverInTheWay ? (DamageType)(((int)type) - 1) : type;
+
+                damageIndicator.ShowDamage(finalDamage, finalDamageType);
             }
         }
     }
@@ -449,7 +459,7 @@ public class Unit : GameGridElement
             {
                 if (grid.CheckMineProximity(out int damage, currentCoordinates, owner))
                 {
-                    TakeDamage(damage, currentCoordinates, true);
+                    TakeDamage(damage, currentCoordinates, true, DamageType.normal);
                     break;
                 }
             }

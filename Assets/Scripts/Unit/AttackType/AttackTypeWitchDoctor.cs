@@ -27,7 +27,7 @@ public class AttackTypeWitchDoctor : AttackType
     {
         if (attackedUnit.owner != attackingUnit.owner)
         {
-            attackedUnit.TakeDamage(CalculateFinalDamage(attackingUnit, false,attributesToUse), attackingUnit.GetCoordinates(), true);
+            attackedUnit.TakeDamage(CalculateFinalDamage(attackingUnit, false, out DamageType type, attributesToUse), attackingUnit.GetCoordinates(), true, type);
 
             attackingUnit.anim.Play("Attack");
             Buff poisonBuff = attackingUnit.grid.gameManager.saveManager.buffTypeBank.GetBuffType("poison");
@@ -37,7 +37,7 @@ public class AttackTypeWitchDoctor : AttackType
         }
         else if (attackedUnit.IsDamaged())
         {
-            attackedUnit.Heal(CalculateFinalDamage(attackingUnit, true, attributesToUse));
+            attackedUnit.Heal(CalculateFinalDamage(attackingUnit, true, out DamageType type, attributesToUse));
             attackingUnit.anim.Play("Heal");
         }
     }

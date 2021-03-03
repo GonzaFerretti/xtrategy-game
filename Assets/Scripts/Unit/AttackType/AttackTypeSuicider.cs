@@ -35,7 +35,7 @@ public class AttackTypeSuicider : AttackTypeDirect
 
         if (shouldDoSuicideBomb)
         {
-            attackingUnit.TakeDamage(99999, Vector3Int.zero, false);
+            attackingUnit.TakeDamage(99999, Vector3Int.zero, false, DamageType.boosted);
         }
     }
 }
