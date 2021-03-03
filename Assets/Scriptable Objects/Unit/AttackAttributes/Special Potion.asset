@@ -17,4 +17,4 @@ MonoBehaviour:
   damage: 2
   damageBoost: 2
   attackType: {fileID: 11400000, guid: 697286888b4774b448e522fc836ede83, type: 2}
-  attackSound: {fileID: 11400000, guid: 4acd884a7b11f57418e446f0c96e7f71, type: 2}
+  attackSound: {fileID: 11400000, guid: 8a79641e3070caa41b4801641c36c1f9, type: 2}

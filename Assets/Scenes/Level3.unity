@@ -1104,12 +1104,12 @@ PrefabInstance:
     - target: {fileID: 2146210180028333315, guid: 5462064c2d16ba4409f064187c19cde8,
         type: 3}
       propertyPath: minX
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2146210180028333315, guid: 5462064c2d16ba4409f064187c19cde8,
         type: 3}
       propertyPath: maxX
-      value: 10
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2146210180028333340, guid: 5462064c2d16ba4409f064187c19cde8,
         type: 3}

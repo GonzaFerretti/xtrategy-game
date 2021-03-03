@@ -705,3 +705,5 @@ MonoBehaviour:
   - GrassFloorCell
   - GrassFloorCell
   - GrassFloorCell
+  hasBoss: 1
+  itemsToSpawn: []

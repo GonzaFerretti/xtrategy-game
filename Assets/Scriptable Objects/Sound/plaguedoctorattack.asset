@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0a36f5f7abc9e74989121752217073b, type: 3}
   m_Name: plaguedoctorattack
   m_EditorClassIdentifier: 
-  file: {fileID: 0}
-  volume: 0
+  file: {fileID: 8300000, guid: fdc9f57d89657434eae1b15f7c75a063, type: 3}
+  volume: 0.391
   shouldLoop: 0

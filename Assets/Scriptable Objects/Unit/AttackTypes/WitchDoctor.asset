@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shouldAllowAllyTargeting: 1
   healMultiplier: 4
+  healSound: {fileID: 11400000, guid: 28460c3eff445a643a8efa1645015c17, type: 2}
   turns: 3

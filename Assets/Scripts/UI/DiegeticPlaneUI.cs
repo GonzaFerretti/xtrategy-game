@@ -11,7 +11,9 @@ public class DiegeticPlaneUI : MonoBehaviour
 
     public void Start()
     {
-        FindObjectOfType<CameraController>().OnCameraPositionChanged += UpdateFacingDirection;
+        var cam = FindObjectOfType<CameraController>();
+        cam.OnCameraPositionChanged += UpdateFacingDirection;
+        transform.forward = cam.mainCam.transform.forward;
     }
 
     public void OnDestroy()
