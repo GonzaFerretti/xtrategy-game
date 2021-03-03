@@ -197,7 +197,7 @@ public class GameManager : MonoBehaviour
         {
             hasBuffedOne = playerUnits[UnityEngine.Random.Range(0, playerUnits.Count - 1)].TryAddBuff(shieldBuff, false);
             currentIndex++;
-        } while (!hasBuffedOne || currentIndex < playerUnits.Count);
+        } while (!hasBuffedOne && currentIndex < playerUnits.Count);
     }
 
     private void HealAllUnits()
