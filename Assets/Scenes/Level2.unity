@@ -46187,17 +46187,17 @@ PrefabInstance:
     - target: {fileID: 4788364906558945134, guid: 419d3b07bd1db014aae5c50d6ea42fe9,
         type: 3}
       propertyPath: playerColor.r
-      value: 0.87916136
-      objectReference: {fileID: 0}
-    - target: {fileID: 4788364906558945134, guid: 419d3b07bd1db014aae5c50d6ea42fe9,
-        type: 3}
-      propertyPath: playerColor.g
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4788364906558945134, guid: 419d3b07bd1db014aae5c50d6ea42fe9,
         type: 3}
+      propertyPath: playerColor.g
+      value: 0.30588236
+      objectReference: {fileID: 0}
+    - target: {fileID: 4788364906558945134, guid: 419d3b07bd1db014aae5c50d6ea42fe9,
+        type: 3}
       propertyPath: playerColor.b
-      value: 0.9245283
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4788364906558945135, guid: 419d3b07bd1db014aae5c50d6ea42fe9,
         type: 3}
@@ -103564,17 +103564,17 @@ PrefabInstance:
     - target: {fileID: 376188351097875309, guid: 8ff19d27e94243d4180840fc93cd07f7,
         type: 3}
       propertyPath: playerColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 376188351097875309, guid: 8ff19d27e94243d4180840fc93cd07f7,
-        type: 3}
-      propertyPath: playerColor.g
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 376188351097875309, guid: 8ff19d27e94243d4180840fc93cd07f7,
         type: 3}
+      propertyPath: playerColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 376188351097875309, guid: 8ff19d27e94243d4180840fc93cd07f7,
+        type: 3}
       propertyPath: playerColor.b
-      value: 0.34083152
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 376188351097875310, guid: 8ff19d27e94243d4180840fc93cd07f7,
         type: 3}
