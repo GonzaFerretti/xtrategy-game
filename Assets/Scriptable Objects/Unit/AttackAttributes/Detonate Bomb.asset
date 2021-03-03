@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Detonate Bomb
   m_EditorClassIdentifier: Assembly-CSharp::AttackAttributes
   minAttackRange: 0
-  maxAttackRange: 25
-  damage: 1
-  damageBoost: 1
+  maxAttackRange: 6
+  damage: 8
+  damageBoost: 4
   attackType: {fileID: 11400000, guid: 97d2f3a42258b674db2098b4812d712c, type: 2}
   attackSound: {fileID: 11400000, guid: 4acd884a7b11f57418e446f0c96e7f71, type: 2}

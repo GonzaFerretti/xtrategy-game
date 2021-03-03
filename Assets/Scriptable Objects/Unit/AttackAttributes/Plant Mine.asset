@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ea448915fce514a99322697c8bd776, type: 3}
   m_Name: Plant Mine
   m_EditorClassIdentifier: Assembly-CSharp::AttackAttributes
-  minAttackRange: 1
-  maxAttackRange: 5
-  damage: 10
-  damageBoost: 5
+  minAttackRange: 0
+  maxAttackRange: 4
+  damage: 6
+  damageBoost: 2
   attackType: {fileID: 11400000, guid: dcaa85f6ab102af43b4f9f25406e808d, type: 2}
   attackSound: {fileID: 11400000, guid: b9cbad414f78f0d41acfb51023668577, type: 2}
