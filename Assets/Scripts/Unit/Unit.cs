@@ -319,13 +319,22 @@ public class Unit : GameGridElement
         {
             yield return null;
         }
-        if (attributes is BossAttributes) yield break;
+        SetupTeamColorMaterial(teamColor);
+    }
 
+    public Material mainMaterial;
+
+    protected virtual void SetupTeamColorMaterial(Color teamColor)
+    {
         Renderer meshRen = model.transform.GetChild(0).GetComponent<Renderer>();
         Material baseMaterial = meshRen.material;
-        Material modifiedMaterial = Instantiate<Material>(baseMaterial);
-        modifiedMaterial.SetColor("_Color", teamColor);
-        meshRen.material = modifiedMaterial;
+        mainMaterial = Instantiate<Material>(baseMaterial);
+
+        meshRen.material = mainMaterial;
+
+        if (attributes is BossAttributes) return;
+
+        mainMaterial.SetColor("_Color", teamColor);
     }
 
     public void ResetActions()

@@ -8,14 +8,31 @@ public class AIBehaviourBoss : AIBehaviour
     [SerializeField]
     int turnsBeforeAttack;
 
+    [SerializeField] Color startColor;
+    [SerializeField] Color warningColor;
+
     public override IEnumerator ExecuteBehaviour(AIController controller, Unit actingUnit)
     {
         GameGridManager grid = controller.GetGridReference();
         AISavedData savedData = new AISavedData() { lastAttackTurn = 0 };
         if (controller.AIUnitsSavedData.ContainsKey(actingUnit)) savedData = controller.AIUnitsSavedData[actingUnit];
 
-        if (grid.gameManager.GetTurnNumber() - savedData.lastAttackTurn < turnsBeforeAttack)
+        int currentTurnsBeforeAttack = grid.gameManager.GetTurnNumber() - savedData.lastAttackTurn;
+
+        if (currentTurnsBeforeAttack <= turnsBeforeAttack)
         {
+            float currentChargeProgress = ((currentTurnsBeforeAttack) * 1.0f) / ((turnsBeforeAttack) * 1.0f);
+            if (actingUnit.mainMaterial)
+            {
+                Color currentAlertLevelColor = Color.Lerp(startColor, warningColor, currentChargeProgress);
+                actingUnit.mainMaterial.SetColor("_EmissionColor", currentAlertLevelColor);
+                if (currentTurnsBeforeAttack == turnsBeforeAttack)
+                {
+                    actingUnit.mainMaterial.SetColor("_Color", currentAlertLevelColor);
+                }
+                else if (currentTurnsBeforeAttack == 1) actingUnit.mainMaterial.SetColor("_Color", Color.white);
+            }
+
             yield return controller.StartCoroutine(controller.MoveTowardsClosestTarget(actingUnit, controller.GetUnitsFromOthers()));
         }
         else
