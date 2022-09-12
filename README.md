@@ -1,5 +1,5 @@
 # Xtrategy
-(Development period: June 2020 - Now)
+(Development period: June 2020 - Mar 2021)
 
 XCOM-like strategy game, with a magic victorian setting. Our aim was to focus on grid management and pathfinding, as well as state machines. Designed with touch controls in mind. 
 
